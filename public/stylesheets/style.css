@@ -1,0 +1,98 @@
+html,
+body {
+    height: 100%;
+    padding-top: 50px;
+    font-family: "Didact Gothic", sans-serif;
+}
+#page-content {
+    flex: 1 0 auto;
+}
+
+.text_registrati{
+    font-size: 3rem;
+    font-family: "Didact Gothic", sans-serif;
+}
+
+.navbar{
+    font-family: "Didact Gothic", sans-serif;
+    background-color: dodgerblue;
+    padding: .10rem 1rem;
+}
+
+.navbar-brand{
+    height: 80px;
+    line-height: 60px;
+    font-size: 2rem;
+}
+
+.fa-cc-mastercard, .fa-cc-visa, .fa-money-check-alt{
+    font-size:10em;
+}
+hr.style{
+    background-image: linear-gradient(to right, #9da3a6, #9da3a6 33%, transparent 34%);
+    background-position: top;
+    background-size: 0.1875rem 0.0625rem;
+    background-repeat: repeat-x;
+    height: 0.0625rem;
+    border: none;
+}
+
+.details{
+    font-size: 18px;
+    padding-left: 0;
+    line-height: 1.125rem;
+    font-weight:600;
+    color: #000000;
+
+}
+
+.secondDetails{
+    font-size:15px;
+    padding-left: 0;
+    line-height: 1.125rem;
+    font-weight:500;
+    color: #000000;
+    margin-left: 15px;
+}
+/*Regole per le altre classi e utilità secondarie */
+
+li{margin-bottom: 8px;}
+
+a{color:white;}
+
+a:hover{color: black;}
+
+input{
+    border-width: 5px;
+    border-color: red;
+}
+
+.card-header{ font-size: 2.5em;}
+
+.button{
+    background: dodgerblue;
+}
+#alert,#alertCheck,#loading,#conferma_errata,#password_errata,
+#modalSuccess,#modalCarte,#modalText,#close,#otherButton,#confermaButton{
+    display: none;
+}
+
+/*Schermi tablet*/
+@media only screen and (max-width: 1100px) and (min-width: 768px) {
+    .card-header{
+        font-size: 1.8em;
+    }
+    #oppure{font-size: 0.8em;}
+    #registrati{font-size: 0.8em;}
+
+}
+
+/*schermi piccoli*/
+@media only screen and (max-width: 768px) {
+
+    .card-header{font-size: 1.8em;}
+    .benvenuto{display: none;}
+
+    #copyright{font-size: 0.7em;}
+    #oppure{font-size: 0.8em;}
+}

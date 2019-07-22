@@ -1,0 +1,23 @@
+<div class="col-12 col-md-6 mb-3">
+    <div class="card">
+        <h2 class="text-center card-header">Ultime Transazioni <i class="fas fa-receipt"></i></h2>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <%
+
+                    for(let i = 0; i < transazioni.length; i++){
+                        var importo = transazioni.map(function(value) {return value.importo;});
+                        var destinatario = transazioni.map(function (value) { return value.destinatario;});
+                        var causale = transazioni.map(function (value) { return value.causale; });
+                %>
+                <li class="list-group-item list-group-item-light"><b>Destinatario:</b> <%=destinatario[i]%> | <b>Importo:</b> <%= importo[i]%> | <b>Causale:</b> <%= causale[i]%></li>
+                <%
+                }
+                %>
+
+
+            </ul>
+        </div>
+
+    </div>
+</div>

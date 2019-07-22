@@ -1,0 +1,203 @@
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyGo</title>
+    <link rel="stylesheet" href="/stylesheets/css/bootstrap.min.css">
+    <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/schermata.css">
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Didact Gothic' rel='stylesheet'>
+</head>
+<body class="d-flex flex-column">
+
+    <% include partials/header_postlogin.ejs %>
+
+    <div id="page-content">
+        <main class="container">
+
+            <div class="row justify-content-center mb-4">
+            <h1 id="titoloCarte">Gestisci le tue carte ed i tuoi conti</h1>
+            </div>
+           <!--ROW contenente i bottoni delle azioni-->
+            <div class="row mb-2">
+                <div class="col-12 col-md-3 offset-md-1">
+                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonONE">Aggiungi Metodo</button>
+                </div>
+                <div class="col-12 col-md-4">
+                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonTHREE">Impoosta Metodo Predefinito</button>
+                </div>
+                <div class="col-12 col-md-3">
+                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonTWO">Rimuovi Metodo</button>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-12 col-md-5 col-lg-4">
+
+                    <div class="list-group mb-3" id="listaMetodi" role="tablist">
+                        <%
+                            for(let i = 0; i < metodi.length; i++){
+                                var id = metodi.map(function(value) {return value.id_metodo;});
+                                var saldo = metodi.map(function(value) {return value.saldo_metodo;});
+                                var tipo = metodi.map(function(value) {return value.tipo;});
+                                var predefinito = metodi.map(function(value){return value.predefinito;});
+                                var numeroBanche = metodi.map(function(value) {return value.numero_iban;});
+                                var numeroCarte = metodi.map(function(value) {return value.numero_carta;});
+                                var numero = numeroCarte.concat(numeroBanche);
+
+                                //Filtro i numeri per rimuovere i valori null
+                                var filter = numero.filter(function (value) { return value; });
+                        %>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#A<%=i%>" id="T<%=i%>" role="tab" aria-controls="home">
+
+                            <%if(tipo[i]=== 1){%><i class="far fa-credit-card"></i> <b>Numero Carta:</b>
+                            <%} else if(tipo[i] === 0) { %> <i class="fas fa-university"></i> <b>IBAN:</b><%}%>
+                               <%=filter[i]%>
+
+                        </a>
+                        <%
+                             }
+                        %>
+
+                    </div>
+                </div>
+                <div class="col-12 col-md-7">
+                    <div class="tab-content">
+                        <%for(let i = 0; i < metodi.length; i++){
+                            let scadenza = carte.map(function (value) { return value.scandenza});
+                            let numeroCarta = carte.map(function (value) { return value.numero_carta });
+                            let tipoBanca = banca.map(function (value) { return value.banca });
+                            let tipoCarta = carte.map(function (value) { return value.tipo_carta});
+                            let saldoCarte = carte.map(function (value) { return value.saldo_carta});
+                            let saldoBanche =  banca.map(function (value) { return value.saldo_banca });
+                            let tipo = tipoCarta.concat(tipoBanca);
+                            let saldo = saldoCarte.concat(saldoBanche);
+
+                        %>
+
+                        <div class="tab-pane fade" id="A<%=i%>" role="tabpanel" aria-labelledby="list-home-list">
+                            <div class="row justify-content-center">
+
+                                <%if(tipoCarta[i] == "Visa"){%>
+                                    <i class="fab fa-cc-visa"></i>
+                                <%}else if(tipoCarta[i] == "MasterCard"){%>
+                                    <i class="fab fa-cc-mastercard"></i>
+                                <%}else{%>
+                                        <i class="fas fa-money-check-alt"></i>
+                                <%}%>
+                            </div>
+                             <hr class="style">
+                            <div class="row  align-items-start">
+                                <div class="col">
+                                    <p class="details">Saldo</p>
+                                </div>
+                            </div>
+                            <div class="row align-items-end">
+                                <div class="col offset-8 text-right">
+                                    <p class="secondDetails"> € <%=saldo[i]%></p>
+                                </div>
+                            </div>
+
+                            <hr class="style">
+                        </div>
+                        <%}%>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5"></div>
+
+            <!-- Modal Operazioni-->
+            <div class="modal fade" id="modalCarte" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="close" id="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!--Barra di loading-->
+                            <div class="spinner-border text-primary mx-auto" id="loading" role="status"></div>
+                            <span class="sr-only">Loading...</span>
+                            <!--Messaggio operazione completata-->
+                            <div id="modalText">Il metodo di pagamento predefinito è stato aggiornato con successo!</div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="otherButton"></button>
+                            <button type="button" class="btn btn-primary" id="primaryButton"></button>
+                            <button type="button" class="btn btn-primary" id="confermaButton"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Form Nuovo Metodo-->
+            <form action="/aggiungiMetodo" method="post" id="aggiungi-metodo">
+            <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Compila il form</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                             <div class="row justify-content-center mb-2">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="tipo" id="carta-credito" value="carta" checked>
+                                        <label class="form-check-label" for="carta-credito">
+                                            Carta di credito
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="tipo" id="conto-bancario" value="conto">
+                                        <label class="form-check-label" for="conto-bancario">
+                                            Conto Bancario
+                                        </label>
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <label for="numero">Numero Carta o IBAN</label>
+                                    <input type="text" maxlength="35" class="form-control" id="numeroOiban" placeholder="Numero carta o iban">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="cvv">CVV Carta</label>
+                                    <input type="text" maxlength="3" class="form-control" id="cvv" placeholder="CVV">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <label for="scadenza">Scadenza Carta</label>
+                                    <input type="date" maxlength="" class="form-control" id="scadenza" placeholder="Scandenza Carta">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="numConto">Numero Conto</label>
+                                    <input type="text" maxlength="3" class="form-control" id="numConto" placeholder="Numero Conto">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="aggiungiMetodo">Aggiungi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </main>
+    </div>
+
+    <% include partials/footer.ejs %>
+
+<%include partials/script.ejs%>
+<script src="/javascripts/gestionecarte.js"></script>
+</body>
+</html>

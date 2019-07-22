@@ -1,0 +1,108 @@
+
+    <div class="row justify-content-center">
+        <div class="col-12  col-md-6 offset-md-1">
+            <div class="text_registrati">Registrati a MoneyGo</div>
+        </div>
+    </div>
+
+    <div class="col-12  col-md-6 offset-md-3">
+        <div class="alert alert-danger text-center" id="alert" role="alert">
+            <p id="alert_text"></p>
+        </div>
+    </div>
+
+    <!--Form registrazione-->
+    <form action="/inviaRegistrazione" method="post" id="form_registrati">
+        <div class="form-row">
+            <div class="form-group col-12 col-md-12">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="Name">Nome</label>
+                        <input type="text" maxlength="20" class="form-control" id="nome"  placeholder="Nome" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="Surname">Cognome</label>
+                        <input type="text" maxlength="20" class="form-control" id="cognome" placeholder="Cognome" required>
+                    </div>
+                </div>
+
+                <div class="mb-2"></div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="CF">Codice Fiscale</label>
+                        <input type="text" maxlength="16" class="form-control" id="codicefiscale" placeholder="Codice Fiscale" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label for="Born">Data di nascita</label>
+                        <input type="date" class="form-control" id="nascita"  placeholder="GG/MM/YYYY" required>
+                    </div>
+
+                </div>
+
+                <div class="mb-2"></div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="Email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="example@example.com" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="Tel">Numero di Telefono</label>
+                        <input type="text" maxlength="10" class="form-control" id="telefono" placeholder="Telefono" >
+                    </div>
+                </div>
+
+                <div class="mb-2"></div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="Nick">Nickname</label>
+                        <input type="text" class="form-control" id="nickname" placeholder="Nickname" required>
+                    </div>
+
+                    <div class="mb-1"></div>
+
+                </div>
+
+                <div class="mb-2"></div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="Password">Password</label>
+                        <input type="password" maxlength="20" class="form-control" id="password" placeholder="Password">
+
+                        <div class="mb-2"></div>
+                        <!--Alert sul formato della password-->
+                        <div class="alert alert-primary" role="alert" id="alertCheck">
+                            <p id="textCheck"></p>
+                        </div>
+                        <div class="alert alert-primary alert-danger" role="alert" id="password_errata">
+                            <p>La password non rispetta le richieste minime </p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="RePassword">Conferma Password</label>
+                        <input type="password" maxlength="20" class="form-control" id="conferma_password" placeholder="Conferma password">
+
+                        <div class="mb-2"></div>
+                        <!--Alert sul controllo della password-->
+                        <div class="alert alert-primary alert-danger" role="alert" id="conferma_errata">
+                            <p>Le due password non coincidono</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4"></div>
+                <div class="row justify-content-center">
+                    <div class="col-6 col-md-3 offset-md-3">
+                        <input class="btn btn-primary btn-lg btn-block" type="reset" value="Reset">
+                    </div>
+                    <div class="col-6 col-md-3 offset-md-3">
+                        <button  class="btn btn-primary btn-lg btn-block">Conferma</button>&nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
