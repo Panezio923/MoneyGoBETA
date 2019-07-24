@@ -36,6 +36,10 @@ hr.style{
     height: 0.0625rem;
     border: none;
 }
+/*link*/
+u{
+    color: blue;
+}
 
 .details{
     font-size: 18px;

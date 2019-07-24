@@ -8,12 +8,15 @@
         selected: null,
     };
 
+    var numero_carta = false;
+
     $("#buttonONE").on('click', function(){mainview.mostraFormNuovoMetodo()});
     $("#buttonTWO").on('click', function(e){mainview.premutoRimuovi(e)});
     $("#buttonTHREE").on('click', function(e){maincontrol.impostaPredefinito(e)});
     $("#primaryButton").on('click', function() {mainview.ricaricaPagina()});
     $("#confermaButton").on('click', function() {maincontrol.rimuoviMetodo()});
     $("#otherButton").on('click', function(){mainview.resetModal()});
+    $("#aggiungiMetodo").on('click', function () {maincontrol.aggiungiMetodo()});
 
 
     //Da completare
@@ -94,9 +97,10 @@
         }
     };
 
-    mainview.pagamentoRimosso = function(e){
-        $(".modal-title").text("Operazione effettuata");
-        $("#modalText").text("Metodo di pagamento rimosso correttamente").show();
+    mainview.messaggioEsitoOperazione = function(title, msg){
+        $("#modalCarte").modal('show');
+        $(".modal-title").text(title);
+        $("#modalText").text(msg).show();
         $("#primaryButton").html("Aggiorna").show();
         $("#otherButton").hide();
         $("#confermaButton").hide();
@@ -105,8 +109,8 @@
     //Invia la richiesta al server per modificare il valore del pagamento predefinito
     maincontrol.impostaPredefinito = function(e){
         e.preventDefault();
-
         var id = maincontrol.selected;
+
         if(id === null){
             mainview.modalError();
         }else {
@@ -177,7 +181,7 @@
                 success: function (msg) {
                     if (msg === "DONE") {
                         $("#loading").hide();
-                        mainview.pagamentoRimosso();
+                        mainview.messaggioEsitoOperazione("Metodo di pagamento rimosso con successo.");
                     } else if (msg === "ERROR") {
                         $("#loading").hide();
                         $("#modalText").text("Ci dispiace, qualcosa è andato storto").show();
@@ -228,15 +232,72 @@
             maincontrol.aggiungiBanca();
     };
 
+    /*
+    * La funzione aggiungiCarta verifica che non esista già un metodo
+    * associato al numero di carta e successivamente invia la richiesta per
+    * l'aggiunzione del nuovo metodo, mostrando i relativi messaggi di
+    * conferma o errore.
+    * */
     maincontrol.aggiungiCarta = function(){
+        console.log("Invio richiesta ajax aggiunzione Carta");
+        var numero = $("#numeroOiban").val();
+        var cvv = $("#cvv").val();
+        var scadenza = $("#scandeza").val();
+
+        for(let i = 0; i < maincontrol.metodi.length; i++){
+          if(!(maincontrol.metodi[i].numero_carta === numero)){
+              numero_carta = true;
+          }else{
+              numero_carta = false;
+              break;
+          }
+        }
+        if(numero_carta) {
+            $.ajax({
+                type: "POST",
+                url: "/home/adminCards/aggiungiMetodoCarta",
+                data: {numero: numero, cvv: cvv},
+
+                beforeSend: function () {
+                    $("#modalForm").modal('hide');
+                    $("#modalCarte").modal('show');
+                    $("#loading").show();
+                    $("#modalText").hide();
+                },
+                success: function (msg) {
+                    if (msg === "DONE") {
+                        $("#loading").hide();
+                        mainview.messaggioEsitoOperazione("Operazione riuscita","Metodo di pagamento inserito con successo.");
+                    } else if (msg === "FAULT") {
+                        $("#loading").hide();
+                        mainview.messaggioEsitoOperazione("Operazione fallita","Numero carta non riscontrato o CVV errato.");
+                    }
+                }
+            })
+        }else{
+            $("#modalForm").modal('hide');
+            mainview.messaggioEsitoOperazione("Operazione fallita","Errore nei dati inseriti o metodo già esistente.");
+        }
 
     };
 
-    //Da rivedere - forse è meglio qua ma sto già facendo il tutto sull'ejs
-    mainview.riepilogoDati = function(){
-        let id = maincontrol.selected;
+    maincontrol.aggiungiBanca = function(){
+        console.log("Invio richiesta ajax aggiunta contoBancario");
+        var iban = $("#numeroOiban").val();
 
     };
+
+    mainview.campiErrati = function () {
+        $("#alert_text").text("Per favore, ricontrollare i dati");
+        $("#alert").show("slow");
+
+    };
+
+    mainview.ripulisciCampiErrati = function(){
+        $("#alert").hide("fast");
+        $("#numeroOiban").css("borderColor", "");
+    };
+
 
     $(document).ready(function () {
         $('#listaMetodi a').on('click', function (e) {
@@ -246,12 +307,36 @@
 
         });
 
-        $("input[name='tipo']").click(function(){
+        $("input[name='tipo']").click(function () {
             var radioValue = $("input[name='tipo']:checked").val();
-            if(radioValue === "carta") mainview.selezionatoCarta();
-            else if(radioValue === "conto") mainview.selezionatoConto();
+            if (radioValue === "carta") mainview.selezionatoCarta();
+            else if (radioValue === "conto") mainview.selezionatoConto();
 
         });
+
+        if ($("#carta-credito").prop('checked')) {
+            $("#numeroOiban").blur(function () {
+                if ($("#numeroOiban").val() != "") {
+                    if (/^[0-9]{8}$/.test($("#numeroOiban").val())) {
+                        numero_carta = true;
+                        mainview.ripulisciCampiErrati();
+                        return;
+                    } else {
+                        numero_carta = false;
+                        mainview.campiErrati();
+                        $("#numeroOiban").css("borderColor", "red");
+
+                        $("#numeroOiban").on("click", function () {
+                            $("#numeroOiban").css("borderColor", "");
+
+                        });
+                    }
+                }
+                numero_carta = true;
+            });
+        }else{
+            console.log("Ciao");
+        }
 
         /*Due control, la prima "getMetodi" recupera e conserva tutte le informarzioni relative ai
             metodi di pagamento. La seconda "getID" salva nella variabile maincontrol.selected l'ID

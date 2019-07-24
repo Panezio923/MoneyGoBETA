@@ -7,8 +7,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const cookieSession = require('cookie-session');
-
 
 //ROUTES
 const indexRoute = require('./routes/indexRoute');
@@ -69,5 +67,39 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+const https = require('https');
+
+/**
+ * Campo della risposta che indica ai browser che la ricevono che le risorse del server possono essere
+ * accedute da qualsiasi origine. Necessario per rispondere all'applicazione mobile.
+ */
+app.use(function setHeader(req, res, next) {
+  res.set({"Access-Control-Allow-Origin": "*"});
+  next();
+});
+
+/**
+ * Anche questo route è necessario per la gestione dell'applicazione mobile. Difatti spesso le richieste da parte
+ * dell'applicazione mobile vengono prima mandate tramite delle CORS, in cui l'applicazione (o il browser) richiede
+ * prima la conferma di validità della richiesta al server (tramite il metodo OPTIONS).
+ */
+app.options("*", function (req, res) {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "origin, x-requested-with, content-type",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
+  });
+  res.send();
+});
+
+/**
+ * L'accesso diretto ai file html viene impedito, per evitare che un utente possa accedere direttamente alla pagina del
+ * sito senza essere autenticato.
+ */
+app.use('*.ejs', function (req, res, next) {
+  res.status('403').end('403 Forbidden');
+});
+
 
 module.exports = app;

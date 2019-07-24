@@ -149,6 +149,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
+
                              <div class="row justify-content-center mb-2">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="tipo" id="carta-credito" value="carta" checked>
@@ -173,14 +174,12 @@
                                     <input type="text" maxlength="3" class="form-control" id="cvv" placeholder="CVV">
                                 </div>
                             </div>
+                            <div class="mb-2"></div>
                             <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <label for="scadenza">Scadenza Carta</label>
-                                    <input type="date" maxlength="" class="form-control" id="scadenza" placeholder="Scandenza Carta">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="numConto">Numero Conto</label>
-                                    <input type="text" maxlength="3" class="form-control" id="numConto" placeholder="Numero Conto">
+                                <div class="col-12 col-md-12">
+                                    <div class="alert alert-danger text-center" id="alert" role="alert">
+                                        <p id="alert_text"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

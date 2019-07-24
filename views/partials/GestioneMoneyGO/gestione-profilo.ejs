@@ -1,0 +1,87 @@
+ <div class="row">
+        <div class="col-12 col-lg-6 mb-2">
+            <div class="card shadow">
+                <h1 class="text-center card-header">Modifica dati </h1>
+                <div class="card-body">
+                    <div class = "row">
+                        <div class ="col-12 col-md-3">
+                            <div class="email" id="email"><h5><b>Email</b></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-6">
+                            <div class="email" id="email"><h5><%= user.email%></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-3">
+                        <button class="link" id="ModificaEmail">Modifica</button>
+                        </div>
+                    </div>
+
+                    <div class = "row">
+                        <div class ="col-12 col-md-3">
+                            <div class="telefono" id="telefono"><h5><b>Telefono</b></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-6">
+                            <div class="telefono" id="telefono"><h5><%= user.telefono%></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-3">
+                            <u href="">Modifica</u>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="card shadow  mb-2">
+                <h1 class="text-center card-header">Impostazioni Utili</h1>
+                <div class="card-body">
+                    <div class = "row">
+                        <div class ="col-12 col-md-4">
+                            <div class="limite" id="limite"><h5><b>Limite spesa</b></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-4">
+                            <div class="limite" id="limite"><h5><%= limite.limite_spesa%></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-3 offset-md-1 ">
+                            <u href="">Modifica</u>
+                        </div>
+                    </div>
+
+                    <div class = "row mb-1">
+                        <div class ="col-12 col-md-4">
+                            <div class="AlertLs"><h5><b>Alert limite spesa</b></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-4">
+                            <div class="AlertLs" id="AlertLs"></div>
+                            <input type="checkbox" checked data-toggle="toggle" data-width="100" data-size="xs">
+                        </div>
+                        <div class ="col-12 offset-md-1 col-md-3">
+
+                        </div>
+                    </div>
+
+                    <div class = "row">
+                        <div class ="col-12 col-md-4">
+                            <div class="comunicazione"><h5><b>Comunicazione</b></h5></div>
+                        </div>
+                        <div class ="col-12 col-md-4">
+                            <div class="comunicazione" id="comunicazione">
+                                <%if(user.comunicazione == 0){%>
+                                <h5>Email</h5>
+                                <%}else if(user.comunicazione == 1){%>
+                                    <h5>SMS</h5>
+                                <%}else if(user.comunicazione == 2){%>
+                                    <h5>Telegram</h5>
+                                <%}%>
+                            </div>
+                        </div>
+                        <div class ="col-12 col-md-3 offset-md-1 ">
+                            <u href="">Modifica</u>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+

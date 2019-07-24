@@ -58,24 +58,26 @@ Metodi.prototype = {
       })
     },
 
-    //DA COMPLETARE!
+    //DA COMPLETARE! Gnoffo -- res ritorna l'objext res.ref_nickname no..
     aggiungiMetodoCarta : function (dati, callback) {
         this.verificaCarta(dati, function (res) {
+            console.log(res);
             if(res){
-                let sql = "INSERT INTO metodi_pagamento(ref_nickname, tipo, saldo_metodo, numero_carta) VALUES(?, ?, ?, ?);"
-                pool.query(sql, [res.ref_nickname, res.tipo_carta, res.saldo_carta, res.numero_carta], function (err, result) {
+                let sql = "INSERT INTO metodi_pagamento(ref_nickname, tipo, saldo_metodo, numero_carta) VALUES(?, ?, ?, ?)";
+                pool.query(sql, [res[0].ref_nickname, '1', res[0].saldo_carta, res[0].numero_carta], function (err, result) {
                     if(err) throw err;
                     callback(result);
                 })
-            }
+            }else
+                callback(null);
         })
     },
 
     verificaCarta : function(dati, callback){
-        let sql = "SELECT * FROM carta WHERE numero_carta = ? AND cvv = ? AND scadenza = ?";
-        pool.query(sql, [dati.numero_carta, dati.cvv, dati.scadenza], function (err, result) {
+        let sql = "SELECT * FROM carta WHERE numero_carta = ? AND cvv = ?";
+        pool.query(sql, [dati.numero, dati.cvv] , function (err, result) {
             if(err) throw err;
-            if(result)
+            if(result.length > 0)
                 callback(result);
             else
                 callback(null);

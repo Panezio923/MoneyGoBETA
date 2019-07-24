@@ -67,11 +67,12 @@ router.post('/rimuoviMetodo', (req,res,next)=>{
 router.post('/aggiungiMetodoCarta', (req, res, next) =>{
    let dati = req.body;
    metodi.aggiungiMetodoCarta(dati, function (result) {
+       console.log(result);
        if(result){
            res.send("DONE");
            res.end;
        }else{
-           res.send("FAUL");
+           res.send("FAULT");
            res.end;
        }
    })

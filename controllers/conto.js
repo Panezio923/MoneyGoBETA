@@ -23,6 +23,18 @@ Conto.prototype = {
         })
     },
 
+    recuperaLimiteSpesa : function(nickname, callback) {
+        let sql = "SELECT limite_spesa FROM conto_moneygo c  WHERE ref_nickname = ?";
+
+        pool.query(sql,nickname,function (err,result) {
+            if(err) throw err;
+            if(result) {
+                callback(result[0]);
+            }
+        })
+
+    }
+
 };
 
 module.exports = Conto;

@@ -27,7 +27,7 @@
         }
 
         if(nome_validato && cognome_validato && codicefiscale_validato && data_di_nascita_validata &&
-            telefono_validato && email_validata && nickname_validato && password_validata && conferma_password_validata) {
+            numero_carta && email_validata && nickname_validato && password_validata && conferma_password_validata) {
             $.ajax({
                 type: "POST",
                 url: "/registrati/inviaRegistrazione",
@@ -149,7 +149,6 @@
 
     mainview.ripulisciCampiErrati = function(){
         $("#alert").hide();
-        $
     };
 
     mainview.mostraInfoPassword =  function(){
