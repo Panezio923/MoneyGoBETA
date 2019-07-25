@@ -74,11 +74,11 @@
         $("#alert").show("slow");
     };
 
-    mainview.messaggioEsitoOperazione = function(title, msg){
+    mainview.messaggioEsitoOperazione = function(title, msg, button){
         $("#modalCarte").modal('show');
         $(".modal-title").text(title);
         $("#modalText").text(msg).show();
-        $("#primaryButton").html("Aggiorna").show();
+        $("#primaryButton").html(button).show();
         $("#otherButton").hide();
         $("#confermaButton").hide();
     };
@@ -174,10 +174,10 @@
             success: function (msg) {
                 if (msg === "DONE") {
                     $("#loading").hide();
-                    mainview.messaggioEsitoOperazione("Metodo di pagamento rimosso con successo.");
+                    mainview.messaggioEsitoOperazione("Operazione effettuata","Metodo di pagamento rimosso con successo.", "Aggiorna");
                 } else if (msg === "ERROR") {
                     $("#loading").hide();
-                    $("#modalText").text("Ci dispiace, qualcosa è andato storto").show();
+                    mainview.messaggioEsitoOperazione("Operazione non riuscita","Ci dispiace ma qualcosa è andato storto.", "Chiudi");
                 }
             },
 
@@ -231,23 +231,22 @@
                 success: function (msg) {
                     if (msg === "DONE") {
                         $("#loading").hide();
-                        mainview.messaggioEsitoOperazione("Operazione riuscita","Metodo di pagamento inserito con successo.");
+                        mainview.messaggioEsitoOperazione("Operazione riuscita","Metodo di pagamento inserito con successo.", "Aggiorna");
                     } else if (msg === "FAULT") {
                         $("#loading").hide();
-                        mainview.messaggioEsitoOperazione("Operazione fallita","Numero carta non riscontrato o CVV errato.");
+                        mainview.messaggioEsitoOperazione("Operazione fallita","Numero carta non riscontrato o CVV errato.", "Chiudi");
                     }
                 }
             })
         }else{
             $("#modalForm").modal('hide');
-            mainview.messaggioEsitoOperazione("Operazione fallita","Errore nei dati inseriti o metodo già esistente.");
+            mainview.messaggioEsitoOperazione("Operazione fallita","Errore nei dati inseriti o metodo già esistente.", "Chiudi");
         }
     };
 
     maincontrol.aggiungiBanca = function() {
         console.log("CIEO");
         var iban = $("#iban").val();
-
         console.log(iban_validato);
         if(iban_validato) {
             console.log("15");
@@ -264,8 +263,8 @@
             console.log("Invio richiesta ajax aggiunta contoBancario");
             $.ajax({
                 type: "POST",
-                url: "/home/adminCards/aggiungiMetodoConto",
                 data: {iban: iban},
+                url: "/home/adminCards/aggiungiMetodoConto",
 
                 beforeSend: function () {
                     $("#modalForm").modal('hide');
@@ -277,10 +276,10 @@
                 success: function (msg) {
                     if (msg === "DONE") {
                         $("#loading").hide();
-                        mainview.messaggioEsitoOperazione("Operazione riuscita", "Metodo di pagamento inserito con successo.");
+                        mainview.messaggioEsitoOperazione("Operazione riuscita", "Metodo di pagamento inserito con successo.", "Aggiorna");
                     } else if (msg === "FAULT") {
                         $("#loading").hide();
-                        mainview.messaggioEsitoOperazione("Operazione fallita", "L'IBAN inserito non è valido.");
+                        mainview.messaggioEsitoOperazione("Operazione fallita", "L'IBAN inserito non è valido.", "Chiudi");
                     }
                 },
                 error: function (err) {
@@ -289,7 +288,7 @@
             });
         } else {
             $("#modalForm").modal('hide');
-            mainview.messaggioEsitoOperazione("Operazione fallita", "Errore nei dati inseriti o metodo già esistente.");
+            mainview.messaggioEsitoOperazione("Operazione fallita", "Errore nei dati inseriti o metodo già esistente.", "Chiudi");
         }
     };
 
@@ -406,8 +405,6 @@
                     }
                     iban_validato = false;
                 });
-
-
     })
 
 })();
