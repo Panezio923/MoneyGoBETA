@@ -58,7 +58,6 @@ Metodi.prototype = {
       })
     },
 
-    //DA COMPLETARE! Gnoffo -- res ritorna l'objext res.ref_nickname no..
     aggiungiMetodoCarta : function (dati, callback) {
         this.verificaCarta(dati, function (res) {
             console.log(res);
@@ -84,8 +83,28 @@ Metodi.prototype = {
         })
     },
 
-    verificaConto : function(user, callback){
+    aggiungiMetodoConto : function(dati, callback){
+        this.verificaConto(dati, function (res) {
+            console.log(res);
+            if(res){
+                let sql = "INSERT INTO metodi_pagamento(ref_nickname, saldo_metodo, numero_iban, tipo) VALUES(?,?,?,?)";
+                pool.query(sql, [res[0].ref_nickname, res[0].saldo_banca, res[0].IBAN, '0'], function (err, result) {
+                    if(err) throw err;
+                    callback(result);
+                })
+            }
+        })
+    },
 
+    verificaConto : function(iban, callback){
+        let sql = "SELECT * FROM conto_bancario WHERE iban = ?";
+        pool.query(sql, iban, function (err, result) {
+            if(err) throw err;
+            if(result.length > 0)
+                callback(result);
+            else
+                callback(null);
+        })
     },
 
 

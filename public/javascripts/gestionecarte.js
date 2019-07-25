@@ -8,7 +8,10 @@
         selected: null,
     };
 
-    var numero_carta = false;
+    var numero_validato = false;
+    var iban_validato = false;
+    var cvv_validato = false;
+    var radioValue;
 
     $("#buttonONE").on('click', function(){mainview.mostraFormNuovoMetodo()});
     $("#buttonTWO").on('click', function(e){mainview.premutoRimuovi(e)});
@@ -18,28 +21,23 @@
     $("#otherButton").on('click', function(){mainview.resetModal()});
     $("#aggiungiMetodo").on('click', function () {maincontrol.aggiungiMetodo()});
 
-
-    //Da completare
-    mainview.mostraFormNuovoMetodo = function(){
-        $("#carta-credito").prop('checked', true);
-        mainview.selezionatoCarta();
+    mainview.mostraFormNuovoMetodo = function() {
+        radioValue = "carta";
+        $("#carta-credito").prop("checked", true);
         $("#modalForm").modal('show');
-
+        mainview.gestisciForm();
+        console.log(radioValue);
     };
 
-    mainview.selezionatoCarta = function(){
-        mainview.attivaCampi();
-        $("#numConto").prop('disabled', true);
-    };
-
-    mainview.selezionatoConto = function(){
-        mainview.attivaCampi();
-        $("#cvv").prop('disabled', true);
-        $("#scadenza").prop('disabled', true);
-    };
-
-    mainview.attivaCampi = function(){
-        $("#aggiungi-metodo input").prop('disabled', false);
+    mainview.gestisciForm = function(){
+        if(radioValue === "carta"){
+            $("#iban").prop('disabled', true).val("");
+            $("#cvv, #numero").prop('disabled', false);
+        }
+        else if(radioValue === "conto") {
+            $("#cvv, #numero").prop('disabled', true);
+            $("#iban").prop('disabled', false);
+        }
     };
 
     //Scorre i metodi di pagamento ed evidenzia quello predefinito
@@ -53,32 +51,6 @@
     mainview.ricaricaPagina = function(){
         $("#cambioPredefinito").hide();
         location.reload();
-    };
-
-    //Recupera l'id dell'elemento selezionato dalla listgroup
-    maincontrol.getID = function(){
-        let storeValue = null;
-        $(".list-group a").on('click',function () {
-          storeValue = ($(this).attr("id"));
-            console.log(maincontrol.metodi[storeValue[1]].id_metodo);
-           maincontrol.selected =  maincontrol.metodi[storeValue[1]].id_metodo;
-        });
-
-    };
-
-    mainview.resetModal = function(){
-        $("#otherButton").html("").hide();
-        $("#primaryButton").html("").hide();
-        $("#confermaButton").html("").hide();
-        $("#modalCarte").modal('toggle');
-    };
-
-    mainview.modalError = function(){
-        $(".modal-title").text("Attenzione");
-        $("#primaryButton").hide();
-        $("#otherButton").html("Chiudi").show();
-        $("#modalText").text("Si prega di selezionare un metodo di pagamento.").show();
-        $("#modalCarte").modal('show');
     };
 
     mainview.premutoRimuovi = function(e){
@@ -97,6 +69,11 @@
         }
     };
 
+    mainview.campiErrati = function () {
+        $("#alert_text").text("Per favore, ricontrollare i dati");
+        $("#alert").show("slow");
+    };
+
     mainview.messaggioEsitoOperazione = function(title, msg){
         $("#modalCarte").modal('show');
         $(".modal-title").text(title);
@@ -104,6 +81,23 @@
         $("#primaryButton").html("Aggiorna").show();
         $("#otherButton").hide();
         $("#confermaButton").hide();
+    };
+
+    mainview.resetModal = function(){
+        $("#otherButton").html("").hide();
+        $("#primaryButton").html("").hide();
+        $("#confermaButton").html("").hide();
+        $("#modalCarte").modal('toggle');
+    };
+
+    //Recupera l'id dell'elemento selezionato dalla listgroup
+    maincontrol.getID = function(){
+        let storeValue = null;
+        $(".list-group a").on('click',function () {
+            storeValue = ($(this).attr("id"));
+            console.log(maincontrol.metodi[storeValue[1]].id_metodo);
+            maincontrol.selected =  maincontrol.metodi[storeValue[1]].id_metodo;
+        });
     };
 
     //Invia la richiesta al server per modificare il valore del pagamento predefinito
@@ -160,40 +154,143 @@
                 mainview.evidenziaPredefinito(maincontrol.metodi);
             }
         })
-
     };
 
     //Invia la richiesta al server per rimuovere il metodo di pagamento selezionato
     maincontrol.rimuoviMetodo = function(){
         var id = maincontrol.selected;
 
+        $.ajax({
+            type: "POST",
+            url: "/home/adminCards/rimuoviMetodo",
+            data: {id: id},
+
+            beforeSend: function () {
+                $("#modalCarte").modal('show');
+                $("#loading").show();
+                $("#modalText").hide();
+            },
+
+            success: function (msg) {
+                if (msg === "DONE") {
+                    $("#loading").hide();
+                    mainview.messaggioEsitoOperazione("Metodo di pagamento rimosso con successo.");
+                } else if (msg === "ERROR") {
+                    $("#loading").hide();
+                    $("#modalText").text("Ci dispiace, qualcosa è andato storto").show();
+                }
+            },
+
+            error: function () {
+                console.log("errore nella richiesta");
+            }
+
+        })
+    };
+
+    maincontrol.aggiungiMetodo = function(){
+      if(radioValue === "carta") maincontrol.aggiungiCarta();
+      else if(radioValue === "conto") maincontrol.aggiungiBanca();
+    };
+
+
+    /*
+    * La funzione aggiungiCarta verifica che non esista già un metodo
+    * associato al numero di carta e successivamente invia la richiesta per
+    * l'aggiunzione del nuovo metodo, mostrando i relativi messaggi di
+    * conferma o errore.
+    * */
+    maincontrol.aggiungiCarta = function(){
+        var numero = $("#numero").val();
+        var cvv = $("#cvv").val();
+        var scadenza = $("#scandeza").val();
+
+        if(numero_validato) {
+            for (let i = 0; i < maincontrol.metodi.length; i++) {
+                if (!(maincontrol.metodi[i].numero_carta === numero)) {
+                    numero_validato = true;
+                } else {
+                    numero_validato = false;
+                    break;
+                }
+            }
+        }
+        if(numero_validato && cvv_validato) {
+            console.log("Invio richiesta ajax aggiunzione Carta");
             $.ajax({
                 type: "POST",
-                url: "/home/adminCards/rimuoviMetodo",
-                data: {id: id},
+                url: "/home/adminCards/aggiungiMetodoCarta",
+                data: {numero: numero, cvv: cvv},
 
                 beforeSend: function () {
+                    $("#modalForm").modal('hide');
                     $("#modalCarte").modal('show');
                     $("#loading").show();
                     $("#modalText").hide();
                 },
-
                 success: function (msg) {
                     if (msg === "DONE") {
                         $("#loading").hide();
-                        mainview.messaggioEsitoOperazione("Metodo di pagamento rimosso con successo.");
-                    } else if (msg === "ERROR") {
+                        mainview.messaggioEsitoOperazione("Operazione riuscita","Metodo di pagamento inserito con successo.");
+                    } else if (msg === "FAULT") {
                         $("#loading").hide();
-                        $("#modalText").text("Ci dispiace, qualcosa è andato storto").show();
+                        mainview.messaggioEsitoOperazione("Operazione fallita","Numero carta non riscontrato o CVV errato.");
+                    }
+                }
+            })
+        }else{
+            $("#modalForm").modal('hide');
+            mainview.messaggioEsitoOperazione("Operazione fallita","Errore nei dati inseriti o metodo già esistente.");
+        }
+    };
+
+    maincontrol.aggiungiBanca = function() {
+        console.log("CIEO");
+        var iban = $("#iban").val();
+
+        console.log(iban_validato);
+        if(iban_validato) {
+            console.log("15");
+            for (let i = 0; i < maincontrol.metodi.length; i++) {
+                if (!(maincontrol.metodi[i].numero_iban === iban)) {
+                    iban_validato = true;
+                } else {
+                    iban_validato = false;
+                    break;
+                }
+            }
+        }
+        if (iban_validato) {
+            console.log("Invio richiesta ajax aggiunta contoBancario");
+            $.ajax({
+                type: "POST",
+                url: "/home/adminCards/aggiungiMetodoConto",
+                data: {iban: iban},
+
+                beforeSend: function () {
+                    $("#modalForm").modal('hide');
+                    $("#modalCarte").modal('show');
+                    $("#loading").show();
+                    $("#modalText").hide();
+                    $("#primaryButton").hide();
+                },
+                success: function (msg) {
+                    if (msg === "DONE") {
+                        $("#loading").hide();
+                        mainview.messaggioEsitoOperazione("Operazione riuscita", "Metodo di pagamento inserito con successo.");
+                    } else if (msg === "FAULT") {
+                        $("#loading").hide();
+                        mainview.messaggioEsitoOperazione("Operazione fallita", "L'IBAN inserito non è valido.");
                     }
                 },
-
-                error: function () {
-                    console.log("errore nella richiesta");
+                error: function (err) {
+                    console.log(err);
                 }
-
-            })
-
+            });
+        } else {
+            $("#modalForm").modal('hide');
+            mainview.messaggioEsitoOperazione("Operazione fallita", "Errore nei dati inseriti o metodo già esistente.");
+        }
     };
 
     /*Le due maincontrol getCarte e getBanche richiedono al server
@@ -225,119 +322,24 @@
         })
     };
 
-    maincontrol.aggiungiMetodo = function(){
-        if($("#carta-credito").prop("checked"))
-            maincontrol.aggiungiCarta();
-        else
-            maincontrol.aggiungiBanca();
-    };
-
-    /*
-    * La funzione aggiungiCarta verifica che non esista già un metodo
-    * associato al numero di carta e successivamente invia la richiesta per
-    * l'aggiunzione del nuovo metodo, mostrando i relativi messaggi di
-    * conferma o errore.
-    * */
-    maincontrol.aggiungiCarta = function(){
-        console.log("Invio richiesta ajax aggiunzione Carta");
-        var numero = $("#numeroOiban").val();
-        var cvv = $("#cvv").val();
-        var scadenza = $("#scandeza").val();
-
-        for(let i = 0; i < maincontrol.metodi.length; i++){
-          if(!(maincontrol.metodi[i].numero_carta === numero)){
-              numero_carta = true;
-          }else{
-              numero_carta = false;
-              break;
-          }
-        }
-        if(numero_carta) {
-            $.ajax({
-                type: "POST",
-                url: "/home/adminCards/aggiungiMetodoCarta",
-                data: {numero: numero, cvv: cvv},
-
-                beforeSend: function () {
-                    $("#modalForm").modal('hide');
-                    $("#modalCarte").modal('show');
-                    $("#loading").show();
-                    $("#modalText").hide();
-                },
-                success: function (msg) {
-                    if (msg === "DONE") {
-                        $("#loading").hide();
-                        mainview.messaggioEsitoOperazione("Operazione riuscita","Metodo di pagamento inserito con successo.");
-                    } else if (msg === "FAULT") {
-                        $("#loading").hide();
-                        mainview.messaggioEsitoOperazione("Operazione fallita","Numero carta non riscontrato o CVV errato.");
-                    }
-                }
-            })
-        }else{
-            $("#modalForm").modal('hide');
-            mainview.messaggioEsitoOperazione("Operazione fallita","Errore nei dati inseriti o metodo già esistente.");
-        }
-
-    };
-
-    maincontrol.aggiungiBanca = function(){
-        console.log("Invio richiesta ajax aggiunta contoBancario");
-        var iban = $("#numeroOiban").val();
-
-    };
-
-    mainview.campiErrati = function () {
-        $("#alert_text").text("Per favore, ricontrollare i dati");
-        $("#alert").show("slow");
-
-    };
-
-    mainview.ripulisciCampiErrati = function(){
-        $("#alert").hide("fast");
-        $("#numeroOiban").css("borderColor", "");
-    };
-
-
     $(document).ready(function () {
         $('#listaMetodi a').on('click', function (e) {
             e.preventDefault();
-            mainview.riepilogoDati();
             $(this).tab('show')
 
         });
 
-        $("input[name='tipo']").click(function () {
-            var radioValue = $("input[name='tipo']:checked").val();
-            if (radioValue === "carta") mainview.selezionatoCarta();
-            else if (radioValue === "conto") mainview.selezionatoConto();
-
+        $("input[name='tipo']").on('click', function () {
+            radioValue = $(this).val();
+            mainview.gestisciForm();
         });
 
-        if ($("#carta-credito").prop('checked')) {
-            $("#numeroOiban").blur(function () {
-                if ($("#numeroOiban").val() != "") {
-                    if (/^[0-9]{8}$/.test($("#numeroOiban").val())) {
-                        numero_carta = true;
-                        mainview.ripulisciCampiErrati();
-                        return;
-                    } else {
-                        numero_carta = false;
-                        mainview.campiErrati();
-                        $("#numeroOiban").css("borderColor", "red");
+        /*Ogni volta che il modal si chiude ricarico la pagina*/
+        $('#modalForm').on('hidden.bs.modal', function () {
+            $("#aggiungi-metodo")[0].reset();
 
-                        $("#numeroOiban").on("click", function () {
-                            $("#numeroOiban").css("borderColor", "");
-
-                        });
-                    }
-                }
-                numero_carta = true;
-            });
-        }else{
-            console.log("Ciao");
-        }
-
+            $("#alert").hide();
+        });
         /*Due control, la prima "getMetodi" recupera e conserva tutte le informarzioni relative ai
             metodi di pagamento. La seconda "getID" salva nella variabile maincontrol.selected l'ID
             del metodo che è stato selezionato dalla listgroup.
@@ -345,5 +347,67 @@
         maincontrol.getMetodi();
         maincontrol.getID();
 
+            $("#cvv").blur(function () {
+                if ($("#cvv").val() != "") {
+                    if (/^[0-9]{3}$/.test($("#cvv").val())) {
+                        cvv_validato = true;
+                        $("#alert").hide("fast");
+                        return;
+                    } else {
+                        cvv_validato = false;
+                        mainview.campiErrati();
+
+                        $("#cvv").css("borderColor", "red");
+
+                        $("#cvv").on("click", function () {
+                            $("#cvv").css("borderColor", "");
+                        });
+                    }
+                }
+                cvv_validato = false;
+            });
+            $("#numero").blur(function () {
+                if ($("#numero").val() != "") {
+                    if (/^[0-9]{8}$/.test($("#numero").val())) {
+                        numero_validato = true;
+                        $("#alert").hide("fast");
+                        return;
+                    } else {
+                        numero_validato = false;
+                        mainview.campiErrati();
+                        $("#numero").css("borderColor", "red");
+
+                        $("#numero").on("click", function () {
+                            $("#numero").css("borderColor", "");
+
+                        });
+                    }
+                }
+                numero_validato = false;
+            });
+
+                $("#iban").blur(function () {
+                    console.log("487");
+                    if ($("#iban").val() != "") {
+                        if (/^([A-Z]{2})\s*\t*[0-9]{24}$/.test($("#iban").val())) {
+                            iban_validato = true;
+                            $("#alert").hide("fast");
+                            return;
+                        } else {
+                            iban_validato = false;
+                            mainview.campiErrati();
+                            $("#iban").css("borderColor", "red");
+
+                            $("#iban").on("click", function () {
+                                $("#iban").css("borderColor", "");
+
+                            });
+                        }
+                    }
+                    iban_validato = false;
+                });
+
+
     })
+
 })();

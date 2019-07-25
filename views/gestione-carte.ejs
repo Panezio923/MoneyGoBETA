@@ -24,13 +24,13 @@
            <!--ROW contenente i bottoni delle azioni-->
             <div class="row mb-2">
                 <div class="col-12 col-md-3 offset-md-1">
-                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonONE">Aggiungi Metodo</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonONE"><i class="fas fa-plus-square"></i> Aggiungi Metodo </button>
                 </div>
                 <div class="col-12 col-md-4">
-                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonTHREE">Impoosta Metodo Predefinito</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonTHREE"> <i class="fas fa-heart"></i> Impoosta Metodo Predefinito</button>
                 </div>
                 <div class="col-12 col-md-3">
-                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonTWO">Rimuovi Metodo</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3" id="buttonTWO"><i class="fas fa-trash-alt"></i> Rimuovi Metodo </button>
                 </div>
             </div>
 
@@ -166,12 +166,19 @@
                                 </div>
                             <div class="row">
                                 <div class="col-12 col-md-6">
-                                    <label for="numero">Numero Carta o IBAN</label>
-                                    <input type="text" maxlength="35" class="form-control" id="numeroOiban" placeholder="Numero carta o iban">
+                                    <label for="numero">Numero Carta</label>
+                                    <input type="text" maxlength="8" class="form-control" id="numero" placeholder="Numero carta" autocomplete="off" required>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="cvv">CVV Carta</label>
-                                    <input type="text" maxlength="3" class="form-control" id="cvv" placeholder="CVV">
+                                    <input type="text" maxlength="3" class="form-control" id="cvv" placeholder="CVV"  autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="mb-2"></div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="numero">IBAN</label>
+                                    <input type="text" maxlength="35" class="form-control" id="iban" placeholder="IBAN" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="mb-2"></div>

@@ -77,4 +77,19 @@ router.post('/aggiungiMetodoCarta', (req, res, next) =>{
        }
    })
 });
+
+router.post('/aggiungiMetodoConto', (req, res, next) =>{
+    let iban = req.body.iban;
+    console.log(iban);
+    metodi.aggiungiMetodoConto(iban, function (result) {
+        if(result){
+            res.send("DONE");
+            res.end;
+        }else{
+            res.send("FAULT");
+            res.end;
+        }
+    })
+});
+
 module.exports = router;
