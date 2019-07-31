@@ -26,4 +26,5 @@ exports.inviaMailRegistrazione = function(destinatario, utente, callback) {
                 });
     callback(esito);
 };
+//hghff
 
