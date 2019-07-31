@@ -39,9 +39,9 @@ router.post('/login', (req,res,next)=>{
                 if(result){
                     //console.log(" match: " + result);
                     req.session.user = result;
-                    conto.calcolaSaldo(req.body.user, function (resConto) {
+                    conto.calcolaSaldo(req.session.user.nickname, function (resConto) {
                         req.session.conto = resConto;
-                        transazione.recuperaTransazione(req.body.user, function (resTransazioni) {
+                        transazione.recuperaTransazione(req.session.user.nickname, function (resTransazioni) {
                             req.session.transazioni = resTransazioni;
                             //console.log(resTransazioni);
                             res.send("MATCH");

@@ -16,7 +16,7 @@ exports.inizializza = function(){
 
 exports.inviaMailRegistrazione = function(destinatario, utente, callback) {
     var html = '<body><h2>MoneyGO</h2><div>Ciao ' + utente + '! Benvenuto sul portale di MoneyGo.'
-        + ' Entra e comincia subito a gestire il tuo denaro.'
+        + ' Entra e comincia subito a gestire il tuo denaro.';
 
     let esito = transporter.sendMail({
                     from: '"MoneyGO 💸" <moneygo@staff.com>',
