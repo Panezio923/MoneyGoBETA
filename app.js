@@ -9,10 +9,11 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 
 //ROUTES
-const indexRoute = require('./routes/indexRoute');
-const registerRoute = require('./routes/registratiRoute');
-const homeRoute = require('./routes/homeRoute');
-const gestioneMetodiRoute = require('./routes/gestioneMetodiRoute');
+const indexRoute = require('./private/route/indexRoute');
+const registerRoute = require('./private/route/registratiRoute');
+const homeRoute = require('./private/route/homeRoute');
+const gestioneMetodiRoute = require('./private/route/gestioneMetodiRoute');
+const gestioneDatiRoute = require('./private/route/gestioneDatiRoute');
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/', indexRoute);
 app.use('/registrati', registerRoute);
 app.use('/home', homeRoute);
 app.use('/home/adminCards', gestioneMetodiRoute);
+app.use('/home/gestioneDati', gestioneDatiRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

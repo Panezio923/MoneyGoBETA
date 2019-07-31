@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Metodi = require('../controllers/metodi');
-const Conto = require('../controllers/conto')
+const Metodi = require('../controller/metodi');
+const Conto = require('../controller/conto');
 
 const metodi = new Metodi();
 const conto = new Conto();

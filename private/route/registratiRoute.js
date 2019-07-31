@@ -1,10 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../controllers/user');
-const Conto = require('../controllers/conto');
+const User = require('../controller/user');
+const Conto = require('../controller/conto');
+const mailer = require('../mailer');
 
 const conto = new Conto();
 const user = new User();
+
+mailer.inizializza();
+
+function confermaRegistrazione(nomeUtente, email, callback){
+    mailer.inviaMailDiConferma(nomeUtente, email, function (esito) {
+        callback(esito);
+    });
+}
 
 router.post('/verificaNick', (req,res,next)=>{
     let nickname = req.body.nick;
@@ -38,8 +47,13 @@ router.post('/inviaRegistrazione', (req, res, next) =>{
         if(result){
             conto.createConto(req.body.nickname, function (resConto) {
                 if(resConto){
-                    res.send("ADDUSER");
-                    res.end();
+                   mailer.inviaMailRegistrazione( req.body.email, req.body.nickname, function (esito) {
+                        if(esito)
+                            res.send("ADDUSER");
+                        else
+                            res.send("ERRUSER");
+                        res.end();
+                    })
                 }
             })
         }else{
@@ -48,5 +62,6 @@ router.post('/inviaRegistrazione', (req, res, next) =>{
         }
     })
 });
+
 
 module.exports = router;

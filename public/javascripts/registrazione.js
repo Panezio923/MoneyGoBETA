@@ -25,9 +25,9 @@
         for (let i = 0; i < inputs.length; i++) {
             utente[inputs[i].id] = inputs[i].value;
         }
-
+        console.log(nome_validato +" " + cognome_validato +" " + codicefiscale_validato+" "  + data_di_nascita_validata+" "  + telefono_validato+" "  + email_validata+" "  + nickname_validato+" "  + password_validata+" "  + conferma_password_validata);
         if(nome_validato && cognome_validato && codicefiscale_validato && data_di_nascita_validata &&
-            numero_carta && email_validata && nickname_validato && password_validata && conferma_password_validata) {
+            telefono_validato && email_validata && nickname_validato && password_validata && conferma_password_validata) {
             $.ajax({
                 type: "POST",
                 url: "/registrati/inviaRegistrazione",
@@ -225,7 +225,7 @@
         });
 
         /* Controllo Data di nascita */
-        $("#nascita").change(function(){
+        $("#nascita").blur(function(){
             var nascita = $("#nascita").val();
             var d = new Date(); // Data corrente
 

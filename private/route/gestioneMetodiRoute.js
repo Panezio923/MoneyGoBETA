@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Metodi = require('../controllers/metodi');
+const Metodi = require('../controller/metodi');
 
 const metodi = new Metodi();
 
 //Restituisce la pagina di index
-router.get('/', (req, res, next) =>{
+router.get('/home/?', (req, res, next) =>{
     let user = req.session.user;
-    if(!user) {
+    if(user.nickname === undefined) {
         res.render('index', {title: 'MoneyGO'});
     }
 });

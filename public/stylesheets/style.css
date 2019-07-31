@@ -76,8 +76,10 @@ input{
 .button{
     background: dodgerblue;
 }
-#alert,#alertCheck,#loading,#conferma_errata,#password_errata,
-#modalSuccess,#modalCarte,#modalText,#close,#otherButton,#confermaButton{
+#alert,#successAlert,#alertCheck,#loading,#conferma_errata,#password_errata,
+#modalSuccess,#modalCarte,#modalText,#close,#otherButton,#confermaButton,
+#emailModifica,#SalvaEmail,#SalvaTelefono,#telefonoModifica,#SalvaLimite,#limiteModifica,
+#SalvaComunicazione,#comunicazioneModifica{
     display: none;
 }
 
@@ -88,6 +90,7 @@ input{
     }
     #oppure{font-size: 0.8em;}
     #registrati{font-size: 0.8em;}
+
 
 }
 

@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-12  col-md-6 offset-md-3">
+        <div class="alert alert-danger text-center" id="alert" role="alert">
+            <p id="alert_text"></p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-6 mb-2">
+        <div class="card shadow">
+            <h1 class="text-center card-header">Modifica dati </h1>
+            <div class="card-body">
+                <div class = "row">
+                    <div class ="col-12 col-md-3 mb-2">
+                        <div class="email" ><h5><b>Email</b></h5></div>
+                    </div>
+                    <div class ="col-12 col-md-6 mb-2">
+                        <div class="email" id="email"><h5><%= user.email%></h5></div>
+                        <input type="text" maxlength="100" class="form-control" id="emailModifica" placeholder="example@example.com">
+                    </div>
+                    <div class ="col-12 col-md-3 mb-2">
+                        <button class="link" id="ModificaEmail">Modifica</button>
+                        <button class="link" id="SalvaEmail">Salva</button>
+                    </div>
+                </div>
+
+                <div class = "row">
+                    <div class ="col-12 col-md-3 mb-2">
+                        <div class="telefono"><h5><b>Telefono</b></h5></div>
+                    </div>
+                    <div class ="col-12 col-md-6 mb-2">
+                        <div class="telefono" id="telefono"><h5><%= user.telefono%></h5></div>
+                        <input type="text" maxlength="10" class="form-control" id="telefonoModifica" placeholder="Inserire numero di telefono">
+                    </div>
+                    <div class ="col-12 col-md-3">
+                        <button class="link" id="ModificaTelefono">Modifica</button>
+                        <button class="link" id="SalvaTelefono">Salva</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card shadow  mb-2">
+            <h1 class="text-center card-header">Impostazioni Utili</h1>
+            <div class="card-body">
+                <div class = "row">
+                    <div class ="col-12 col-md-4 mb-2">
+                        <div class="limite"><h5><b>Limite spesa</b></h5></div>
+                    </div>
+                    <div class ="col-12 col-md-4 mb-2">
+                        <div class="limite" id="limite"><h5><%= limite.limite_spesa%>  €</h5></div>
+                        <input type="number" maxlength="10" class="form-control" id="limiteModifica" placeholder="00">
+
+                    </div>
+                    <div class ="col-12 col-md-3 offset-md-1 mb-2">
+                        <button class="link" id="ModificaLimite">Modifica</button>
+                        <button class="link" id="SalvaLimite">Salva</button>
+                    </div>
+                </div>
+
+                <div class = "row">
+                    <div class ="col-12 col-md-4 mb-2">
+                        <div class="comunicazione"><h5><b>Comunicazione</b></h5></div>
+                    </div>
+                    <div class ="col-12 col-md-4 mb-2">
+                        <div class="comunicazione" id="comunicazione">
+                            <%if(user.comunicazione == 0){%>
+                                <h5>Email</h5>
+                            <%}else if(user.comunicazione == 1){%>
+                                <h5>SMS</h5>
+                            <%}else if(user.comunicazione == 2){%>
+                                <h5>Telegram</h5>
+                            <%}%>
+                        </div>
+                        <div class="bootstrap-select-wrapper" id="comunicazioneModifica">
+                            <select title="Scegli un'opzione">
+                                <option value="Value 1">Email</option>
+                                <option value="Value 2">SMS</option>
+                                <option value="Value 3">Telegram</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class ="col-12 col-md-3 offset-md-1 mb-2 ">
+                        <button class="link" id="ModificaComunicazione">Modifica</button>
+                        <button class="link" id="SalvaComunicazione">Salva</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

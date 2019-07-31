@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../controllers/user');
-const Conto = require('../controllers/conto');
-const Transazione = require('../controllers/transazione');
+const User = require('../controller/user');
+const Conto = require('../controller/conto');
+const Transazione = require('../controller/transazione');
 
 const transazione = new Transazione();
 const conto = new Conto();

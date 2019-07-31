@@ -67,6 +67,16 @@ User.prototype = {
         })
     },
 
+    updateEmail: function (email,nickname,callback) {
+        let sql = "UPDATE utenti SET email = ? WHERE nickname = ?";
+        pool.query(sql,[email,nickname], function (err, result) {
+            if(err) throw err;
+            console.log(result);
+            if(result) callback(result);
+            else callback(null);
+        })
+    },
+
 };
 
 module.exports = User;
