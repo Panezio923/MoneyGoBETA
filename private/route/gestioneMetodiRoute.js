@@ -4,14 +4,6 @@ const Metodi = require('../controller/metodi');
 
 const metodi = new Metodi();
 
-//Restituisce la pagina di index
-router.get('/home/?', (req, res, next) =>{
-    let user = req.session.user;
-    if(user.nickname === undefined) {
-        res.render('index', {title: 'MoneyGO'});
-    }
-});
-
 router.get('/ricavaMetodi', (req,res,next)=>{
     let user = req.session.user;
     let nickname = user.nickname;

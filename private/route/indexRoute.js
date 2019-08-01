@@ -9,13 +9,14 @@ const conto = new Conto();
 const user = new User();
 
 //Restituisce la pagina di index
-router.get('/', (req, res, next) =>{
+router.all('/', (req, res, next) =>{
     let user = req.session.user;
-    if(user) {
+    if(!user) {
+        res.render('index', {title: 'MoneyGO'});
+    }else{
         res.redirect('/home');
-        return;
     }
-    res.render('index', {title: 'MoneyGO'});
+
 });
 
 router.get('/home', (req, res, next) =>{

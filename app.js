@@ -8,6 +8,7 @@ const session = require('express-session');
 const morgan = require('morgan');
 const helmet = require('helmet');
 
+
 //ROUTES
 const indexRoute = require('./private/route/indexRoute');
 const registerRoute = require('./private/route/registratiRoute');
@@ -21,6 +22,7 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
 //Bodyparser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,9 +32,9 @@ app.use(cookieParser());
 app.set('trust proxy', 1); // trust first proxy
 app.use(session({
   secret: 'secret',
-  resave: true,
+  resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 24 * 60 * 60 * 1000}
+  cookie: { maxAge: 900000}
 }));
 
 //Helmet protegge l'app da vulnerabilità web
@@ -45,7 +47,8 @@ app.use(morgan('common', {
 
 
 //Set static folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
+app.use(express.static(path.join(__dirname + '/public')));
 
 //routers
 app.use('/', indexRoute);
@@ -69,8 +72,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-const https = require('https');
 
 /**
  * Campo della risposta che indica ai browser che la ricevono che le risorse del server possono essere
@@ -96,12 +97,11 @@ app.options("*", function (req, res) {
 });
 
 /**
- * L'accesso diretto ai file html viene impedito, per evitare che un utente possa accedere direttamente alla pagina del
+ * L'accesso diretto ai file ejs viene impedito, per evitare che un utente possa accedere direttamente alla pagina del
  * sito senza essere autenticato.
  */
 app.use('*.ejs', function (req, res, next) {
   res.status('403').end('403 Forbidden');
 });
-
 
 module.exports = app;
