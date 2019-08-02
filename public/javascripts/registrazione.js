@@ -158,7 +158,6 @@
 
     mainview.nascondiInfoPassword = function(){
         $("#alertCheck").hide();
-
     };
 
     $(document).ready(function () {

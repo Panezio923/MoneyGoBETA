@@ -203,7 +203,6 @@
     maincontrol.aggiungiCarta = function(){
         var numero = $("#numero").val();
         var cvv = $("#cvv").val();
-        var scadenza = $("#scandeza").val();
 
         if(numero_validato) {
             for (let i = 0; i < maincontrol.metodi.length; i++) {

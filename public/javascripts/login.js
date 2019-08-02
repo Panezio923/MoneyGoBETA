@@ -2,6 +2,8 @@
     var mainview = {};
     var maincontrol = {};
 
+    $("#recPass").on('click', function () {location.href='/recuperoPassword';});
+
     $("#buttonLogin").on('click',function(e){maincontrol.premutoLogin(e)});
     $("#password").on('keyup',function(e){
         if(e.keyCode === 13)

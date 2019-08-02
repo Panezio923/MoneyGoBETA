@@ -1,4 +1,5 @@
 "use strict";
+const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 let transporter;
 
@@ -27,4 +28,17 @@ exports.inviaMailRegistrazione = function(destinatario, utente, callback) {
     callback(esito);
 };
 
+exports.inviaMailRecuperoPassword = function (destinatario, utente, password, callback) {
+    var html = '<body><h2>Password Modificata</h2><div>Ciao ' + utente + '! Ecco la tua nuova password:'
+        + '<h3>'+ password +'</h3>';
+
+    let esito = transporter.sendMail({
+        from: '"MoneyGO 💸" <moneygo@staff.com>',
+        to: destinatario,
+        subject: "Recupero Password",
+        html: html,
+    });
+    callback(esito);
+
+};
 

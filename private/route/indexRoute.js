@@ -75,8 +75,8 @@ router.get('/registrati', (req,res,next) =>{
     res.render('registrati', {title:'Registrati su MoneyGO'});
 });
 
-router.get('/verificaaccesso', (req, res, next) =>{
-   res.send("CIAO");
+router.get('/recuperoPassword', (req, res)=>{
+    res.render('recuperoPassword', {title: 'Recupera la tua password'});
 });
 
 module.exports = router;

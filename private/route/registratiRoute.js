@@ -9,12 +9,6 @@ const user = new User();
 
 mailer.inizializza();
 
-function confermaRegistrazione(nomeUtente, email, callback){
-    mailer.inviaMailDiConferma(nomeUtente, email, function (esito) {
-        callback(esito);
-    });
-}
-
 router.post('/verificaNick', (req,res,next)=>{
     let nickname = req.body.nick;
     user.findNick(nickname, function (result) {
@@ -63,5 +57,25 @@ router.post('/inviaRegistrazione', (req, res, next) =>{
     })
 });
 
+router.post('/verificaCoincidenza', (req,res,next)=>{
+   user.findNick(req.body.nickname, function (result) {
+       if(result[0].email === req.body.email) res.send("CHECK");
+       else res.send("UNCHECK");
+       res.end();
+   })
+});
 
+router.post(('/inviaNuovaPassword'), (req,res,next)=>{
+    user.generaPassword(function (nuovaPassword) {
+        user.caricaNuovaPassword(req.body.nickname, req.body.email, nuovaPassword, function (result) {
+            if(result) {
+                mailer.inviaMailRecuperoPassword(req.body.email, req.body.nickname, nuovaPassword, function (esito) {
+                    if (esito) res.send("DONE");
+                    else res.send("FAULT");
+                    res.end();
+                })
+            }else res.send("ERR");
+        })
+    })
+});
 module.exports = router;
