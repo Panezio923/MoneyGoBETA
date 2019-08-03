@@ -5,7 +5,6 @@
     var salvaemail = false;
     var salvatelefono = false;
     var salvalimite = false;
-    var salvacomunicazione = false;
 
     $("#ModificaEmail").on("click", function () {maincontrol.premutoModificaEmail()});
     $("#SalvaEmail").on("click", function () {maincontrol.premutoSalvaEmail()});
@@ -233,7 +232,7 @@
     //controllo Limite Spesa
     $("#limiteModifica").blur(function(){
         if($("#limiteModifica").val() != ""){
-            if(/^[0-9]{10}$/.test($("#limiteModifica").val())){
+            if(/^[0-9]/.test($("#limiteModifica").val())){
                 salvalimite = true;
                 mainview.ripulisciCampiErrati();
                 return;
