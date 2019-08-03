@@ -32,8 +32,16 @@ Conto.prototype = {
                 callback(result[0]);
             }
         })
+    },
 
-    }
+    updateLimiteSpesa : function(limite,nickname,callback) {
+        let sql = "UPDATE conto_moneygo SET limite_spesa = ? WHERE ref_nickname = ?";
+        pool.query(sql, [limite, nickname], function (err, result) {
+            if (err) throw err;
+            if (result) callback(result);
+            else callback(null);
+        })
+    },
 
 };
 

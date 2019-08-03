@@ -77,6 +77,24 @@ User.prototype = {
         })
     },
 
+    updateTelefono: function (telefono,nickname,callback) {
+        let sql = "UPDATE utenti SET telefono = ? WHERE nickname = ?";
+        pool.query(sql, [telefono, nickname], function (err, result) {
+            if (err) throw err;
+            if (result) callback(result);
+            else callback(null);
+        })
+    },
+
+    updateComunicazione: function (comunicazione,nickname,callback) {
+        let sql = "UPDATE utenti SET comunicazione = ? WHERE nickname = ?";
+        pool.query(sql,[comunicazione,nickname], function (err, result) {
+            if(err) throw err;
+            if(result) callback(result);
+            else callback(null);
+        })
+    },
+
     generaPassword: function (callback) {
         var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
