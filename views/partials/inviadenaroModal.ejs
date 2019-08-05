@@ -1,0 +1,75 @@
+<!--Modal form invio denaro-->
+<form action="/aggiungiMetodo" method="post" id="aggiungi-metodo">
+    <div class="modal fade" id="modalInviaDenaro" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Compila il form per inviare il denaro</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="destinatario">Nickname o email del Destinatario</label>
+                            <input type="text" maxlength="8" class="form-control" id="destinatario" placeholder="Nickname o email" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-8">
+                            <label for="metodoPagamento">Seleziona da dove inviare denaro</label>
+                            <div class="form-group" id="metodoPagamento">
+                                <select class="form-control" title="Scegli un'opzione" id="items">
+                                    <%
+                                    for(let i = 0; i < metodi.length; i++){
+                                        var numeroBanche = metodi.map(function(value) {return value.numero_iban;});
+                                        var numeroCarte = metodi.map(function(value) {return value.numero_carta;});
+                                        var numero = numeroCarte.concat(numeroBanche);
+                                        var tipo = metodi.map(function(value) {return value.tipo;});
+                                        //Filtro i numeri per rimuovere i valori null
+                                        var filter = numero.filter(function (value) { return value; });
+                                    %>
+                                    <option value="value<%=i%>"><%=filter[i]%></option>
+                                    <%}%>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-auto my-1">
+                            <div class="custom-control custom-checkbox mr-sm-2">
+                                <input type="checkbox" class="custom-control-input" id="checkPredefinito">
+                                <label class="custom-control-label" for="checkPredefinito">Utilizza pagamento predefinito</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="importo">Inserisci l'importo</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="euro">€</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Importo"  aria-describedby="euro" id="importo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2"></div>
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="alert alert-danger text-center" id="alert" role="alert">
+                                <p id="alert_text"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confermaInvioDenaro">Invia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

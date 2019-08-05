@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Metodi = require('../controller/metodi');
 const Conto = require('../controller/conto');
+const User = require('../controller/user');
 
+const user = new User();
 const metodi = new Metodi();
 const conto = new Conto();
 
@@ -45,6 +47,10 @@ router.get('/gestioneProfilo', (req,res,next) =>{
             res.render('gestioneprofilo', {title: "MoneyGo", user: req.session.user, limite: req.session.limite_spesa});
         }
     });
+});
+
+router.get('/user_nickname', (req,res,next)=>{
+    res.send(req.session.user.nickname);
 });
 
 

@@ -170,7 +170,7 @@
                     return;
                 }
                 else {
-                    email_validata = false;
+                    nome_validato = false;
                     mainview.campiErrati();
                     $("#nome").css("borderColor", "red");
                 }
@@ -178,7 +178,7 @@
                         $("#nome").css("borderColor", "");
                     });
             }
-            email_validata = false;
+            nome_validato = false;
         });
 
         /*Controllo cognome*/

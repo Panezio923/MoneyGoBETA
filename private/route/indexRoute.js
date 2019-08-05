@@ -3,10 +3,12 @@ const router = express.Router();
 const User = require('../controller/user');
 const Conto = require('../controller/conto');
 const Transazione = require('../controller/transazione');
+const Metodi = require('../controller/metodi');
 
 const transazione = new Transazione();
 const conto = new Conto();
 const user = new User();
+const metodi = new Metodi();
 
 //Restituisce la pagina di index
 router.all('/', (req, res, next) =>{
@@ -22,7 +24,7 @@ router.all('/', (req, res, next) =>{
 router.get('/home', (req, res, next) =>{
     let user = req.session.user;
     if(user){
-        res.render('home', {user:req.session.user, conto:req.session.conto, transazioni:req.session.transazioni});
+        res.render('home', {user:req.session.user, conto:req.session.conto, transazioni:req.session.transazioni, metodi:req.session.metodi});
         return;
     }
     res.redirect('/');
@@ -43,10 +45,17 @@ router.post('/login', (req,res,next)=>{
                     conto.calcolaSaldo(req.session.user.nickname, function (resConto) {
                         req.session.conto = resConto;
                         transazione.recuperaTransazione(req.session.user.nickname, function (resTransazioni) {
-                            req.session.transazioni = resTransazioni;
-                            //console.log(resTransazioni);
-                            res.send("MATCH");
-                            res.end();
+                            if(resTransazioni) {
+                                req.session.transazioni = resTransazioni;
+                                metodi.recuperaMetodi(req.session.user.nickname, function (resMetodi) {
+                                    if(resMetodi){
+                                        req.session.metodi = resMetodi;
+                                        res.send("MATCH");
+                                        res.end();
+                                    }
+                                })
+
+                            }
                         })
                     });
                 }

@@ -147,7 +147,6 @@
         $.ajax({
             type: "GET",
             url: "/home/adminCards/ricavaMetodi",
-            //no data
 
             success: function (data) {
                 maincontrol.metodi = data;
