@@ -3,10 +3,12 @@ const router = express.Router();
 const Metodi = require('../controller/metodi');
 const Conto = require('../controller/conto');
 const User = require('../controller/user');
+const Transazione = require('../controller/transazione');
 
 const user = new User();
 const metodi = new Metodi();
 const conto = new Conto();
+const transazione = new Transazione();
 
 router.get('/adminCards', (req,res,next) =>{
     let user = req.session.user;
@@ -51,6 +53,27 @@ router.get('/gestioneProfilo', (req,res,next) =>{
 
 router.get('/user_nickname', (req,res,next)=>{
     res.send(req.session.user.nickname);
+});
+
+router.post('/inviaDenaro', (req, res, next)=>{
+    var mittente = req.session.user.nickname;
+    var destinatario = req.body.destinatario;
+    var metodo = req.body.metodo;
+    var importo = req.body.importo;
+    var causale = req.body.causale;
+
+    metodi.inviaDenaro(mittente, destinatario, importo, metodo, function (result) {
+        if(result){
+            transazione.newTransazione(causale, mittente, destinatario, importo, "accettata", function (resTran) {
+                if(resTran) res.send("DONE");
+                else res.send("TRANERR");
+                res.end();
+            })
+        }else{
+            res.send("SENDERR");
+            res.end();
+        }
+    })
 });
 
 

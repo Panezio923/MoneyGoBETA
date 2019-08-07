@@ -108,6 +108,98 @@ Metodi.prototype = {
     },
 
 
+    inviaDenaro : function (mittente, destinatario, importo, metodo, callback) {
+        if(metodo === "PREDEFINITO"){
+            //prendo il predefinito
+            let metodo_predef = null;
+            let get_pred = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
+            pool.query(get_pred,mittente, function (err, result) {
+                if(err) throw err;
+                if(result[0].numero_carta != null) metodo_predef = result[0].numero_carta;
+                else if(result[0].numero_iban != null) metodo_predef = result[0].numero_iban;
+            });
+            //verifico la copertura
+            this.verificaCopertura(mittente, metodo_predef, importo, function (copertura) {
+                if(copertura) {
+                    this.avviaInvio(metodo_predef, mittente, destinatario, importo, causale, function (result) {
+                        if(result)
+                            callback(result);
+                        else
+                            callback(null);
+                    })
+                }
+            });
+        }
+        else if(metodo === "MONEYGO"){
+            this.verificaCoperturaContoMG(importo, mittente, function (esito) {
+                if(esito){
+                    this.avviaInvioContoMG(mittente, destinatario, importo, function (result) {
+                        if(result) callback(result);
+                        else callback(null);
+                    })
+                }
+            })
+        }
+        else{
+            this.verificaCopertura(metodo, mittente, importo, function (esito) {
+                if(esito){
+                    this.avviaInvio(metodo, mittente, destinatario, importo, function (result) {
+                        if(result) callback(result);
+                        else callback(null);
+                    })
+                }
+            })
+        }
+    },
+
+    verificaCopertura: function(metodo, mittente, importo, callback){
+        let sql = "SELECT saldo_metodo FROM metodi_pagamento WHERE ref_nickname = ? AND (numero_carta = ? OR numero_iban = ?)";
+        pool.query(sql, [mittente, metodo, metodo], function (err, result) {
+            if(err) throw err;
+            if(result[0] - importo < 0) callback(false);
+            else callback(true);
+        });
+    },
+
+    verificaCoperturaContoMG: function(importo, mittente, callback){
+        let sql = "SELECT saldo_conto FROM conto_moneygo WHERE ref_nickname = ?";
+        pool.query(sql, [mittente], function (err, result) {
+            if(err) throw err;
+            if(result[0] - importo < 0) callback(false);
+            else callback(true);
+        });
+    },
+
+    avviaInvio: function (metodo, mittente, destinatario, importo, callback) {
+
+        let sql = "BEGIN TRAN " +
+            "UPDATE metodi_pagamento SET saldo_metodo = (saldo_metodo - ?) WHERE (numero_carta = ? OR numero_iban = ?) AND ref_nickname = ? " +
+            "UPDATE carta SET saldo_carta = (saldo_carta - ?) WHERE numero_carta = ? " +
+            "UPDATE conto_bancario SET saldo_banca = (saldo_banca - ?) WHERE IBAN = ? " +
+            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? " +
+            "COMMIT TRAN ";
+
+        pool.query(sql, [importo, metodo, metodo, mittente, importo, metodo, importo, metodo, importo, destinatario], function (err, result) {
+            if(err) throw err;
+            if(result.length) callback(result);
+            else callback(null);
+        })
+    }, 
+    
+    avviaInvioContoMG: function (mittente, destinatario, importo, callback) {
+
+        let sql = "BEGIN TRAN " +
+            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto - ?) WHERE ref_nickname = ? " +
+            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? " +
+            "COMMIT TRAN ";
+
+        pool.query(sql, [importo, mittente, importo, destinatario], function (err, result) {
+            if(err) throw err;
+            if(result.length) callback(result);
+            else callback(null);
+        })
+    }
+
 
 
 };

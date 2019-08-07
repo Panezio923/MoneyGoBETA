@@ -7,11 +7,16 @@
     };
 
     var destinatario_validato = false;
+    var cifra_validata = false;
 
+    const formatter = new Intl.NumberFormat('it-IT', {
+        minimumFractionDigits: 2
+    });
 
     $("#gestCarte").on("click", function(){maincontrol.premutogestisciCarte()});
     $("#gestProfilo").on("click", function(){maincontrol.premutogestisciProfilo()});
     $("#inviaDenaro").on("click", function () {$("#modalInviaDenaro").modal('show')});
+    $("#form_inviadenaro").on("submit", function (e) {maincontrol.inviaDenaro(e)});
 
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
@@ -69,6 +74,7 @@
 
                         $("#destinatario").on("click", function () {
                             $("#destinatario").css("background-color", "");
+                            mainview.ripulisciCampiErrati();
 
                         });
                     } else if (msg === "EXIST") {
@@ -84,14 +90,34 @@
     maincontrol.getFontePagamento = function(){
       if($("#checkPredefinito").is(':checked'))
           maincontrol.metodo = "PREDEFINITO";
-      else{
-          maincontrol.metodo = $("#comunicazioneModifica option:selected").text();
-      }
+      else if($("#contoMG").is(':checked'))
+          maincontrol.metodo = "MONEYGO";
+      else
+          maincontrol.metodo = $("#metodoPagamento option:selected").text();
     };
 
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
-        //richiesta ajax per l'invio di denaro
+        if(destinatario_validato && cifra_validata) {
+            maincontrol.getFontePagamento();
+
+            var destinatario = $("#destinatario").val();
+            var importo = $("#importo").val();
+            var metodo = maincontrol.metodo;
+            var causale = $("#causale").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/home/inviaDenaro",
+                data: {destinatario: destinatario, importo: importo, metodo: metodo, causale: causale},
+
+                success: function (msg) {
+                    if(msg === "DONE"){
+                        console.log("fatto");
+                    }
+                }
+            })
+        }
     };
 
     mainview.mostraBarraLoading = function () {
@@ -113,17 +139,31 @@
 
     $(document).ready(function () {
 
-        $("#checkPredefinito").prop('checked', false);
+        var checkboxes = $("#checkPredefinito, #contoMG");
+        checkboxes.prop('checked', false);
 
-        $("#destinatario").blur(function(){
-            if($("#destinatario").val() != ""){
-                if(/^[a-zA-Z0-9]+$/.test($("#destinatario").val())){
+        checkboxes.on('click',function () {
+            checkboxes.prop("disabled", false);
+            $("#items").prop("disabled", false);
+
+            if($("#checkPredefinito").is(":checked")){
+                $("#items").prop("disabled", true);
+                $("#contoMG").prop("disabled", true);
+            }
+            else if($("#contoMG").is(":checked")){
+                $("#items").prop("disabled", true);
+                $("#checkPredefinito").prop("disabled", true);
+            }
+        });
+
+        $("#destinatario").blur(function () {
+            if ($("#destinatario").val() != "") {
+                if (/^[a-zA-Z0-9]+$/.test($("#destinatario").val())) {
                     destinatario_validato = true;
                     $("#alert").hide();
                     maincontrol.controllaEsistenzaNick($("#destinatario").val());
                     return;
-                }
-                else{
+                } else {
                     destinatario_validato = false;
                     mainview.campiErrati();
                     $("#destinatario").css("background-color", "#ff6152");
@@ -136,12 +176,22 @@
             destinatario_validato = false;
         });
 
-        $("#checkPredefinito").on('click',function () {
-            console.log($("#checkPredefinito").is(':checked'));
-            if($("#checkPredefinito").is(':checked')) $("#items").prop('disabled', true);
-            else $("#items").prop('disabled', false);
 
-        })
+        $("#importo").change(function () {
+            var cifra = $("#importo").val();
+            if(cifra != "") {
+                $("#importo").val(formatter.format(cifra));
+                cifra_validata = true;
+                return;
+            }else{
+                cifra_validata = false;
+            }
+        });
+
+        $("#importo").on('click',function () {
+            $("#importo").val("");
+        });
+
 
     });
 })();
