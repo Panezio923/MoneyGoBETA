@@ -59,12 +59,12 @@ router.post('/inviaDenaro', (req, res, next)=>{
     var mittente = req.session.user.nickname;
     var destinatario = req.body.destinatario;
     var metodo = req.body.metodo;
-    var importo = req.body.importo;
+    var importo = parseFloat(req.body.importo);
     var causale = req.body.causale;
 
-    metodi.inviaDenaro(mittente, destinatario, importo, metodo, function (result) {
+    metodi.inviaDenaro(mittente, importo, destinatario, metodo, function (result) {
         if(result){
-            transazione.newTransazione(causale, mittente, destinatario, importo, "accettata", function (resTran) {
+            transazione.newTransazione(causale, mittente, destinatario, importo, "eseguita", function (resTran) {
                 if(resTran) res.send("DONE");
                 else res.send("TRANERR");
                 res.end();

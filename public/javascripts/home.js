@@ -140,7 +140,6 @@
     $(document).ready(function () {
 
         var checkboxes = $("#checkPredefinito, #contoMG");
-        checkboxes.prop('checked', false);
 
         checkboxes.on('click',function () {
             checkboxes.prop("disabled", false);
@@ -191,7 +190,6 @@
         $("#importo").on('click',function () {
             $("#importo").val("");
         });
-
 
     });
 })();

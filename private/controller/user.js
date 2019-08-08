@@ -17,10 +17,8 @@ User.prototype = {
         });
     },
 
-
     login: function (user, pass, callback) {
         this.find(user, function (result) {
-            //console.log(bcrypt.hashSync(pass, 10));
             if (result) {
                 if (bcrypt.compareSync(pass, result.password)) {
                     callback(result);

@@ -107,8 +107,103 @@ Metodi.prototype = {
         })
     },
 
+    /*Funzione che permette di effettuare l'invio di denaro tramite il conto personale di MG.
+     *Per non ledere il database viene effettuata una transazione. Se qualcosa non va a buon fine
+     * in una qualunque query durante la transazione allora viene effettuato un rollback riportando il
+     * db allo stato in cui si trovava in precedenza.
+     */
+    avviaInvioContoMG: function(mittente, importo, destinatario, callback) {
+        console.log(destinatario + " " + mittente);
+      let sql_1 = "UPDATE conto_moneygo SET saldo_conto = (saldo_conto - ?) WHERE ref_nickname = ? ";
+      let sql_2 = "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? ";
 
-    inviaDenaro : function (mittente, destinatario, importo, metodo, callback) {
+        /**
+         * Richiedo al pool una connessione, in modo da poter iniziare una transazione.
+         */
+      pool.getConnection(function (err, connection) {
+          if(err){
+              console.log(err);
+              callback(undefined, "CONNERR");
+          }
+          else {
+              connection.beginTransaction(function (err) {
+                  if (err) {
+                      console.log(err);
+                      callback("CONNERR");
+                      connection.rollback();
+                      connection.release();
+                  } else {
+                      pool.query(sql_1, [importo, mittente], function (err, esitoUNO) {
+                          console.log(!esitoUNO);
+                          if (!esitoUNO) {
+                              callback(esitoUNO);
+                              connection.rollback();
+                              connection.release();
+                          } else {
+                              /*
+                               * Se la prima query viene eseguita allora procedo con il trasferimento di denaro
+                               */
+                              pool.query(sql_2, [importo, destinatario], function (err, esitoDUE) {
+                                  console.log(esitoDUE);
+                                  if (!esitoDUE) {
+                                      callback(esitoDUE);
+                                      connection.rollback();
+                                      connection.release();
+                                  } else {
+                                      /*
+                                       *Se le due query sono andate a buon fine effettuo il commit per rendere
+                                       * le modifiche permanenti nel db.
+                                       */
+                                      callback(esitoDUE);
+                                      connection.commit();
+                                      connection.release();
+                                  }
+                              })
+                          }
+                      })
+                  }
+              })
+          }
+      })
+
+    },
+
+    avviaInvio: function(mittente, importo, destinatario, metodo, callback) {
+
+        let sql = "START TRANSACTION; " +
+            "UPDATE metodi_pagamento SET saldo_metodo = (saldo_metodo - ?) WHERE (numero_carta = ? OR numero_iban = ?) AND ref_nickname = ? ;" +
+            "UPDATE carta SET saldo_carta = (saldo_carta - ?) WHERE numero_carta = ? ;" +
+            "UPDATE conto_bancario SET saldo_banca = (saldo_banca - ?) WHERE IBAN = ? ;" +
+            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? ;" +
+            "COMMIT;";
+
+        pool.query(sql, [importo, metodo, metodo, mittente, importo, metodo, importo, metodo, importo, destinatario], function (err, result) {
+            if(err) throw err;
+            if(result.length) callback(result);
+            else callback(null);
+        });
+    },
+
+    verificaCopertura: function(mittente, importo, metodo, callback){
+        let sql = "SELECT saldo_metodo FROM metodi_pagamento WHERE ref_nickname = ? AND (numero_carta = ? OR numero_iban = ?)";
+        pool.query(sql, [mittente, metodo, metodo], function (err, result) {
+            if(err) throw err;
+            if(result[0] - importo < 0) callback(false);
+            else callback(true);
+        });
+    },
+
+    verificaCoperturaContoMG: function(mittente, importo, callback){
+        let sql = "SELECT saldo_conto FROM conto_moneygo WHERE ref_nickname = ?";
+        pool.query(sql, [mittente], function (err, result) {
+            if(err) throw err;
+            if(result[0] - importo < 0) callback(false);
+            else callback(true);
+        });
+    },
+
+    inviaDenaro : function (mittente, importo, destinatario, metodo, callback) {
+        var that = this;
         if(metodo === "PREDEFINITO"){
             //prendo il predefinito
             let metodo_predef = null;
@@ -119,21 +214,20 @@ Metodi.prototype = {
                 else if(result[0].numero_iban != null) metodo_predef = result[0].numero_iban;
             });
             //verifico la copertura
-            this.verificaCopertura(mittente, metodo_predef, importo, function (copertura) {
+            that.verificaCopertura(mittente, importo, metodo_predef, function (copertura) {
                 if(copertura) {
-                    this.avviaInvio(metodo_predef, mittente, destinatario, importo, causale, function (result) {
-                        if(result)
-                            callback(result);
-                        else
-                            callback(null);
+                    that.avviaInvio(mittente, importo, destinatario, metodo_predef, function (result) {
+                        if(result) callback(result);
+                        else callback(null);
                     })
                 }
             });
         }
         else if(metodo === "MONEYGO"){
-            this.verificaCoperturaContoMG(importo, mittente, function (esito) {
-                if(esito){
-                    this.avviaInvioContoMG(mittente, destinatario, importo, function (result) {
+            that.verificaCoperturaContoMG(mittente, importo, function (copertura) {
+                if(copertura){
+                    console.log(destinatario + " " + mittente);
+                    that.avviaInvioContoMG(mittente, importo, destinatario, function (result) {
                         if(result) callback(result);
                         else callback(null);
                     })
@@ -141,9 +235,9 @@ Metodi.prototype = {
             })
         }
         else{
-            this.verificaCopertura(metodo, mittente, importo, function (esito) {
-                if(esito){
-                    this.avviaInvio(metodo, mittente, destinatario, importo, function (result) {
+            that.verificaCopertura(mittente, importo, metodo, function (copertura) {
+                if(copertura){
+                    that.avviaInvio(mittente, importo, destinatario, metodo, function (result) {
                         if(result) callback(result);
                         else callback(null);
                     })
@@ -151,56 +245,6 @@ Metodi.prototype = {
             })
         }
     },
-
-    verificaCopertura: function(metodo, mittente, importo, callback){
-        let sql = "SELECT saldo_metodo FROM metodi_pagamento WHERE ref_nickname = ? AND (numero_carta = ? OR numero_iban = ?)";
-        pool.query(sql, [mittente, metodo, metodo], function (err, result) {
-            if(err) throw err;
-            if(result[0] - importo < 0) callback(false);
-            else callback(true);
-        });
-    },
-
-    verificaCoperturaContoMG: function(importo, mittente, callback){
-        let sql = "SELECT saldo_conto FROM conto_moneygo WHERE ref_nickname = ?";
-        pool.query(sql, [mittente], function (err, result) {
-            if(err) throw err;
-            if(result[0] - importo < 0) callback(false);
-            else callback(true);
-        });
-    },
-
-    avviaInvio: function (metodo, mittente, destinatario, importo, callback) {
-
-        let sql = "BEGIN TRAN " +
-            "UPDATE metodi_pagamento SET saldo_metodo = (saldo_metodo - ?) WHERE (numero_carta = ? OR numero_iban = ?) AND ref_nickname = ? " +
-            "UPDATE carta SET saldo_carta = (saldo_carta - ?) WHERE numero_carta = ? " +
-            "UPDATE conto_bancario SET saldo_banca = (saldo_banca - ?) WHERE IBAN = ? " +
-            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? " +
-            "COMMIT TRAN ";
-
-        pool.query(sql, [importo, metodo, metodo, mittente, importo, metodo, importo, metodo, importo, destinatario], function (err, result) {
-            if(err) throw err;
-            if(result.length) callback(result);
-            else callback(null);
-        })
-    }, 
-    
-    avviaInvioContoMG: function (mittente, destinatario, importo, callback) {
-
-        let sql = "BEGIN TRAN " +
-            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto - ?) WHERE ref_nickname = ? " +
-            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? " +
-            "COMMIT TRAN ";
-
-        pool.query(sql, [importo, mittente, importo, destinatario], function (err, result) {
-            if(err) throw err;
-            if(result.length) callback(result);
-            else callback(null);
-        })
-    }
-
-
 
 };
 
