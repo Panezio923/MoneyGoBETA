@@ -170,18 +170,67 @@ Metodi.prototype = {
 
     avviaInvio: function(mittente, importo, destinatario, metodo, callback) {
 
-        let sql = "START TRANSACTION; " +
-            "UPDATE metodi_pagamento SET saldo_metodo = (saldo_metodo - ?) WHERE (numero_carta = ? OR numero_iban = ?) AND ref_nickname = ? ;" +
-            "UPDATE carta SET saldo_carta = (saldo_carta - ?) WHERE numero_carta = ? ;" +
-            "UPDATE conto_bancario SET saldo_banca = (saldo_banca - ?) WHERE IBAN = ? ;" +
-            "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? ;" +
-            "COMMIT;";
+        let sql_1 = "UPDATE metodi_pagamento SET saldo_metodo = (saldo_metodo - ?) WHERE (numero_carta = ? OR numero_iban = ?) AND ref_nickname = ? ";
+        let sql_2 =  "UPDATE carta SET saldo_carta = (saldo_carta - ?) WHERE numero_carta = ? " ;
+        let sql_3 =   "UPDATE conto_bancario SET saldo_banca = (saldo_banca - ?) WHERE IBAN = ? ";
+        let sql_4 =   "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? ";
 
-        pool.query(sql, [importo, metodo, metodo, mittente, importo, metodo, importo, metodo, importo, destinatario], function (err, result) {
-            if(err) throw err;
-            if(result.length) callback(result);
-            else callback(null);
-        });
+        pool.getConnection(function (err, connection) {
+            if(err){
+                console.log(err);
+                callback(undefined, "CONNERR");
+            }else{
+                connection.beginTransaction(function (err) {
+                    if(err){
+                        callback("CONNERR");
+                        connection.rollback();
+                        connection.release();
+                    }else{
+                        pool.query(sql_1, [importo, metodo, metodo, mittente], function (err, esitoUNO) {
+                            if(err) throw err;
+                            if(!esitoUNO){
+                                callback(undefined, esitoUNO);
+                                connection.rollback();
+                                connection.release();
+                            }else{
+                                pool.query(sql_2, [importo, metodo], function (err, esitoDUE) {
+                                    if(err) throw err;
+                                    if(!esitoDUE){
+                                        callback(undefined, esitoDUE);
+                                        connection.rollback();
+                                        connection.release();
+                                    }else{
+                                        pool.query(sql_3, [importo, metodo], function (err, esitoTRE) {
+                                            if(err) throw err;
+                                            if(!esitoTRE){
+                                                callback(undefined, esitoTRE);
+                                                connection.rollback();
+                                                connection.release();
+                                            }else{
+                                                pool.query(sql_4, [importo, destinatario], function (err, esitoTRE) {
+                                                    if(err) throw err;
+                                                    if(!esitoTRE){
+                                                        callback(undefined, esitoTRE);
+                                                        connection.rollback();
+                                                        connection.release();
+                                                    }else{
+                                                        callback(esitoTRE);
+                                                        connection.commit();
+                                                        connection.release();
+                                                    }
+                                                    
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+
     },
 
     verificaCopertura: function(mittente, importo, metodo, callback){
@@ -197,7 +246,8 @@ Metodi.prototype = {
         let sql = "SELECT saldo_conto FROM conto_moneygo WHERE ref_nickname = ?";
         pool.query(sql, [mittente], function (err, result) {
             if(err) throw err;
-            if(result[0] - importo < 0) callback(false);
+            console.log(result[0]);
+            if(result[0].saldo_conto - importo < 0) callback(false);
             else callback(true);
         });
     },
@@ -210,6 +260,7 @@ Metodi.prototype = {
             let get_pred = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
             pool.query(get_pred,mittente, function (err, result) {
                 if(err) throw err;
+                console.log(result[0]);
                 if(result[0].numero_carta != null) metodo_predef = result[0].numero_carta;
                 else if(result[0].numero_iban != null) metodo_predef = result[0].numero_iban;
             });
@@ -220,18 +271,17 @@ Metodi.prototype = {
                         if(result) callback(result);
                         else callback(null);
                     })
-                }
+                }else callback(false);
             });
         }
         else if(metodo === "MONEYGO"){
             that.verificaCoperturaContoMG(mittente, importo, function (copertura) {
                 if(copertura){
-                    console.log(destinatario + " " + mittente);
                     that.avviaInvioContoMG(mittente, importo, destinatario, function (result) {
                         if(result) callback(result);
                         else callback(null);
                     })
-                }
+                }else callback(false);
             })
         }
         else{
@@ -241,7 +291,7 @@ Metodi.prototype = {
                         if(result) callback(result);
                         else callback(null);
                     })
-                }
+                }else callback(false);
             })
         }
     },

@@ -17,6 +17,7 @@
     $("#gestProfilo").on("click", function(){maincontrol.premutogestisciProfilo()});
     $("#inviaDenaro").on("click", function () {$("#modalInviaDenaro").modal('show')});
     $("#form_inviadenaro").on("submit", function (e) {maincontrol.inviaDenaro(e)});
+    $("#aggiorna").on("click", function () {location.reload()});
 
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
@@ -102,7 +103,11 @@
             maincontrol.getFontePagamento();
 
             var destinatario = $("#destinatario").val();
-            var importo = $("#importo").val();
+            /*
+             * Formatter formatta la cifra con la virgola. Sostituisco la virgola con un punto
+             * poichè su mysql i float sono identificati dal punto e non dalla virgola.
+             */
+            var importo = $("#importo").val().replace(/,/g, '.');
             var metodo = maincontrol.metodo;
             var causale = $("#causale").val();
 
@@ -111,21 +116,42 @@
                 url: "/home/inviaDenaro",
                 data: {destinatario: destinatario, importo: importo, metodo: metodo, causale: causale},
 
+                beforeSend: function(){
+                    $("#formModal").hide();
+                    $("#loadingInvioDenaro").show();
+                },
+
                 success: function (msg) {
                     if(msg === "DONE"){
-                        console.log("fatto");
+                        $("#loadingInvioDenaro").hide();
+                        $("#alertCheck").show();
+                        $("#aggiorna").show();
+                        $("#confermaInvioDenaro").hide();
                     }
+                    else if(msg === "TRANERR"){
+                        $("#loadingInvioDenaro").hide();
+                        mainview.mostraAlert("Errore nella transazione. Per favore riprovare");
+                        $("#aggiorna").show();
+                        $("#confermaInvioDenaro").hide();
+                    }
+                    else if(msg === "FAULT"){
+                        $("#loadingInvioDenaro").hide();
+                        mainview.mostraAlert("Qualcosa è andato storto. Ci dispiace. Riprova.");
+                        $("#aggiorna").show();
+                        $("#confermaInvioDenaro").hide();
+                    }
+
                 }
             })
         }
     };
 
-    mainview.mostraBarraLoading = function () {
-        $("#loading").show();
+    mainview.mostraBarraLoading = function(){
+      $("#loading").show();
     };
 
-    mainview.nascondiBarraLoading = function () {
-        $("#loading").hide();
+    mainview.nascondiBarraLoading = function(){
+      $("#loading").hide();
     };
 
     mainview.mostraAlert = function(msg){
@@ -140,7 +166,7 @@
     $(document).ready(function () {
 
         var checkboxes = $("#checkPredefinito, #contoMG");
-
+        checkboxes.prop("checked", false);
         checkboxes.on('click',function () {
             checkboxes.prop("disabled", false);
             $("#items").prop("disabled", false);

@@ -64,13 +64,23 @@ router.post('/inviaDenaro', (req, res, next)=>{
 
     metodi.inviaDenaro(mittente, importo, destinatario, metodo, function (result) {
         if(result){
+            /*
+             * Aggiorno il valore del conto nella sessione solo quando viene selezionato quello di MoneyGo
+             * in quanto viene utilizzato nella home.
+             */
+            if(metodo === "MONEYGO") req.session.conto.saldo_conto = req.session.conto.saldo_conto - importo;
             transazione.newTransazione(causale, mittente, destinatario, importo, "eseguita", function (resTran) {
-                if(resTran) res.send("DONE");
+                /*
+                 * Quando creo una nuova transazione recupero le precedenti e aggiorno quelle salvate in session
+                 */
+                if(resTran){
+                   res.send("DONE");
+                }
                 else res.send("TRANERR");
                 res.end();
             })
         }else{
-            res.send("SENDERR");
+            res.send("FAULT");
             res.end();
         }
     })
