@@ -63,24 +63,33 @@ router.post('/inviaDenaro', (req, res, next)=>{
     var causale = req.body.causale;
 
     metodi.inviaDenaro(mittente, importo, destinatario, metodo, function (result) {
-        if(result){
+        if (result) {
             /*
              * Aggiorno il valore del conto nella sessione solo quando viene selezionato quello di MoneyGo
              * in quanto viene utilizzato nella home.
              */
-            if(metodo === "MONEYGO") req.session.conto.saldo_conto = req.session.conto.saldo_conto - importo;
-            transazione.newTransazione(causale, mittente, destinatario, importo, "eseguita", function (resTran) {
-                /*
-                 * Quando creo una nuova transazione recupero le precedenti e aggiorno quelle salvate in session
-                 */
-                if(resTran){
-                   res.send("DONE");
+            if (metodo === "MONEYGO") req.session.conto.saldo_conto = req.session.conto.saldo_conto - importo;
+
+            transazione.newTransazione(causale, mittente, destinatario, importo, "eseguita", function (newT) {
+                if (newT) {
+                    //Aggiorno le transazioni nella sessione
+                    transazione.recuperaTransazione(mittente, function (esito) {
+                        if (esito) {
+                            req.session.transazioni = esito;
+                            res.send("DONE");
+                            res.end();
+                        } else if (!esito) {
+                            res.send("FAULT");
+                            res.end();
+                        }
+                    })
+                } else if (!newT) {
+                    res.send("TRANERR");
+                    res.end();
                 }
-                else res.send("TRANERR");
-                res.end();
             })
-        }else{
-            res.send("FAULT");
+        } else if (!result) {
+            res.send("TOO");
             res.end();
         }
     })

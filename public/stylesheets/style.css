@@ -79,7 +79,7 @@ input{
 #alert,#successAlert,#alertCheck,#loading,#conferma_errata,#password_errata,
 #modalSuccess,#modalCarte,#modalText,#close,#otherButton,#confermaButton,
 #emailModifica,#SalvaEmail,#SalvaTelefono,#telefonoModifica,#SalvaLimite,#limiteModifica,
-#SalvaComunicazione,#comunicazioneModifica, #loadingInvioDenaro, #aggiorna{
+#SalvaComunicazione,#comunicazioneModifica, #loadingInvioDenaro, #aggiorna, .alert{
     display: none;
 }
 

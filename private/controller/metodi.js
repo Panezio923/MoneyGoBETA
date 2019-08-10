@@ -246,7 +246,6 @@ Metodi.prototype = {
         let sql = "SELECT saldo_conto FROM conto_moneygo WHERE ref_nickname = ?";
         pool.query(sql, [mittente], function (err, result) {
             if(err) throw err;
-            console.log(result[0]);
             if(result[0].saldo_conto - importo < 0) callback(false);
             else callback(true);
         });
@@ -260,7 +259,6 @@ Metodi.prototype = {
             let get_pred = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
             pool.query(get_pred,mittente, function (err, result) {
                 if(err) throw err;
-                console.log(result[0]);
                 if(result[0].numero_carta != null) metodo_predef = result[0].numero_carta;
                 else if(result[0].numero_iban != null) metodo_predef = result[0].numero_iban;
             });

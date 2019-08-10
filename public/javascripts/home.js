@@ -8,6 +8,8 @@
 
     var destinatario_validato = false;
     var cifra_validata = false;
+    var reqmittente_validato = false; //Chi riceve la richiesta di denaro è il mittente della transazione
+
 
     const formatter = new Intl.NumberFormat('it-IT', {
         minimumFractionDigits: 2
@@ -16,7 +18,9 @@
     $("#gestCarte").on("click", function(){maincontrol.premutogestisciCarte()});
     $("#gestProfilo").on("click", function(){maincontrol.premutogestisciProfilo()});
     $("#inviaDenaro").on("click", function () {$("#modalInviaDenaro").modal('show')});
+    $("#richiediDenaro").on("click", function(){$("#modalRichiediDenaro").modal('show')});
     $("#form_inviadenaro").on("submit", function (e) {maincontrol.inviaDenaro(e)});
+    $("#form_richiediDenaro").on("submit", function (e) {maincontrol.richiediDenaro(e)});
     $("#aggiorna").on("click", function () {location.reload()});
 
     maincontrol.premutogestisciProfilo = function(){
@@ -40,8 +44,6 @@
 
           success: function (data) {
               maincontrol.user_nickname = data;
-              console.log(data);
-              console.log(maincontrol.user_nickname);
           },
           error: function () {
               mainview.mostraAlert("Qualcosa è andato storto.");
@@ -50,15 +52,14 @@
       })
     };
 
-    maincontrol.controllaEsistenzaNick = function(nickname){
-        maincontrol.verificaNick();
-        if(nickname === maincontrol.user_nickname){
-            destinatario_validato=false;
-            mainview.mostraAlert("Impossibile inviare denaro a se stessi.");
-            $("#destinatario").css("background-color", "#ff6962");
+    maincontrol.controllaEsistenzaNick = function(nickname, id, variabile_di_controllo){
+        if(nickname.toLowerCase() === maincontrol.user_nickname.toLowerCase()){
+            variabile_di_controllo=false;
+            mainview.mostraAlert("Impossibile scambiare denaro con sé stessi.");
+            $("#" + id).css("background-color", "#ff6962");
 
-            $("#destinatario").on("click", function () {
-                $("#destinatario").css("background-color", "");
+            $("#" + id).on("click", function () {
+                $("#" + id).css("background-color", "");
             });
         }else {
             $.ajax({
@@ -67,20 +68,19 @@
                 data: {nick: nickname},
 
                 success: function (msg) {
-                    console.log(msg);
                     if (msg === "NOTEXIST") {
-                        destinatario_validato = false;
-                        mainview.mostraAlert("Destinatario inesistente nel sistema.");
-                        $("#destinatario").css("background-color", "#ff6962");
+                        variabile_di_controllo = false;
+                        mainview.mostraAlert("Nickname inesistente nel sistema.");
+                        $("#" + id).css("background-color", "#ff6962");
 
-                        $("#destinatario").on("click", function () {
-                            $("#destinatario").css("background-color", "");
+                        $("#" + id).on("click", function () {
+                            $("#" + id).css("background-color", "");
                             mainview.ripulisciCampiErrati();
 
                         });
                     } else if (msg === "EXIST") {
-                        $("#destinatario").css("background-color", "#66ff99");
-                        destinatario_validato = true;
+                        $("#" + id).css("background-color", "#66ff99");
+                        variabile_di_controllo = true;
                         mainview.ripulisciCampiErrati();
                     }
                 }
@@ -99,6 +99,7 @@
 
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
+        console.log(destinatario_validato + " " + cifra_validata);
         if(destinatario_validato && cifra_validata) {
             maincontrol.getFontePagamento();
 
@@ -107,9 +108,10 @@
              * Formatter formatta la cifra con la virgola. Sostituisco la virgola con un punto
              * poichè su mysql i float sono identificati dal punto e non dalla virgola.
              */
-            var importo = $("#importo").val().replace(/,/g, '.');
+            var importo = $(".importo").val().replace(/,/g, '.');
             var metodo = maincontrol.metodo;
-            var causale = $("#causale").val();
+            var causale = $(".causale").val();
+            console.log(importo + " " + causale);
 
             $.ajax({
                 type: "POST",
@@ -122,6 +124,7 @@
                 },
 
                 success: function (msg) {
+                    console.log(msg);
                     if(msg === "DONE"){
                         $("#loadingInvioDenaro").hide();
                         $("#alertCheck").show();
@@ -140,7 +143,16 @@
                         $("#aggiorna").show();
                         $("#confermaInvioDenaro").hide();
                     }
+                    else if(msg === "TOO"){
+                        $("#loadingInvioDenaro").hide();
+                        mainview.mostraAlert("L'importo selezionato non è coperto dal metodo scelto.");
+                        $("#aggiorna").show();
+                        $("#confermaInvioDenaro").hide();
+                    }
 
+                },
+                error: function () {
+                    console.log("Error");
                 }
             })
         }
@@ -155,15 +167,19 @@
     };
 
     mainview.mostraAlert = function(msg){
-        $("#alert_text").text(msg);
-        $("#alert").show("slow");
+        $(".testo_alert").text(msg);
+        $(".alert").show("slow");
     };
 
     mainview.ripulisciCampiErrati = function(){
-        $("#alert").hide("fast");
+        $(".alert").hide();
     };
 
+
     $(document).ready(function () {
+
+        //Quando carica la pagina recupero il nick dell'utente
+        maincontrol.verificaNick();
 
         var checkboxes = $("#checkPredefinito, #contoMG");
         checkboxes.prop("checked", false);
@@ -181,12 +197,12 @@
             }
         });
 
-        $("#destinatario").blur(function () {
+        $("#destinatario").blur(function (e) {
             if ($("#destinatario").val() != "") {
                 if (/^[a-zA-Z0-9]+$/.test($("#destinatario").val())) {
                     destinatario_validato = true;
                     $("#alert").hide();
-                    maincontrol.controllaEsistenzaNick($("#destinatario").val());
+                    maincontrol.controllaEsistenzaNick($("#destinatario").val(), "destinatario", destinatario_validato, e);
                     return;
                 } else {
                     destinatario_validato = false;
@@ -202,10 +218,13 @@
         });
 
 
-        $("#importo").change(function () {
-            var cifra = $("#importo").val();
-            if(cifra != "") {
-                $("#importo").val(formatter.format(cifra));
+        $("#importoDUE, #importoUNO").change(function () {
+            var cifraUNO = $("#importoUNO").val();
+            var cifraDUE = $("#importoDUE").val();
+            if(cifraUNO != "" || cifraDUE != "") {
+                $("#importoUNO").val(formatter.format(cifraUNO));
+                $("#importoDUE").val(formatter.format(cifraDUE));
+                console.log(cifraUNO + " " + cifraDUE);
                 cifra_validata = true;
                 return;
             }else{
@@ -213,9 +232,35 @@
             }
         });
 
-        $("#importo").on('click',function () {
-            $("#importo").val("");
+        $(".importo").on('click',function () {
+            $(".importo").val("");
         });
+
+        $("#reqmittente").blur( function () {
+            if ($("#reqmittente").val() != "") {
+                if (/^[a-zA-Z0-9]+$/.test($("#reqmittente").val())) {
+                    reqmittente_validato = true;
+                    maincontrol.controllaEsistenzaNick($("#reqmittente").val(), "reqmittente", reqmittente_validato);
+                    return;
+                } else {
+                    reqmittente_validato = false;
+                    mainview.campiErrati();
+                    $("#reqmittente").css("background-color", "#ff6152");
+
+                    $("#reqmittente").on("click", function () {
+                        $("#reqmittente").css("background-color", "");
+                    });
+                }
+            }
+            reqmittente_validato = false;
+        });
+
+        $("#modalInviaDenaro, #modalRichiediDenaro").on('hidden.bs.modal', function () {
+            mainview.ripulisciCampiErrati();
+            cifra_validata = false;
+            destinatario_validato = false;
+            reqmittente_validato = false;
+        })
 
     });
 })();

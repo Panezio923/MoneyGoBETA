@@ -5,7 +5,7 @@ function Transazione() {};
 Transazione.prototype = {
 
     recuperaTransazione : function (user, callback) {
-        let sql = "SELECT * FROM transazione t WHERE (t.nick_mittente = ? OR t.destinatario = ?)";
+        let sql = "SELECT * FROM transazione t WHERE (t.nick_mittente = ? OR t.destinatario = ?) ORDER BY id_transazione DESC";
 
         pool.query(sql, [user, user], function (err, result) {
             if(err) throw err;
