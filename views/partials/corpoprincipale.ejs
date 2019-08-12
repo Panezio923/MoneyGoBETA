@@ -39,7 +39,21 @@
     <div class="mb-4"></div>
     <!--SECONDA ROW -->
     <div class="row">
-        <%include ultime-transazioni.ejs%>
+        <!--Card Gestione profilo-->
+        <div class="col-12 col-md-6">
+        <div class="card shadow mb-3">
+            <h2 class="text-center">Gestici il tuo MoneyGO</h2>
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-12">
+                        <button class="btn btn-primary btn-block" id="ricConto"><i class="fas fa-piggy-bank"></i>    Ricarica Conto      <i class="fas fa-piggy-bank"></i></button>
+                        <button class="btn btn-primary btn-block" id="gestProfilo"><i class="fas fa-user"></i> Gestione Profilo <i class="fas fa-user"></i></button>
+                        <button class="btn btn-primary btn-block" id="estConto"><i class="fas fa-cash-register"></i> Estratto Conto <i class="fas fa-cash-register"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
         <!--Card Gestione Conto-->
         <div class="col-12 col-md-6">
             <div class="card shadow mb-3">
@@ -52,25 +66,17 @@
                             <button class="btn btn-primary btn-block" id="gestCarte"><i class="fas fa-credit-card"></i> Gestione Carte <i class="fas fa-credit-card"></i></button>
                             <button class="btn btn-primary btn-block" id="creaLink"><i class="fas fa-link"></i> Crea Link Pagamento <i class="fas fa-link"></i></button>
                             <button class="btn btn-primary btn-block" id="pagPeriodico"><i class="fas fa-user-clock"></i> Pagamento Periodico <i class="fas fa-user-clock"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!--Card Gestione profilo-->
-                <div class="card shadow mb-3">
-                    <h2 class="text-center">Gestici il tuo MoneyGO</h2>
-                    <div class="card-body">
-                        <div class="row ">
-                            <div class="col-12">
-                                <button class="btn btn-primary btn-block" id="ricConto"><i class="fas fa-piggy-bank"></i>    Ricarica Conto      <i class="fas fa-piggy-bank"></i></button>
-                                <button class="btn btn-primary btn-block" id="gestProfilo"><i class="fas fa-user"></i> Gestione Profilo <i class="fas fa-user"></i></button>
-                                <button class="btn btn-primary btn-block" id="gestDati"><i class="fas fa-info-circle"></i> Gestione Dati <i class="fas fa-info-circle"></i></button>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
+       <%include notifiche.ejs%>
+
+        <%include ultime-transazioni.ejs%>
+    </div>
 
 
