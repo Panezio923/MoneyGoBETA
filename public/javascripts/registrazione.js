@@ -133,9 +133,11 @@
         $("#alert").show("slow");
     };
 
-    mainview.campiErrati = function () {
+    mainview.campiErrati = function (id) {
         $("#alert_text").text("Per favore, ricontrollare i dati");
         $("#alert").show("slow");
+       id.addClass("is-invalid");
+       id.removeClass("is-valid");
 
     };
 
@@ -147,8 +149,11 @@
 
     };
 
-    mainview.ripulisciCampiErrati = function(){
+    mainview.ripulisciCampiErrati = function(id){
         $("#alert").hide();
+        id.removeClass("is-invalid");
+        id.addClass("is-valid");
+
     };
 
     mainview.mostraInfoPassword =  function(){
@@ -166,17 +171,16 @@
             if($("#nome").val() != ""){
                 if(/^[A-Za-z]+$/.test($("#nome").val())){
                     nome_validato = true;
-                    mainview.ripulisciCampiErrati();
+                    mainview.ripulisciCampiErrati($("#nome"));
+                    $("#nome").addClass("is-valid");
                     return;
                 }
                 else {
                     nome_validato = false;
-                    mainview.campiErrati();
-                    $("#nome").css("borderColor", "red");
+                    mainview.campiErrati($("#nome"));
+                    $("#nome").addClass("is-invalid");
+
                 }
-                    $("#nome").on("click", function () {
-                        $("#nome").css("borderColor", "");
-                    });
             }
             nome_validato = false;
         });
@@ -186,18 +190,16 @@
             if($("#cognome").val() != ""){
                 if(/^[A-Za-z]+$/.test($("#cognome").val())){
                     cognome_validato = true;
-                    mainview.ripulisciCampiErrati();
+                    $("#cognome").addClass("is-valid");
+                    mainview.ripulisciCampiErrati($("#cognome"));
                     return;
                 }
                 else {
                     cognome_validato = false;
-                    mainview.campiErrati();
-                    $("#cognome").css("borderColor", "red");
+                    $("#cognome").addClass("is-invalid");
+                    mainview.campiErrati($("#cognome"));
                 }
 
-            $("#cognome").on("click", function () {
-                $("#cognome").css("borderColor", "");
-            });
         }
             cognome_validato = false;
         });
@@ -207,17 +209,12 @@
             if($("#codicefiscale").val() != ""){
                 if(/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i.test($("#codicefiscale").val())){
                     codicefiscale_validato = true;
-                    mainview.ripulisciCampiErrati();
+                    mainview.ripulisciCampiErrati($("#codicefiscale"));
                     return;
                 }
                 else{
                     codicefiscale_validato = false;
-                    mainview.campiErrati();
-                    $("#codicefiscale").css("borderColor", "red");
-
-                    $("#codicefiscale").on("click", function () {
-                        $("#codicefiscale").css("borderColor", "");
-                    });
+                    mainview.campiErrati($("#codicefiscale"));
                 }
             }
             codicefiscale_validato = false;
@@ -232,37 +229,22 @@
             nascita = new Date(nascita);
             /* Se il formato non è valido */
             if(nascita.toDateString() == "Invalid Date") {
-                mainview.campiErrati();
-                $("#nascita").css("borderColor", "red");
-
-                $("#nascita").on("click", function () {
-                    $("#nascita").css("borderColor", "");
-                });
+                mainview.campiErrati($("#nascita"));
             }
             /* Se viene dal futuro */
             else if(nascita > d) {
-                mainview.campiErrati();
-                $("#nascita").css("borderColor", "red");
-
-                $("#nascita").on("click", function () {
-                    $("#nascita").css("borderColor", "");
-                });
+                mainview.campiErrati($("#nascita"));
             }
             /* Controllo l'età */
             else{
                 d.setYear(d.getFullYear() - 14);
                 /* Se ha meno di 14 anni (dalla data di registrazione) */
                 if (nascita > d){
-                    mainview.campiErrati();
-                    $("#nascita").css("borderColor", "red");
-
-                    $("#nascita").on("click", function () {
-                        $("#nascita").css("borderColor", "");
-                    });
+                    mainview.campiErrati($("#nascita"));
                 }
                 else {
                     data_di_nascita_validata = true;
-                    mainview.ripulisciCampiErrati();
+                    mainview.ripulisciCampiErrati($("#nascita"));
                     return;
                 }
             }
@@ -274,18 +256,13 @@
             if($("#email").val() != ""){
                 if(/^[A-Z0-9a-z._-]{3,}@[A-Z0-9a-z.-]{2,}\.[A-Za-z0-9]{2,4}$/.test($("#email").val())){
                     email_validata = true;
-                    mainview.ripulisciCampiErrati();
+                    mainview.ripulisciCampiErrati($("#email"));
                     maincontrol.controllaMailDuplicata($("#email").val());
                     return;
                 }
                 else{
                     email_validata = false;
-                    mainview.campiErrati();
-                    $("#email").css("borderColor", "red");
-
-                    $("#email").on("click", function () {
-                        $("#email").css("borderColor", "");
-                    });
+                    mainview.campiErrati($("#email"));
                 }
             }
             email_validata = false;
@@ -296,17 +273,12 @@
             if($("#telefono").val() != ""){
                 if(/^[0-9]{10}$/.test($("#telefono").val())){
                     telefono_validato = true;
-                    mainview.ripulisciCampiErrati();
+                    mainview.ripulisciCampiErrati($("#telefono"));
                     return;
                 }
                 else{
                     telefono_validato = false;
-                    mainview.campiErrati();
-                    $("#telefono").css("borderColor", "red");
-
-                    $("#telefono").on("click", function () {
-                        $("#telefono").css("borderColor", "");
-                    });
+                    mainview.campiErrati($("#telefono"));
                 }
             }
             telefono_validato = false;
@@ -317,18 +289,13 @@
             if($("#nickname").val() != ""){
                 if(/^[a-zA-Z0-9]+$/.test($("#nickname").val())){
                     nickname_validato = true;
-                    mainview.ripulisciCampiErrati();
+                    mainview.ripulisciCampiErrati($("#nickname"));
                     maincontrol.controllaNicknameDuplicato($("#nickname").val());
                     return;
                 }
                 else{
                     nickname_validato = false;
-                    mainview.campiErrati();
-                    $("#nickname").css("borderColor", "red");
-
-                    $("#nickname").on("click", function () {
-                        $("#nickname").css("borderColor", "");
-                    });
+                    mainview.campiErrati($("#nickname"));
                 }
             }
             nickname_validato = false;
@@ -369,17 +336,21 @@
                 (/[A-Z]/.test($("#password").val())))
             {
                 if(($("#password").val().length >= 8) && ($("#password").val().length < 12)){
-                    $("#password").css("background-color","rgba(255,71,0,0.5)"); // darkorange
+                    $("#password").css("background-color","rgb(255, 140, 0)"); // darkorange
+                    $("#gradoPassword").text("Debole");
                 }
                 else if(($("#password").val().length >= 12) && ($("#password").val().length < 16)){
                     $("#password").css("background-color","rgba(255,245,0,0.5)"); // gold
+                    $("#gradoPassword").text("Media");
                 }
                 else if(($("#password").val().length >= 16)){
                     $("#password").css("background-color","rgba(21,205,2,0.5)"); // limegreen
+                    $("#gradoPassword").text("Forte");
                 }
             }
             else{
                 $("#password").css("background-color","white"); // limegreen
+                $("#gradoPassword").text(" ");
             }
         });
 
@@ -392,10 +363,12 @@
             if($("#password").val().length != 0) {
                 if ($("#conferma_password").val() == $("#password").val()) {
                     conferma_password_validata = true;
+                    mainview.ripulisciCampiErrati($("#conferma_password"));
                 }
                 else {
                     conferma_password_validata = false;
                     $("#conferma_errata").show();
+                    mainview.campiErrati($("#conferma_password"));
                 }
             }
             else

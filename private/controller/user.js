@@ -113,7 +113,22 @@ User.prototype = {
                if(esito) callback(esito);
                else callback(null);
            })
-    }
+    },
+
+    findPassword : function (password,nickname,callback) {
+        let sql = "SELECT * FROM utenti u WHERE nickname = ? ";
+        pool.query(sql,[nickname],function (err, result) {
+            if (err) throw err;
+            if(result) {
+                bcrypt.compare(password,result[0].password,function (err,res) {
+                    if(err) throw err;
+                    if(res) callback(res);
+                    else callback(null);
+                })
+            }
+        })
+    },
+
 };
 
 

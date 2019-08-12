@@ -101,42 +101,71 @@
         <div class="card shadow">
             <h1 class="text-center card-header">Modifica password</h1>
             <div class="card-body">
-                <div class = "row">
-                    <div class ="col-12 col-md-4 mb-2">
-                        <div class="password" ><campi><b> Vecchia Password</b></campi></div>
-                    </div>
-                    <div class ="col-12 col-md-7 mb-2">
-                        <input type="password" maxlength="100" class="form-control" id="passwordVecchia">
-                    </div>
-                </div>
+                 <form  method="post" id="form_cambia_password">
+                    <div class="form-row">
+                        <div class="form-group col-12 col-md-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-success"  id="successAlert" role="alert">
+                                         <p id = "alert_text_success"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "row">
+                                <div class ="col-12 col-md-4 mb-2">
+                                    <div class="password" ><campi><b> Vecchia Password</b></campi></div>
+                                </div>
+                                <div class ="col-12 col-md-7 mb-2">
+                                     <input type="password" maxlength="100" class="form-control" id="passwordVecchia">
+                                </div>
+                            </div>
 
-                <div class = "row">
-                    <div class ="col-12 col-md-4 mb-2">
-                        <div class="password"><campi><b>Nuova Password</b></campi></div>
-                    </div>
-                    <div class ="col-12 col-md-7 mb-2">
-                        <input type="password" maxlength="10" class="form-control" id="passwordNuova">
-                    </div>
-                </div>
+                            <div class = "row">
+                                <div class ="col-12 col-md-4 mb-2">
+                                     <div class="password"><campi><b>Nuova Password</b></campi></div>
+                                </div>
+                                <div class ="col-12 col-md-7 mb-2">
+                                    <input type="password" maxlength="100" class="form-control" id="passwordNuova">
+                                    <p id="grado_password"></p>
+                                </div>
+                            </div>
 
-                <div class = "row">
-                    <div class ="col-12 col-md-4 mb-2">
-                        <div class="password"><campi><b>Ripeti Password</b></campi></div>
-                    </div>
-                    <div class ="col-12 col-md-7 mb-2">
-                        <input type="password" maxlength="10" class="form-control" id="passwordRipeti">
-                    </div>
-                </div>
+                            <div class="row">
+                                <div class ="col-12">
+                                    <!--Alert sul formato della password-->
+                                    <div class="alert alert-primary" role="alert" id="alertCheck">
+                                        <p id="textCheck"></p>
+                                    </div>
+                                    <div class="alert alert-primary alert-danger" role="alert" id="password_errata">
+                                        <p>La password non rispetta le richieste minime </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div class ="mb-3"></div>
+                            <div class="row">
+                                <div class ="col-12 col-md-4 mb-2">
+                                    <div class="password"><campi><b>Conferma Password</b></campi></div>
+                                </div>
+                                <div class ="col-12 col-md-7 mb-2">
+                                    <input type="password" maxlength="100" class="form-control" id="passwordRipeti">
+                                    <!--Alert sul controllo della password-->
+                                    <div class="alert alert-primary alert-danger" role="alert" id="conferma_errata">
+                                        <p>Le due password non coincidono</p>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div class ="row">
-                    <div class = "col-12">
-                        <button class="btn btn-primary btn-lg btn-block">Conferma</button>
+                            <div class ="mb-3"></div>
+
+                            <div class ="row">
+                                <div class = "col-12">
+                                    <button id ="Conferma" class="btn btn-primary btn-lg btn-block">Conferma</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                 </form>
             </div>
         </div>
     </div>
 </div>
-

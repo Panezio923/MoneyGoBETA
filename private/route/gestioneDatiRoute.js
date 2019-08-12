@@ -64,5 +64,35 @@ router.post('/aggiornaComunicazione', (req,res,next)=> {
     })
 });
 
+//funzione che controlla che, quando si desidera cambiare la password, viene inserita correttamente la vecchia password
+router.post('/controllaPassword', (req,res,next)=> {
+
+    let nick = req.session.user.nickname;
+    let password = req.body.password;
+    console.log(password);
+    user.findPassword(password,nick,function(result) {
+        if (result) {
+            res.send("RIGHT");
+        } else {
+            res.send("WRONG");
+        }
+        res.end();
+    })
+});
+
+//funzione che permette di cambiare la password
+router.post('/ModificaPassword', (req,res,next)=> {
+
+    let password = req.body.password;
+    let nick = req.session.user.nickname;
+    let email = req.session.user.email;
+    user.caricaNuovaPassword(nick,email,password,function (result) {
+        if (result) {
+            req.session.user.password = password;
+            res.send("DONE");
+        } else res.send("FAULT");
+        res.end();
+    })
+});
 
 module.exports = router;
