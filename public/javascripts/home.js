@@ -4,6 +4,10 @@
     var maincontrol = {
         user_nickname: null,
         metodo: null,
+        importo: null,
+        causale: null,
+        destinatario: null,
+        bypass: "off",
     };
 
     var destinatario_validato = false;
@@ -21,7 +25,8 @@
     $("#richiediDenaro").on("click", function(){$("#modalRichiediDenaro").modal('show')});
     $("#form_inviadenaro").on("submit", function (e) {maincontrol.inviaDenaro(e)});
     $("#form_richiediDenaro").on("submit", function (e) {maincontrol.richiediDenaro(e)});
-    $("#aggiorna").on("click", function () {location.reload()});
+    $("#byPassLimite").on("click", function(e){maincontrol.byPassLimite(e)});
+    $(".aggiorna").on("click", function () {location.reload()});
 
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
@@ -97,9 +102,50 @@
           maincontrol.metodo = $("#metodoPagamento option:selected").text();
     };
 
+    maincontrol.richiediDenaro = function(e){
+      e.preventDefault();
+
+      if(reqmittente_validato && cifra_validata){
+          var reqmittente = $("#reqmittente").val();
+          var importo = $(".importo").val().replace(/,/g, '.');
+          var causale = $("#causale").val();
+
+          $.ajax({
+              type:"POST",
+              url: "/home/richiediDenaro",
+              data: {reqmittente: reqmittente, importo: importo, causale: causale},
+
+              beforeSend: function () {
+                  $("#formModalDUE").hide();
+                  $(".loading").show();
+              },
+              success: function (msg) {
+                  if(msg === "DONE"){
+                      $(".loading").hide();
+                      $(".alert-check").show();
+                      $(".aggiorna").show();
+                      $("#confermaRichiestaDenaro").hide();
+                  }
+                  else if(msg === "FAULT"){
+                      $(".loading").hide();
+                      mainview.mostraAlert("Qualcosa è andato storto. Ci dispiace. Riprova.");
+                      $(".aggiorna").show();
+                      $("#confermaRichiestaDenaro").hide();
+                  }
+              }
+
+          })
+
+      }
+    };
+
+    maincontrol.byPassLimite = function(e){
+        maincontrol.bypass = "on";
+        maincontrol.inviaDenaro(e);
+    };
+
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
-        console.log(destinatario_validato + " " + cifra_validata);
         if(destinatario_validato && cifra_validata) {
             maincontrol.getFontePagamento();
 
@@ -111,12 +157,16 @@
             var importo = $(".importo").val().replace(/,/g, '.');
             var metodo = maincontrol.metodo;
             var causale = $(".causale").val();
-            console.log(importo + " " + causale);
 
+            //Salvo i valori all'interno della maincontrol
+            maincontrol.destinatario = destinatario;
+            maincontrol.importo = importo;
+            maincontrol.causale = causale;
+            console.log(maincontrol.bypass);
             $.ajax({
                 type: "POST",
                 url: "/home/inviaDenaro",
-                data: {destinatario: destinatario, importo: importo, metodo: metodo, causale: causale},
+                data: {destinatario: destinatario, importo: importo, metodo: metodo, causale: causale, bypass: maincontrol.bypass},
 
                 beforeSend: function(){
                     $("#formModal").hide();
@@ -126,27 +176,37 @@
                 success: function (msg) {
                     console.log(msg);
                     if(msg === "DONE"){
-                        $("#loadingInvioDenaro").hide();
-                        $("#alertCheck").show();
-                        $("#aggiorna").show();
+                        $(".alert").hide();
+                        $(".loading").hide();
+                        $(".alert-check").show();
+                        $(".aggiorna").html("Aggiorna").show();
                         $("#confermaInvioDenaro").hide();
+                        $("#byPassLimite").hide();
                     }
                     else if(msg === "TRANERR"){
-                        $("#loadingInvioDenaro").hide();
+                        $(".loading").hide();
                         mainview.mostraAlert("Errore nella transazione. Per favore riprovare");
-                        $("#aggiorna").show();
+                        $(".aggiorna").show();
                         $("#confermaInvioDenaro").hide();
                     }
                     else if(msg === "FAULT"){
-                        $("#loadingInvioDenaro").hide();
+                        $(".loading").hide();
                         mainview.mostraAlert("Qualcosa è andato storto. Ci dispiace. Riprova.");
-                        $("#aggiorna").show();
+                        $(".aggiorna").show();
                         $("#confermaInvioDenaro").hide();
                     }
                     else if(msg === "TOO"){
-                        $("#loadingInvioDenaro").hide();
+                        $(".loading").hide();
                         mainview.mostraAlert("L'importo selezionato non è coperto dal metodo scelto.");
-                        $("#aggiorna").show();
+                        $(".aggiorna").show();
+                        $("#confermaInvioDenaro").hide();
+                    }
+                    else if(msg === "OVERLIMIT"){
+                        $(".loading").hide();
+                        $(".alert").removeClass("alert-danger").addClass("alert-warning");
+                        mainview.mostraAlert("La transazione supera il limite spesa impostato nel sistema. Continuare?");
+                        $(".aggiorna").html("Annulla").show();
+                        $("#byPassLimite").show();
                         $("#confermaInvioDenaro").hide();
                     }
 

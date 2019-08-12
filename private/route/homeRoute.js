@@ -55,6 +55,30 @@ router.get('/user_nickname', (req,res,next)=>{
     res.send(req.session.user.nickname);
 });
 
+
+/*
+ *Questo route verifica che il limite spesa non venga superato. Se così è
+ * restituisce il messaggio OVERLIMIT. Il parametro bypass verifica se l'utente vuole
+ * continuare la transazione anche se supera il limite di spesa.
+ */
+router.use('/inviaDenaro', (req, res, next)=>{
+    var importo = parseFloat(req.body.importo);
+    var limite = req.session.conto.limite_spesa;
+    var bypass = req.body.bypass;
+
+    if (importo >= limite && limite != null && limite !== 0 && bypass === "off") {
+        res.send("OVERLIMIT");
+        res.end();
+        return;
+    }
+    next('route');
+});
+
+/*
+ * Questa route si occupa dell'invio di denaro eseguendo prima lo spostamento dei soldi
+ * e successivamente crea la transazione. Inoltre aggiorna i valori della sessione del saldo
+ * e delle transazioni.
+ */
 router.post('/inviaDenaro', (req, res, next)=>{
     var mittente = req.session.user.nickname;
     var destinatario = req.body.destinatario;
@@ -95,5 +119,18 @@ router.post('/inviaDenaro', (req, res, next)=>{
     })
 });
 
+router.post("/richiediDenaro", (req, res, next)=>{
+   console.log("Creo la nuova transazione");
+   var mittente = req.body.reqmittente;
+   var destinatario = req.session.user.nickname;
+   var importo = req.body.importo;
+   var causale = req.body.causale;
+
+   transazione.newTransazione(causale, mittente, destinatario, importo, "in attesa", function (esito) {
+       if(esito) res.send("DONE");
+       else res.send("FAULT");
+       res.end();
+   })
+});
 
 module.exports = router;

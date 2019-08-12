@@ -83,10 +83,14 @@
                 </div>
                 </div>
                 <!--Spinner loading-->
-                <div class="spinner-grow text-primary" role="status" id="loadingInvioDenaro">
-                    <span class="sr-only">Loading...</span>
+                <div class="row justify-content-center loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
-                <div class="row justify-content-center"  id="alertCheck">
+
+                <!--Check Riuscita-->
+                <div class="row justify-content-center alert-check">
                     <div class="success-checkmark">
                         <div class="check-icon">
                             <span class="icon-line line-tip"></span>
@@ -100,8 +104,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary aggiorna" id="aggiorna">Aggiorna</button>
                     <button type="submit" class="btn btn-primary" id="confermaInvioDenaro">Invia</button>
-                    <button type="button" class="btn btn-primary" id="aggiorna">Aggiorna</button>
+                    <button type="button" class="btn btn-primary" id="byPassLimite">Conferma</button>
+
                 </div>
             </div>
         </div>

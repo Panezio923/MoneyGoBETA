@@ -60,7 +60,7 @@ Metodi.prototype = {
 
     aggiungiMetodoCarta : function (dati, callback) {
         this.verificaCarta(dati, function (res) {
-            console.log(res);
+            //console.log(res);
             if(res){
                 let sql = "INSERT INTO metodi_pagamento(ref_nickname, tipo, saldo_metodo, numero_carta) VALUES(?, ?, ?, ?)";
                 pool.query(sql, [res[0].ref_nickname, '1', res[0].saldo_carta, res[0].numero_carta], function (err, result) {
@@ -85,7 +85,7 @@ Metodi.prototype = {
 
     aggiungiMetodoConto : function(dati, callback){
         this.verificaConto(dati, function (res) {
-            console.log(res);
+            //console.log(res);
             if(res){
                 let sql = "INSERT INTO metodi_pagamento(ref_nickname, saldo_metodo, numero_iban, tipo) VALUES(?,?,?,?)";
                 pool.query(sql, [res[0].ref_nickname, res[0].saldo_banca, res[0].IBAN, '0'], function (err, result) {
@@ -113,7 +113,6 @@ Metodi.prototype = {
      * db allo stato in cui si trovava in precedenza.
      */
     avviaInvioContoMG: function(mittente, importo, destinatario, callback) {
-        console.log(destinatario + " " + mittente);
       let sql_1 = "UPDATE conto_moneygo SET saldo_conto = (saldo_conto - ?) WHERE ref_nickname = ? ";
       let sql_2 = "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? ";
 
@@ -134,7 +133,7 @@ Metodi.prototype = {
                       connection.release();
                   } else {
                       pool.query(sql_1, [importo, mittente], function (err, esitoUNO) {
-                          console.log(!esitoUNO);
+                          //console.log(!esitoUNO);
                           if (!esitoUNO) {
                               callback(esitoUNO);
                               connection.rollback();
@@ -144,7 +143,7 @@ Metodi.prototype = {
                                * Se la prima query viene eseguita allora procedo con il trasferimento di denaro
                                */
                               pool.query(sql_2, [importo, destinatario], function (err, esitoDUE) {
-                                  console.log(esitoDUE);
+                                 // console.log(esitoDUE);
                                   if (!esitoDUE) {
                                       callback(esitoDUE);
                                       connection.rollback();
@@ -253,6 +252,7 @@ Metodi.prototype = {
 
     inviaDenaro : function (mittente, importo, destinatario, metodo, callback) {
         var that = this;
+
         if(metodo === "PREDEFINITO"){
             //prendo il predefinito
             let metodo_predef = null;
