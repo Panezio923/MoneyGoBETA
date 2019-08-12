@@ -5,7 +5,7 @@ function Transazione() {};
 Transazione.prototype = {
 
     recuperaTransazione : function (user, callback) {
-        let sql = "SELECT * FROM transazione t WHERE (t.nick_mittente = ? OR t.destinatario = ?)";
+        let sql = "SELECT * FROM transazione t WHERE (t.nick_mittente = ? OR t.destinatario = ?) ORDER BY id_transazione DESC";
 
         pool.query(sql, [user, user], function (err, result) {
             if(err) throw err;
@@ -13,16 +13,17 @@ Transazione.prototype = {
         })
     },
 
-    newTransazione : function (dati, callback) {
+    newTransazione : function (causale, mittente, destinatario, importo, stato, callback) {
         let sql = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione) VALUES(?,?,?,?,?,?)";
 
-        pool.query(sql, dati, function (err, result) {
+        var d = new Date();
+
+        pool.query(sql, [d, causale, mittente, destinatario, importo, stato], function (err, result) {
             if(err) throw err;
-            callback(result);
+            if(result) callback(result);
+            else callback(null);
         })
     }
-
-
 };
 
 module.exports = Transazione;
