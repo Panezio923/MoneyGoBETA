@@ -250,27 +250,37 @@ Metodi.prototype = {
         });
     },
 
+    ricavaPredefinito: function(nickname, callback){
+        let sql = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
+        pool.query(sql, nickname, function (err, result) {
+          if(err) throw err;
+          if(result.length){
+              if (result[0].numero_carta != null) metodo = result[0].numero_carta;
+              else if (result[0].numero_iban != null) metodo = result[0].numero_iban;
+          }else callback(null);
+
+        })
+    },
+
     inviaDenaro : function (mittente, importo, destinatario, metodo, callback) {
         var that = this;
 
         if(metodo === "PREDEFINITO"){
-            //prendo il predefinito
-            let metodo_predef = null;
-            let get_pred = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
-            pool.query(get_pred,mittente, function (err, result) {
-                if(err) throw err;
-                if(result[0].numero_carta != null) metodo_predef = result[0].numero_carta;
-                else if(result[0].numero_iban != null) metodo_predef = result[0].numero_iban;
-            });
-            //verifico la copertura
-            that.verificaCopertura(mittente, importo, metodo_predef, function (copertura) {
-                if(copertura) {
-                    that.avviaInvio(mittente, importo, destinatario, metodo_predef, function (result) {
-                        if(result) callback(result);
-                        else callback(null);
-                    })
-                }else callback(false);
-            });
+         that.ricavaPredefinito(mittente, function (result) {
+              if(result !== null)
+              {
+                  metodo = result;
+                  that.verificaCopertura(mittente, importo, metodo, function (copertura) {
+                      if(copertura) {
+                          that.avviaInvio(mittente, importo, destinatario, metodo, function (confermaInvio) {
+                              if(confermaInvio) callback(confermaInvio);
+                              else callback(null);
+                          })
+                      }else callback(false);
+                  });
+              }
+              else callback(false);
+          });
         }
         else if(metodo === "MONEYGO"){
             that.verificaCoperturaContoMG(mittente, importo, function (copertura) {

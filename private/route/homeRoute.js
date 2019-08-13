@@ -62,14 +62,17 @@ router.get('/user_nickname', (req,res,next)=>{
  * continuare la transazione anche se supera il limite di spesa.
  */
 router.use('/inviaDenaro', (req, res, next)=>{
-    var importo = parseFloat(req.body.importo);
+    res.locals.importo = Number(req.body.importo);
     var limite = req.session.conto.limite_spesa;
     var bypass = req.body.bypass;
+    res.locals.mittente = req.session.user.nickname;
+    res.locals.metodo = req.body.metodo;
+    res.locals.destinatario = req.body.destinatario;
+    res.locals.causale = req.body.causale;
 
-    if (importo >= limite && limite != null && limite !== 0 && bypass === "off") {
-        res.send("OVERLIMIT");
-        res.end();
-        return;
+
+    if (res.locals.importo >= limite && limite != null && limite !== 0 && bypass === "off") {
+        return res.send("OVERLIMIT");
     }
     next('route');
 });
@@ -79,57 +82,64 @@ router.use('/inviaDenaro', (req, res, next)=>{
  * e successivamente crea la transazione. Inoltre aggiorna i valori della sessione del saldo
  * e delle transazioni.
  */
-router.post('/inviaDenaro', (req, res, next)=>{
-    var mittente = req.session.user.nickname;
-    var destinatario = req.body.destinatario;
-    var metodo = req.body.metodo;
-    var importo = parseFloat(req.body.importo);
-    var causale = req.body.causale;
-
-    metodi.inviaDenaro(mittente, importo, destinatario, metodo, function (result) {
-        if (result) {
-            /*
-             * Aggiorno il valore del conto nella sessione solo quando viene selezionato quello di MoneyGo
-             * in quanto viene utilizzato nella home.
-             */
-            if (metodo === "MONEYGO") req.session.conto.saldo_conto = req.session.conto.saldo_conto - importo;
-
-            transazione.newTransazione(causale, mittente, destinatario, importo, "eseguita", function (newT) {
-                if (newT) {
-                    //Aggiorno le transazioni nella sessione
-                    transazione.recuperaTransazione(mittente, function (esito) {
-                        if (esito) {
-                            req.session.transazioni = esito;
-                            res.send("DONE");
-                            res.end();
-                        } else if (!esito) {
-                            res.send("FAULT");
-                            res.end();
-                        }
-                    })
-                } else if (!newT) {
-                    res.send("TRANERR");
-                    res.end();
-                }
-            })
-        } else if (!result) {
+router.post('/inviaDenaro', (req,res,next)=>{
+    metodi.inviaDenaro(res.locals.mittente, res.locals.importo, res.locals.destinatario, res.locals.metodo, function (result) {
+        if(!result) {
             res.send("TOO");
             res.end();
+            return;
+        } else {
+            if (res.locals.metodo === "MONEYGO") req.session.conto.saldo_conto = (req.session.conto.saldo_conto - res.locals.importo).toFixed(2);
+            next('route');
         }
     })
 });
+
+router.post('/inviaDenaro', (req, res, next) =>{
+    transazione.newTransazione(res.locals.causale, res.locals.mittente, res.locals.destinatario, res.locals.importo, "eseguita", function (result) {
+        if(!result) return res.send("TRANERR");
+        else{
+            next('route');
+        }
+    })
+});
+
+router.post('/inviaDenaro', (req, res)=>{
+   transazione.recuperaTransazione(res.locals.mittente, function (result) {
+       if(!result) return res.send("FAULT");
+       else return res.send("DONE");
+   })
+});
+
 
 router.post("/richiediDenaro", (req, res, next)=>{
    console.log("Creo la nuova transazione");
    var mittente = req.body.reqmittente;
    var destinatario = req.session.user.nickname;
-   var importo = req.body.importo;
+   var importo =  Number(req.body.importo);
+   console.log(importo);
    var causale = req.body.causale;
 
+   /*
+    * In questa chiamata alla funzione inverto il mittente ed il destinatario
+    * in quanto il mittente è colui che invia denaro e non chi effettua la richiesta.
+    */
    transazione.newTransazione(causale, mittente, destinatario, importo, "in attesa", function (esito) {
        if(esito) res.send("DONE");
        else res.send("FAULT");
        res.end();
+   })
+});
+
+/*
+ * Questa route restituisce le transazioni in attesa per crearne una copia
+ * sul front-end
+ */
+
+router.post("/ricavaNotifiche", (req, res)=>{
+   transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (notifiche) {
+       if(notifiche.length) res.send(notifiche);
+       else res.send("NONE");
    })
 });
 

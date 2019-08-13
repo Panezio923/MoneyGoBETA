@@ -9,7 +9,8 @@ Transazione.prototype = {
 
         pool.query(sql, [user, user, "eseguita"], function (err, result) {
             if(err) throw err;
-            callback(result);
+            if(result) callback(result);
+            else callback(null);
         })
     },
 
@@ -19,6 +20,20 @@ Transazione.prototype = {
         var d = new Date();
 
         pool.query(sql, [d, causale, mittente, destinatario, importo, stato], function (err, result) {
+            if(err) throw err;
+            if(result) callback(result);
+            else callback(null);
+        })
+    },
+
+    /*
+     * Restituisce tutte le transazioni che sono in attesa di approvazione da parte dell'utente
+     * che sta utilizzando l'app. Le transazioni in attesa di approvazioni sono quelle che come mittente hanno l'utente
+     * che deve inviare il denaro e come stato della transazione abbiano la dicitura "IN ATTESA"
+     */
+    recuperaTransazioniInAttesa : function (user, callback) {
+        let sql = "SELECT * FROM transazione t WHERE t.nick_mittente = ? AND stato_transazione = ?";
+        pool.query(sql, [user, "in attesa"], function (err, result) {
             if(err) throw err;
             if(result) callback(result);
             else callback(null);

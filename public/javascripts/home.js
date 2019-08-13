@@ -8,6 +8,7 @@
         causale: null,
         destinatario: null,
         bypass: "off",
+        notifiche: null,
     };
 
     var destinatario_validato = false;
@@ -107,8 +108,9 @@
 
       if(reqmittente_validato && cifra_validata){
           var reqmittente = $("#reqmittente").val();
-          var importo = $(".importo").val().replace(/,/g, '.');
-          var causale = $("#causale").val();
+          var importo = $(".importo").val().replace(/\./g, '');
+          importo = importo.replace(/,/g, '.');
+          var causale = $("#causaleRichiesta").val();
 
           $.ajax({
               type:"POST",
@@ -135,8 +137,9 @@
               }
 
           })
-
       }
+      else mainview.mostraAlert("Qualcosa non va con i campi inseriti.");
+
     };
 
     maincontrol.byPassLimite = function(e){
@@ -154,9 +157,10 @@
              * Formatter formatta la cifra con la virgola. Sostituisco la virgola con un punto
              * poichè su mysql i float sono identificati dal punto e non dalla virgola.
              */
-            var importo = $(".importo").val().replace(/,/g, '.');
+            var importo = $(".importo").val().replace(/\./g, '');
+                importo = importo.replace(/,/g, '.');
             var metodo = maincontrol.metodo;
-            var causale = $(".causale").val();
+            var causale = $("#causaleInvia").val();
 
             //Salvo i valori all'interno della maincontrol
             maincontrol.destinatario = destinatario;
@@ -218,6 +222,43 @@
         }
     };
 
+    maincontrol.ricavaNotifiche = function(){
+        $.ajax({
+            type: "POST",
+            url: "/home/ricavaNotifiche",
+            //no data
+
+            success: function (data) {
+                maincontrol.notifiche = data;
+            },
+            error: function () {
+                console.log("errore recupero notifiche");
+            }
+        })
+    };
+
+    //Recupera l'id dell'elemento selezionato dalla listgroup
+    maincontrol.getID = function(){
+        let storeValue = null;
+        $(".list-group-item button").on('click',function () {
+            storeValue = ($(this).attr("id"));
+            let id_transazione = maincontrol.notifiche[storeValue[1]].id_transazione;
+            if(storeValue[0] === "A"){
+                maincontrol.accettaTransazione(id_transazione);
+            }
+            else if(storeValue[1] === "R"){
+                maincontrol.rifiutaTransazione(id_transazione);
+            }
+        });
+    };
+
+    maincontrol.accettaTransazione = function(){
+
+        $.ajax({
+
+        })
+    };
+
     mainview.mostraBarraLoading = function(){
       $("#loading").show();
     };
@@ -240,6 +281,12 @@
 
         //Quando carica la pagina recupero il nick dell'utente
         maincontrol.verificaNick();
+
+        maincontrol.ricavaNotifiche();
+
+        maincontrol.getID();
+
+        $('[data-toggle="tooltip"]').tooltip();
 
         var checkboxes = $("#checkPredefinito, #contoMG");
         checkboxes.prop("checked", false);
@@ -278,13 +325,12 @@
         });
 
 
-        $("#importoDUE, #importoUNO").change(function () {
-            var cifraUNO = $("#importoUNO").val();
-            var cifraDUE = $("#importoDUE").val();
-            if(cifraUNO != "" || cifraDUE != "") {
-                $("#importoUNO").val(formatter.format(cifraUNO));
-                $("#importoDUE").val(formatter.format(cifraDUE));
-                console.log(cifraUNO + " " + cifraDUE);
+        $("#importoUNO, #importoDUE").change(function () {
+          var cifra = 0;
+          if($("#importoUNO").val() === "" ) cifra = $("#importoDUE").val();
+          else cifra = $("#importoUNO").val();
+            if(cifra !== "" && !isNaN(cifra)) {
+                $("#importoUNO , #importoDUE").val(formatter.format(cifra));
                 cifra_validata = true;
                 return;
             }else{
@@ -321,6 +367,7 @@
             destinatario_validato = false;
             reqmittente_validato = false;
         })
+
 
     });
 })();

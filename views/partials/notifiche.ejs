@@ -4,12 +4,20 @@
 
         <div class="card-body">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Richiesta da Tizio di x euro <button type="button" class="btn btn-success btn-sm float-right ml-1">Accetta</button><button type="button" class="btn btn-danger btn-sm float-right mr-1">Rifiuta</button> </li>
+                <%
+                    let causale = notifiche.map(function (value){return value.causale});
+                    let importo = notifiche.map(function (value) {return value.importo});
+                    let destinatario = notifiche.map(function (value) { return value.destinatario });
+                    for(let i = 0; i < notifiche.length; i++){
 
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
+                %>
+                <div class="row">
+                    <div class="col-12">
+                        <li class="list-group-item">Richiesta da <%=destinatario[i]%> di <b>€ <%=importo[i]%></b> con <causale class="text-tool" data-toggle="tooltip" data-placement="bottom" title="<%=causale[i]%>">causale</causale>.
+                            <div class="flex-sm-column"> <button type="button" class="btn btn-success btn-sm float-right ml-3" id="A<%=i%>">Accetta</button> <button type="button" class="btn btn-danger btn-sm float-right" id="R<%=i%>">Rifiuta</button></div> </li>
+                    </div>
+                </div>
+               <%}%>
             </ul>
         </div>
     </div>

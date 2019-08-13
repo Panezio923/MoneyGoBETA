@@ -29,7 +29,6 @@
                                         var numeroBanche = metodi.map(function(value) {return value.numero_iban;});
                                         var numeroCarte = metodi.map(function(value) {return value.numero_carta;});
                                         var numero = numeroCarte.concat(numeroBanche);
-                                        var tipo = metodi.map(function(value) {return value.tipo;});
                                         //Filtro i numeri per rimuovere i valori null
                                         var filter = numero.filter(function (value) { return value; });
                                     %>
@@ -64,7 +63,7 @@
                     <div class="mb-2"></div>
                     <div class="form-group">
                         <label for="causale">Causale:</label>
-                        <textarea class="form-control causale" rows="2" id="causale">
+                        <textarea class="form-control causale" rows="2" id="causaleInvia">
 
                         </textarea>
                     </div>
