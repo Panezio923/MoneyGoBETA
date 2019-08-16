@@ -14,7 +14,7 @@
     var destinatario_validato = false;
     var cifra_validata = false;
     var reqmittente_validato = false; //Chi riceve la richiesta di denaro è il mittente della transazione
-
+    let storeValue = null;
 
     const formatter = new Intl.NumberFormat('it-IT', {
         minimumFractionDigits: 2
@@ -166,7 +166,7 @@
             maincontrol.destinatario = destinatario;
             maincontrol.importo = importo;
             maincontrol.causale = causale;
-            console.log(maincontrol.bypass);
+
             $.ajax({
                 type: "POST",
                 url: "/home/inviaDenaro",
@@ -239,7 +239,6 @@
 
     //Recupera l'id dell'elemento selezionato dalla listgroup
     maincontrol.getID = function(){
-        let storeValue = null;
         $(".list-group-item button").on('click',function () {
             storeValue = ($(this).attr("id"));
             let id_transazione = maincontrol.notifiche[storeValue[1]].id_transazione;
@@ -252,10 +251,20 @@
         });
     };
 
-    maincontrol.accettaTransazione = function(){
+    maincontrol.accettaTransazione = function(id){
 
         $.ajax({
+            type: "POST",
+            url: "/home/accettaTransazione",
+            data: {destinatario: maincontrol.notifiche[storeValue[1]].destinatario, importo: maincontrol.notifiche[storeValue[1]].importo, id: id },
 
+            beforeSend : function () {
+                console.log("invio..");
+            },
+
+            success : function (msg) {
+                console.log(msg)
+            }
         })
     };
 

@@ -4,6 +4,12 @@ function Metodi() {}
 
 Metodi.prototype = {
 
+    /*
+     * Funzione utilizzata per recuperare le informazioni di tutti i metodi di pagamento di un utente.
+     * @param {string} user - Il nickname dell'utente.
+     * @param {function} callback - La funzione da eseguire una volta terminate le operazioni, e che restituirà
+     *                              i metodi dell'utente.
+     */
     recuperaMetodi : function (user, callback) {
         let sql = "SELECT * FROM metodi_pagamento mp WHERE mp.ref_nickname = ? ORDER BY mp.numero_iban";
         pool.query(sql, user, function (err, result) {
@@ -111,6 +117,10 @@ Metodi.prototype = {
      *Per non ledere il database viene effettuata una transazione. Se qualcosa non va a buon fine
      * in una qualunque query durante la transazione allora viene effettuato un rollback riportando il
      * db allo stato in cui si trovava in precedenza.
+     * @param {string} mittente - Il nickname di colui che invia denaro.
+     * @param {string} importo - La cifra da trasmettere.
+     * @param {string} destinatario - IL nickname di colui che riceve denaro.
+     * @param {function} callback - La funzione da eseguire una volta terminate le operazioni.
      */
     avviaInvioContoMG: function(mittente, importo, destinatario, callback) {
       let sql_1 = "UPDATE conto_moneygo SET saldo_conto = (saldo_conto - ?) WHERE ref_nickname = ? ";

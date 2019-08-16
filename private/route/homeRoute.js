@@ -53,8 +53,8 @@ router.get('/gestioneProfilo', (req,res,next) =>{
 
 router.get('/user_nickname', (req,res,next)=>{
     res.send(req.session.user.nickname);
+    res.end();
 });
-
 
 /*
  *Questo route verifica che il limite spesa non venga superato. Se così è
@@ -107,7 +107,10 @@ router.post('/inviaDenaro', (req, res, next) =>{
 router.post('/inviaDenaro', (req, res)=>{
    transazione.recuperaTransazione(res.locals.mittente, function (result) {
        if(!result) return res.send("FAULT");
-       else return res.send("DONE");
+       else{
+           req.session.transazioni = result;
+           return res.send("DONE");
+       }
    })
 });
 
@@ -142,5 +145,22 @@ router.post("/ricavaNotifiche", (req, res)=>{
        else res.send("NONE");
    })
 });
+
+
+router.post("/accettaTransazione", (req, res)=>{
+    metodi.inviaDenaro(req.session.user.nickname, req.body.importo, req.body.destinatario, "MONEYGO", function (esito) {
+        if(!esito) res.send("ERROR");
+        else{
+            req.session.conto.saldo_conto = (req.session.conto.saldo_conto - res.locals.importo).toFixed(2);
+            transazione.accettaTransazione(req.session.user.nickname, req.body.id, function (esitoDUE) {
+                if(!esitoDUE) res.send("ERROR");
+                else{
+                    res.send("DONE");
+                }
+            })
+        }
+    })
+});
+
 
 module.exports = router;

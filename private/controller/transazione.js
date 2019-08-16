@@ -38,7 +38,25 @@ Transazione.prototype = {
             if(result) callback(result);
             else callback(null);
         })
-    }
+    },
+
+    accettaTransazione : function (user, id, callback) {
+        let sql = "UPDATE transazione SET stato_transazione = ? WHERE id_transazione = ? AND nick_mittente = ?";
+        pool.query(sql, ["eseguita", id, user], function (err, result) {
+            if(err) throw err;
+            if(result) callback(true);
+            else callback(false);
+        })
+    },
+
+    rifiutaTransazione : function (user, id, callback) {
+        let sql = "UPDATE transazione SET stato_transazione = ? WHERE id_transazione = ? AND nick_mittente = ?";
+        pool.query(sql, ["rifiutata", id, user], function (err, result) {
+            if(err) throw err;
+            if(result) callback(true);
+            else callback(false);
+        })
+    },
 };
 
 module.exports = Transazione;
