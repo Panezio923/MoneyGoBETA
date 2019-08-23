@@ -119,17 +119,18 @@
 
               beforeSend: function () {
                   $("#formModalDUE").hide();
-                  $(".loading").show();
+                  $("#loadingRichiediDenaro").show();
               },
               success: function (msg) {
                   if(msg === "DONE"){
-                      $(".loading").hide();
+                      $("#loadingRichiediDenaro").hide();
                       $(".alert-check").show();
                       $(".aggiorna").show();
                       $("#confermaRichiestaDenaro").hide();
+                      mainview.ripulisciCampiErrati();
                   }
                   else if(msg === "FAULT"){
-                      $(".loading").hide();
+                      $("#loadingRichiediDenaro").hide();
                       mainview.mostraAlert("Qualcosa è andato storto. Ci dispiace. Riprova.");
                       $(".aggiorna").show();
                       $("#confermaRichiestaDenaro").hide();
@@ -224,9 +225,8 @@
 
     maincontrol.ricavaNotifiche = function(){
         $.ajax({
-            type: "POST",
+            type: "get",
             url: "/home/ricavaNotifiche",
-            //no data
 
             success: function (data) {
                 maincontrol.notifiche = data;
@@ -243,6 +243,7 @@
             storeValue = ($(this).attr("id"));
             let id_transazione = maincontrol.notifiche[storeValue[1]].id_transazione;
             if(storeValue[0] === "A"){
+                console.log("cliccato2");
                 maincontrol.accettaTransazione(id_transazione);
             }
             else if(storeValue[1] === "R"){
@@ -252,20 +253,45 @@
     };
 
     maincontrol.accettaTransazione = function(id){
-
+        console.log("accidenti");
         $.ajax({
             type: "POST",
             url: "/home/accettaTransazione",
             data: {destinatario: maincontrol.notifiche[storeValue[1]].destinatario, importo: maincontrol.notifiche[storeValue[1]].importo, id: id },
 
-            beforeSend : function () {
-                console.log("invio..");
-            },
-
             success : function (msg) {
-                console.log(msg)
+                if(msg === "DONE"){
+                    maincontrol.ricavaNotifiche();
+                    $("#notifiche").load(location.href + ' #notifiche');
+                    $("#saldo").load(location.href + ' #saldo');
+
+                }
+                else if(msg === "ERROR"){
+
+                }
             }
         })
+    };
+
+    maincontrol.rifiutaTransazione = function(id){
+
+        $.ajax({
+            type: "POST",
+            url: "/home/rifiutaTransazione",
+            data: {id: id },
+
+            success : function (msg) {
+                maincontrol.ricavaNotifiche();
+                $("#notifiche").load(location.href + ' #notifiche');
+            }
+        })
+
+    };
+
+    maincontrol.rimuoviNotifica = function(id){
+      return maincontrol.notifiche.filter(function (ele) {
+          return ele = id;
+      })
     };
 
     mainview.mostraBarraLoading = function(){

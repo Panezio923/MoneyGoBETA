@@ -52,9 +52,9 @@ router.post('/login', (req,res,next)=>{
                                         req.session.metodi = resMetodi;
                                         transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (resNotifiche) {
                                             req.session.notifiche = resNotifiche;
-                                           res.send("MATCH");
-                                           res.end();
-                                       })
+                                            res.send("MATCH");
+                                            res.end();
+                                        })
                                     }
                                 })
 

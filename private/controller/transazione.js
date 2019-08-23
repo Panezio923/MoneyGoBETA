@@ -57,6 +57,7 @@ Transazione.prototype = {
             else callback(false);
         })
     },
+
 };
 
 module.exports = Transazione;

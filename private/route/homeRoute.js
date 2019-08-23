@@ -10,6 +10,7 @@ const metodi = new Metodi();
 const conto = new Conto();
 const transazione = new Transazione();
 
+
 router.get('/adminCards', (req,res,next) =>{
     let user = req.session.user;
     if(!user){
@@ -114,7 +115,6 @@ router.post('/inviaDenaro', (req, res)=>{
    })
 });
 
-
 router.post("/richiediDenaro", (req, res, next)=>{
    console.log("Creo la nuova transazione");
    var mittente = req.body.reqmittente;
@@ -138,27 +138,40 @@ router.post("/richiediDenaro", (req, res, next)=>{
  * Questa route restituisce le transazioni in attesa per crearne una copia
  * sul front-end
  */
-
-router.post("/ricavaNotifiche", (req, res)=>{
-   transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (notifiche) {
-       if(notifiche.length) res.send(notifiche);
+router.get("/ricavaNotifiche", (req, res)=>{
+    //console.log(req.session.notifiche);
+   transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (esito) {
+       if(esito) {
+           req.session.notifiche = esito;
+           res.send(esito);
+       }
        else res.send("NONE");
+
    })
 });
-
 
 router.post("/accettaTransazione", (req, res)=>{
     metodi.inviaDenaro(req.session.user.nickname, req.body.importo, req.body.destinatario, "MONEYGO", function (esito) {
         if(!esito) res.send("ERROR");
         else{
-            req.session.conto.saldo_conto = (req.session.conto.saldo_conto - res.locals.importo).toFixed(2);
+            //console.log(req.body.id);
+            req.session.conto.saldo_conto = (req.session.conto.saldo_conto - req.body.importo).toFixed(2);
             transazione.accettaTransazione(req.session.user.nickname, req.body.id, function (esitoDUE) {
                 if(!esitoDUE) res.send("ERROR");
                 else{
                     res.send("DONE");
                 }
+                res.end();
             })
         }
+    })
+});
+
+router.post("/rifiutaTransazione", (req,res) =>{
+    transazione.rifiutaTransazione(req.session.user.nickname, req.body.id, function (esito) {
+        if(!esito) res.send("ERROR");
+        else res.send("DONE");
+        res.end();
     })
 });
 
