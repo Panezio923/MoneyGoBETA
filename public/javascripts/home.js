@@ -20,6 +20,7 @@
         minimumFractionDigits: 2
     });
 
+    //commento
     $("#gestCarte").on("click", function(){maincontrol.premutogestisciCarte()});
     $("#gestProfilo").on("click", function(){maincontrol.premutogestisciProfilo()});
     $("#creaLink").on("click", function(){maincontrol.premutocreaLink()});
