@@ -51,6 +51,14 @@ router.get('/gestioneProfilo', (req,res,next) =>{
     });
 });
 
+router.get('/ricaricaconto',(req,res,next) => {
+    if(!req.session.user){
+        res.redirect('/');
+        return
+    }
+    else res.render('ricaricaconto',{title:"MoneyGo", metodi : req.session.metodi, saldo_metodo : req.session.saldo_metodo});
+});
+
 router.get('/user_nickname', (req,res,next)=>{
     res.send(req.session.user.nickname);
 });

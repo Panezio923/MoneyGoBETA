@@ -104,11 +104,7 @@
                 if(msg === "EXIST"){
                     nickname_validato=false;
                     mainview.nicknameDuplicato();
-                    $("#nickname").css("borderColor", "red");
-
-                    $("#nickname").on("click", function () {
-                        $("#nickname").css("borderColor", "");
-                    });
+                    $("#nickname").addClass("is-invalid");
                 }else if (msg === "NOTEXIST"){
                     mainview.emailDuplicata();
                     nickname_validato=true;
