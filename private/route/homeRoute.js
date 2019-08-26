@@ -52,7 +52,15 @@ router.get('/gestioneProfilo', (req,res,next) =>{
     });
 });
 
-router.get('/user_nickname', (req,res,next)=>{
+router.get('/creaLink', (req, res)=>{
+    if(!req.session.user){
+        res.redirect('/');
+        return
+    }
+        res.render('partials/GestioneConto/linkpagamento', {title: "MoneyGo"});
+});
+
+router.get('/user_nickname', (req,res)=>{
     res.send(req.session.user.nickname);
     res.end();
 });

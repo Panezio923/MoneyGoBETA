@@ -10,7 +10,7 @@
 
     mainview.mostraAlert = function(msg){
         $("#alert_text").text(msg);
-        $("#alert").show("slow");
+        $(".alert").show("slow");
     };
 
     mainview.ripulisciCampiErrati = function(){
@@ -118,7 +118,7 @@
                        $("#form_recupero").css("display", "none");
                        $("#alertCheck").show();
                     } else if (msg === "FAULT") {
-                        console.log("ERRO");
+                        console.log("ERR");
                     }
                 }
             })

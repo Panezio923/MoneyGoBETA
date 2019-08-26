@@ -136,8 +136,8 @@
     mainview.campiErrati = function (id) {
         $("#alert_text").text("Per favore, ricontrollare i dati");
         $("#alert").show("slow");
-       id.addClass("is-invalid");
        id.removeClass("is-valid");
+        id.addClass("is-invalid");
 
     };
 
@@ -289,8 +289,8 @@
             if($("#nickname").val() != ""){
                 if(/^[a-zA-Z0-9]+$/.test($("#nickname").val())){
                     nickname_validato = true;
-                    mainview.ripulisciCampiErrati($("#nickname"));
                     maincontrol.controllaNicknameDuplicato($("#nickname").val());
+                    mainview.ripulisciCampiErrati($("#nickname"));
                     return;
                 }
                 else{

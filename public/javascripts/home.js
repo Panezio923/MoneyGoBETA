@@ -22,6 +22,7 @@
 
     $("#gestCarte").on("click", function(){maincontrol.premutogestisciCarte()});
     $("#gestProfilo").on("click", function(){maincontrol.premutogestisciProfilo()});
+    $("#creaLink").on("click", function(){maincontrol.premutocreaLink()});
     $("#inviaDenaro").on("click", function () {$("#modalInviaDenaro").modal('show')});
     $("#richiediDenaro").on("click", function(){$("#modalRichiediDenaro").modal('show')});
     $("#form_inviadenaro").on("submit", function (e) {maincontrol.inviaDenaro(e)});
@@ -39,6 +40,13 @@
     maincontrol.premutogestisciCarte = function(){
         mainview.mostraBarraLoading();
         location.href = '/home/adminCards';
+        mainview.nascondiBarraLoading();
+        return false;
+    };
+
+    maincontrol.premutocreaLink = function(){
+        mainview.mostraBarraLoading();
+        location.href = '/home/creaLink';
         mainview.nascondiBarraLoading();
         return false;
     };
@@ -253,7 +261,6 @@
     };
 
     maincontrol.accettaTransazione = function(id){
-        console.log("accidenti");
         $.ajax({
             type: "POST",
             url: "/home/accettaTransazione",
@@ -267,7 +274,7 @@
 
                 }
                 else if(msg === "ERROR"){
-
+                    console.log("errore nell'accettamento della transazione");
                 }
             }
         })
