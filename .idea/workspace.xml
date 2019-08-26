@@ -2,29 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1aceef9d-89e5-4368-8eb1-7783bb6a90d9" name="Default Changelist" comment="17:11 05/08 &#10;Finito front-end invio denaro.">
-      <change afterPath="$PROJECT_DIR$/.idea/MoneyGO.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/634b52a2-4af4-4dc9-aab1-2f1f06e35b85.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/sergi.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57_[Default_Changelist]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57__Default_Changelist_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vagrant.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/javascripts/RicaricaConto.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/access.log" beforeDir="false" afterPath="$PROJECT_DIR$/access.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private/controller/connessionedb.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/connessionedb.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private/controller/metodi.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/metodi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private/controller/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/private/route/homeRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/route/homeRoute.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/javascripts/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/inviadenaroModal.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/inviadenaroModal.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/javascripts/registrazione.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/registrazione.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/GestioneMoneyGO/gestione-profilo.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/GestioneMoneyGO/gestione-profilo.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/ricaricaconto.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/ricaricaconto.ejs" afterDir="false" />
     </list>
+    <ignored path="C:\xampp\htdocs\MoneyGoBETA\.idea\shelf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,14 +36,87 @@
   <component name="FavoritesManager">
     <favorites_list name="MoneyGo" />
   </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/private/route/gestioneDatiRoute.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/RicaricaConto.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="44" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/gestionedati.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3723">
+              <caret line="219" column="42" selection-start-line="219" selection-start-column="42" selection-end-line="219" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/gestionecarte.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/home.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3961">
+              <caret line="233" column="65" selection-start-line="233" selection-start-column="65" selection-end-line="233" selection-end-column="65" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/views/ricaricaconto.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="680">
+              <caret line="40" column="47" selection-start-line="40" selection-start-column="47" selection-end-line="40" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/gestione-carte.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="731">
+              <caret line="43" column="94" selection-start-line="43" selection-start-column="94" selection-end-line="43" selection-end-column="94" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/partials/inviadenaroModal.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="595">
+              <caret line="35" column="36" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="87" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
         <option value="CoffeeScript File" />
         <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="Template" />
+        <option value="File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -68,14 +129,97 @@
     </dirStrings>
   </component>
   <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="REBASE" />
     <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
-    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/public/javascripts/gestionedati.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/registrazione.js" />
+        <option value="$PROJECT_DIR$/views/partials/GestioneMoneyGO/ricarica-conto.ejs" />
+        <option value="$PROJECT_DIR$/views/partials/corpoprincipale.ejs" />
+        <option value="$PROJECT_DIR$/public/javascripts/home.js" />
+        <option value="$PROJECT_DIR$/views/partials/inviadenaroModal.ejs" />
+        <option value="$PROJECT_DIR$/views/partials/GestioneMoneyGO/gestione-profilo.ejs" />
+        <option value="$PROJECT_DIR$/views/gestione-carte.ejs" />
+        <option value="$PROJECT_DIR$/public/javascripts/recuperopassword.js" />
+        <option value="$PROJECT_DIR$/private/route/homeRoute.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/RicaricaConto.js" />
+        <option value="$PROJECT_DIR$/views/ricaricaconto.ejs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="170" />
+    <option name="y" value="91" />
+    <option name="width" value="1026" />
+    <option name="height" value="546" />
   </component>
   <component name="ProjectId" id="1P07Aa1EgjQemC7wpwplwtqW9pp" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+              <item name="private" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+              <item name="private" type="462c0819:PsiDirectoryNode" />
+              <item name="route" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="javascripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="javascripts" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MoneyGoBETA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MoneyGoBETA" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="partials" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql&#10;mariadb" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
@@ -100,17 +244,17 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\mobileapp\www" />
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views\partials" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\private" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\public\javascripts\js" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\public\javascripts" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views\pages" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\mobileapp\www" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views\partials" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -264,6 +408,11 @@
       <workItem from="1565253818535" duration="2935000" />
       <workItem from="1565256793083" duration="3983000" />
       <workItem from="1565271182682" duration="607000" />
+      <workItem from="1565602227200" duration="5184000" />
+      <workItem from="1565612455455" duration="8876000" />
+      <workItem from="1566033365422" duration="173000" />
+      <workItem from="1566654208555" duration="2050000" />
+      <workItem from="1566822954375" duration="448000" />
     </task>
     <task id="LOCAL-00001" summary="Instanziato il file connessione, creata connessione con utente phpmyadmin:&#10;User: vagrant&#10;Pass: password&#10;&#10;creata funzione login di prova.&#10;Funzione login riuscita.&#10;&#10;Si attendono notizie da Gnoffo per determinare l'impostazione MVC.">
       <created>1560499285017</created>
@@ -370,8 +519,18 @@
       <option name="project" value="LOCAL" />
       <updated>1565192605343</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="gestione dati">
+      <created>1565602593100</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1565602593100</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="16731000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -381,6 +540,29 @@
       <are-packages-shown value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.86293435" visible="true" weight="0.2559524" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" sideWeight="0.13706563" side_tool="true" weight="0.2514881" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.21276596" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.15220949" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -401,6 +583,12 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
               <option name="COLUMN_ORDER" />
             </State>
           </value>
@@ -438,7 +626,115 @@
     <MESSAGE value="14:01 - 05/04 &#10;InviaDenaro FrontEnd. &#10;Modificata grafica form-control di gestione dati." />
     <MESSAGE value="17:11 05/08 &#10;Finito front-end invio denaro." />
     <MESSAGE value="17:42 - 07/08 &#10;quasi terminato invia denaro. Manca il testing ed il debugging." />
-    <option name="LAST_COMMIT_MESSAGE" value="17:42 - 07/08 &#10;quasi terminato invia denaro. Manca il testing ed il debugging." />
+    <MESSAGE value="gestione dati" />
+    <option name="LAST_COMMIT_MESSAGE" value="gestione dati" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/views/gestioneprofilo.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/partials/GestioneMoneyGO/ricarica-conto.ejs" />
+    <entry file="file://$PROJECT_DIR$/views/partials/corpoprincipale.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1105">
+          <caret line="65" column="86" selection-start-line="65" selection-start-column="86" selection-end-line="65" selection-end-column="86" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/home.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="21" column="57" selection-end-line="28" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/registrazione.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="436">
+          <caret line="355" column="76" selection-start-line="355" selection-start-column="76" selection-end-line="355" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/partials/GestioneConto/elenco-carte.ejs">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/partials/GestioneMoneyGO/gestione-profilo.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="32" column="104" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/recuperopassword.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="177" column="5" selection-start-line="177" selection-start-column="5" selection-end-line="177" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/private/route/homeRoute.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="59" selection-start-line="59" selection-end-line="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/private/route/gestioneDatiRoute.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/RicaricaConto.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="44" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/gestionedati.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3723">
+          <caret line="219" column="42" selection-start-line="219" selection-start-column="42" selection-end-line="219" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/gestionecarte.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3961">
+          <caret line="233" column="65" selection-start-line="233" selection-start-column="65" selection-end-line="233" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/gestione-carte.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="43" column="94" selection-start-line="43" selection-start-column="94" selection-end-line="43" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/partials/inviadenaroModal.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="36" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/ricaricaconto.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="40" column="47" selection-start-line="40" selection-start-column="47" selection-end-line="40" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
