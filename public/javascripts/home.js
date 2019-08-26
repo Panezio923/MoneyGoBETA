@@ -15,6 +15,7 @@
         minimumFractionDigits: 2
     });
 
+    //commento
     $("#gestCarte").on("click", function(){maincontrol.premutogestisciCarte()});
     $("#gestProfilo").on("click", function(){maincontrol.premutogestisciProfilo()});
     $("#inviaDenaro").on("click", function () {$("#modalInviaDenaro").modal('show')});
