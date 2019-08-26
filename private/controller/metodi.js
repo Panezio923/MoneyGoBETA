@@ -4,6 +4,12 @@ function Metodi() {}
 
 Metodi.prototype = {
 
+    /*
+     * Funzione utilizzata per recuperare le informazioni di tutti i metodi di pagamento di un utente.
+     * @param {string} user - Il nickname dell'utente.
+     * @param {function} callback - La funzione da eseguire una volta terminate le operazioni, e che restituirà
+     *                              i metodi dell'utente.
+     */
     recuperaMetodi : function (user, callback) {
         let sql = "SELECT * FROM metodi_pagamento mp WHERE mp.ref_nickname = ? ORDER BY mp.numero_iban";
         pool.query(sql, user, function (err, result) {
@@ -60,7 +66,7 @@ Metodi.prototype = {
 
     aggiungiMetodoCarta : function (dati, callback) {
         this.verificaCarta(dati, function (res) {
-            console.log(res);
+            //console.log(res);
             if(res){
                 let sql = "INSERT INTO metodi_pagamento(ref_nickname, tipo, saldo_metodo, numero_carta) VALUES(?, ?, ?, ?)";
                 pool.query(sql, [res[0].ref_nickname, '1', res[0].saldo_carta, res[0].numero_carta], function (err, result) {
@@ -85,7 +91,7 @@ Metodi.prototype = {
 
     aggiungiMetodoConto : function(dati, callback){
         this.verificaConto(dati, function (res) {
-            console.log(res);
+            //console.log(res);
             if(res){
                 let sql = "INSERT INTO metodi_pagamento(ref_nickname, saldo_metodo, numero_iban, tipo) VALUES(?,?,?,?)";
                 pool.query(sql, [res[0].ref_nickname, res[0].saldo_banca, res[0].IBAN, '0'], function (err, result) {
@@ -111,9 +117,12 @@ Metodi.prototype = {
      *Per non ledere il database viene effettuata una transazione. Se qualcosa non va a buon fine
      * in una qualunque query durante la transazione allora viene effettuato un rollback riportando il
      * db allo stato in cui si trovava in precedenza.
+     * @param {string} mittente - Il nickname di colui che invia denaro.
+     * @param {string} importo - La cifra da trasmettere.
+     * @param {string} destinatario - IL nickname di colui che riceve denaro.
+     * @param {function} callback - La funzione da eseguire una volta terminate le operazioni.
      */
     avviaInvioContoMG: function(mittente, importo, destinatario, callback) {
-        console.log(destinatario + " " + mittente);
       let sql_1 = "UPDATE conto_moneygo SET saldo_conto = (saldo_conto - ?) WHERE ref_nickname = ? ";
       let sql_2 = "UPDATE conto_moneygo SET saldo_conto = (saldo_conto + ?) WHERE ref_nickname = ? ";
 
@@ -134,7 +143,7 @@ Metodi.prototype = {
                       connection.release();
                   } else {
                       pool.query(sql_1, [importo, mittente], function (err, esitoUNO) {
-                          console.log(!esitoUNO);
+                          //console.log(!esitoUNO);
                           if (!esitoUNO) {
                               callback(esitoUNO);
                               connection.rollback();
@@ -144,7 +153,7 @@ Metodi.prototype = {
                                * Se la prima query viene eseguita allora procedo con il trasferimento di denaro
                                */
                               pool.query(sql_2, [importo, destinatario], function (err, esitoDUE) {
-                                  console.log(esitoDUE);
+                                 // console.log(esitoDUE);
                                   if (!esitoDUE) {
                                       callback(esitoDUE);
                                       connection.rollback();
@@ -251,26 +260,37 @@ Metodi.prototype = {
         });
     },
 
+    ricavaPredefinito: function(nickname, callback){
+        let sql = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
+        pool.query(sql, nickname, function (err, result) {
+          if(err) throw err;
+          if(result.length){
+              if (result[0].numero_carta != null) metodo = result[0].numero_carta;
+              else if (result[0].numero_iban != null) metodo = result[0].numero_iban;
+          }else callback(null);
+
+        })
+    },
+
     inviaDenaro : function (mittente, importo, destinatario, metodo, callback) {
         var that = this;
+
         if(metodo === "PREDEFINITO"){
-            //prendo il predefinito
-            let metodo_predef = null;
-            let get_pred = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
-            pool.query(get_pred,mittente, function (err, result) {
-                if(err) throw err;
-                if(result[0].numero_carta != null) metodo_predef = result[0].numero_carta;
-                else if(result[0].numero_iban != null) metodo_predef = result[0].numero_iban;
-            });
-            //verifico la copertura
-            that.verificaCopertura(mittente, importo, metodo_predef, function (copertura) {
-                if(copertura) {
-                    that.avviaInvio(mittente, importo, destinatario, metodo_predef, function (result) {
-                        if(result) callback(result);
-                        else callback(null);
-                    })
-                }else callback(false);
-            });
+         that.ricavaPredefinito(mittente, function (result) {
+              if(result !== null)
+              {
+                  metodo = result;
+                  that.verificaCopertura(mittente, importo, metodo, function (copertura) {
+                      if(copertura) {
+                          that.avviaInvio(mittente, importo, destinatario, metodo, function (confermaInvio) {
+                              if(confermaInvio) callback(confermaInvio);
+                              else callback(null);
+                          })
+                      }else callback(false);
+                  });
+              }
+              else callback(false);
+          });
         }
         else if(metodo === "MONEYGO"){
             that.verificaCoperturaContoMG(mittente, importo, function (copertura) {

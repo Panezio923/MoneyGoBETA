@@ -6,6 +6,11 @@
     background: dodgerblue;
 }
 
+.text-tool{
+    color: dodgerblue;
+    text-decoration: underline;
+}
+
 .button-img{
     font-size: 1.5em;
     cursor: pointer;

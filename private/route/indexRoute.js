@@ -24,7 +24,7 @@ router.all('/', (req, res, next) =>{
 router.get('/home', (req, res, next) =>{
     let user = req.session.user;
     if(user){
-        res.render('home', {user:req.session.user, conto:req.session.conto, transazioni:req.session.transazioni, metodi:req.session.metodi});
+        res.render('home', {user:req.session.user, conto:req.session.conto, transazioni:req.session.transazioni, metodi:req.session.metodi, notifiche: req.session.notifiche});
         return;
     }
     res.redirect('/');
@@ -50,8 +50,11 @@ router.post('/login', (req,res,next)=>{
                                 metodi.recuperaMetodi(req.session.user.nickname, function (resMetodi) {
                                     if(resMetodi){
                                         req.session.metodi = resMetodi;
-                                        res.send("MATCH");
-                                        res.end();
+                                        transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (resNotifiche) {
+                                            req.session.notifiche = resNotifiche;
+                                            res.send("MATCH");
+                                            res.end();
+                                        })
                                     }
                                 })
 
@@ -60,7 +63,6 @@ router.post('/login', (req,res,next)=>{
                     });
                 }
                 else if(!result){
-                    console.log("no match: " + result);
                     res.send("NOMATCH");
                     res.end();
                 }

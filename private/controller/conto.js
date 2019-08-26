@@ -13,7 +13,7 @@ Conto.prototype = {
     },
 
     calcolaSaldo : function (user, callback) {
-        let sql = "SELECT saldo_conto FROM conto_moneygo c, utenti u WHERE c.ref_nickname = u.nickname AND u.nickname = ?";
+        let sql = "SELECT * FROM conto_moneygo c, utenti u WHERE c.ref_nickname = u.nickname AND u.nickname = ?";
 
         pool.query(sql, user, function (err, result) {
             if(err) throw err;

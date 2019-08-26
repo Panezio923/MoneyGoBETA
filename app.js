@@ -8,7 +8,6 @@ const session = require('express-session');
 const morgan = require('morgan');
 const helmet = require('helmet');
 
-
 //ROUTES
 const indexRoute = require('./private/route/indexRoute');
 const registerRoute = require('./private/route/registratiRoute');

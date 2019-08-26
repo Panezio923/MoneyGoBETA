@@ -95,7 +95,7 @@
         let storeValue = null;
         $(".list-group a").on('click',function () {
             storeValue = ($(this).attr("id"));
-            console.log(maincontrol.metodi[storeValue[1]].id_metodo);
+            //console.log(maincontrol.metodi[storeValue[1]].id_metodo);
             maincontrol.selected =  maincontrol.metodi[storeValue[1]].id_metodo;
         });
     };

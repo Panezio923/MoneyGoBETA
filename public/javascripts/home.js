@@ -22,8 +22,6 @@
     $("#form_inviadenaro").on("submit", function (e) {maincontrol.inviaDenaro(e)});
     $("#form_richiediDenaro").on("submit", function (e) {maincontrol.richiediDenaro(e)});
     $("#aggiorna").on("click", function () {location.reload()});
-    $("#ricConto").on("click", function (){maincontrol.premutoRicaricaConto()});
-
 
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
@@ -160,13 +158,6 @@
         }
     };
 
-    maincontrol.premutoRicaricaConto = function(){
-        mainview.mostraBarraLoading();
-        location.href = '/home/RicaricaConto';
-        mainview.nascondiBarraLoading();
-        return false;
-    };
-
     mainview.mostraBarraLoading = function(){
       $("#loading").show();
     };
@@ -270,7 +261,6 @@
             destinatario_validato = false;
             reqmittente_validato = false;
         })
-
 
     });
 })();
