@@ -138,7 +138,11 @@
         $("#alert").show("slow");
        id.addClass("is-invalid");
        id.removeClass("is-valid");
+    };
 
+    mainview.campiVuoti = function(id){
+        id.removeClass("is-invalid");
+        id.removeClass("is-valid");
     };
 
     mainview.FaultRegistrati = function () {
@@ -181,7 +185,7 @@
                     $("#nome").addClass("is-invalid");
 
                 }
-            }
+            }else mainview.campiVuoti($("#nome"));
             nome_validato = false;
         });
 
@@ -200,7 +204,7 @@
                     mainview.campiErrati($("#cognome"));
                 }
 
-        }
+        }else mainview.campiVuoti($("#cognome"));
             cognome_validato = false;
         });
 
@@ -216,7 +220,7 @@
                     codicefiscale_validato = false;
                     mainview.campiErrati($("#codicefiscale"));
                 }
-            }
+            }else mainview.campiVuoti($("#codicefiscale"));
             codicefiscale_validato = false;
         });
 
@@ -264,7 +268,7 @@
                     email_validata = false;
                     mainview.campiErrati($("#email"));
                 }
-            }
+            }else mainview.campiVuoti($("#email"));
             email_validata = false;
         });
 
@@ -280,7 +284,7 @@
                     telefono_validato = false;
                     mainview.campiErrati($("#telefono"));
                 }
-            }
+            }else mainview.campiVuoti($("#telefono"));
             telefono_validato = false;
         });
         /*Controllo nickname */
@@ -297,7 +301,7 @@
                     nickname_validato = false;
                     mainview.campiErrati($("#nickname"));
                 }
-            }
+            }else mainview.campiVuoti($("#nickname"));
             nickname_validato = false;
         });
 
