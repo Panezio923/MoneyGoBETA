@@ -137,8 +137,7 @@
         $("#alert_text").text("Per favore, ricontrollare i dati");
         $("#alert").show("slow");
        id.removeClass("is-valid");
-        id.addClass("is-invalid");
-
+       id.addClass("is-invalid");
     };
 
     mainview.FaultRegistrati = function () {
