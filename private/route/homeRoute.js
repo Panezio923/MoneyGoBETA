@@ -11,7 +11,18 @@ const conto = new Conto();
 const transazione = new Transazione();
 
 router.get('/', (req, res)=>{
-   req.session.conto.saldo_conto = calcolaSaldo(req.session.user.nickname);
+    console.log("ASD");
+   if(!req.session.user.nickname){
+       res.redirect('/');
+   }else{
+       conto.calcolaSaldo(req.session.user.nickname, function (nuovoSaldo) {
+           console.log("ciaoxxxx");
+          if(nuovoSaldo)
+              req.session.conto.saldo_conto = nuovoSaldo;
+          else
+              req.session.conto.saldo_conto = "err";
+       });
+   }
 });
 
 router.get('/adminCards', (req,res,next) =>{
@@ -74,7 +85,6 @@ router.use('/inviaDenaro', (req, res, next)=>{
     res.locals.destinatario = req.body.destinatario;
     res.locals.causale = req.body.causale;
 
-    console.log(res.locals.importo + res.locals.mittente +  res.locals.metodo + res.locals.destinatario);
 
     if (res.locals.importo >= limite && limite != null && limite !== 0 && bypass === "off") {
         return res.send("OVERLIMIT");
@@ -89,7 +99,6 @@ router.use('/inviaDenaro', (req, res, next)=>{
  */
 router.post('/inviaDenaro', (req,res,next)=>{
     metodi.inviaDenaro(res.locals.mittente, res.locals.importo, res.locals.destinatario, res.locals.metodo, function (result) {
-        console.log(result);
         if(!result) {
             res.send("TOO");
             res.end();
@@ -118,14 +127,6 @@ router.post('/inviaDenaro', (req, res)=>{
            return res.send("DONE");
        }
    })
-});
-
-router.get('/ricaricaConto',(req,res,next) => {
-    if(!req.session.user){
-        res.redirect('/');
-        return
-    }
-    else res.render('ricaricaConto',{title:"MoneyGo", metodi : req.session.metodi, saldo_metodo : req.session.saldo_metodo});
 });
 
 router.post("/richiediDenaro", (req, res, next)=>{
@@ -192,5 +193,6 @@ router.post('/creaToken', (req, res, next)=>{
 
 
 });
+
 
 module.exports = router;
