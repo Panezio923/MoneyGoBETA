@@ -22,6 +22,9 @@
                 <div class="alert alert-danger text-center" id="alert" role="alert">
                     <p id="alert_text"></p>
                 </div>
+                <div class="alert alert-success text-center" id="successAlert" role="alert">
+                    <p id="alert_text_success"></p>
+                </div>
             </div>
         </div>
 
@@ -31,35 +34,35 @@
                     <h1 class="text-center card-header">Ricarica il tuo conto MoneyGO </h1>
                     <div class="card-body">
                         <div class = "row">
-                            <div class ="col-12 col-md-6">
-                                <label for="metodoPagamento">Seleziona la fonte della ricarica</label>
-                                <select class="form-control" id="ListaCarte">
+                            <div class="col-md-8 offset-md-2 col-12">
+                                <label>Seleziona la fonte di ricarica</label>
+                                <div class="form-group"  id="listaCarte">
+                                    <select class="form-control" title="Scegli un'opzione">
                                         <%
                                         var numeroBanche = metodi.map(function(value) {return value.numero_iban;});
                                         var numeroCarte = metodi.map(function(value) {return value.numero_carta;});
+                                        var saldo = metodi.map(function (value) {return value.saldo_metodo;});
                                         var numero = numeroCarte.concat(numeroBanche);
                                         //Filtro i numeri per rimuovere i valori null
                                         var filter = numero.filter(function (value) { return value; });
                                         for(let i = 0; i < metodi.length; i++){
                                         %>
-                                    <option value="value<%=i%>"><%=filter[i]%></option>
+                                        <option value="<%=filter[i]%>"><%=filter[i]%> - <div class="text-right">€ <%=saldo[i]%></div></option>
                                     <%}%>
                                 </select>
                             </div>
-
-                            <div class ="col-12 col-md-6">
-                                <campi>Importo della carta selezionata:</campi>
-                                <p id="importocorrente"></p>
                             </div>
+
                         </div>
+
                         <div class="row">
-                            <div class="col-12 col-md-7">
+                            <div class="col-12 col-md-8 offset-md-2">
                                 <label for="importo">Inserisci l'importo che vuoi ricaricare</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="euro">€</span>
                                     </div>
-                                    <input type="text" min="1" max="50000" class="form-control text-right importo" placeholder="Importo"  aria-describedby="euro" id="importoUNO" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
+                                    <input type="text" min="1" max="50000" class="form-control text-right importo" placeholder="Importo"  aria-describedby="euro" id="importoRic" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
                                 </div>
                             </div>
                         </div>
@@ -77,9 +80,8 @@
         </div>
     </main>
 </div>
-<% include partials/footer.ejs %>
+<%include partials/footer.ejs %>
 <%include partials/script.ejs%>
-<script type="text/javascript" src="/javascripts/home.js"></script>
 <script type="text/javascript" src="/javascripts/RicaricaConto.js"></script>
 </body>
 </html>
