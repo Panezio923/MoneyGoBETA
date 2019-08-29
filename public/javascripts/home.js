@@ -29,7 +29,7 @@
     $("#form_richiediDenaro").on("submit", function (e) {maincontrol.richiediDenaro(e)});
     $("#byPassLimite").on("click", function(e){maincontrol.byPassLimite(e)});
     $(".aggiorna").on("click", function () {location.reload()});
-
+    $("#ricConto").on("click", function (){maincontrol.premutoRicaricaConto()});
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
         location.href = '/home/gestioneProfilo';
@@ -155,6 +155,14 @@
         maincontrol.bypass = "on";
         maincontrol.inviaDenaro(e);
     };
+
+    maincontrol.premutoRicaricaConto = function(){
+        mainview.mostraBarraLoading();
+        location.href = '/home/ricaricaConto';
+        mainview.nascondiBarraLoading();
+        return false;
+    };
+
 
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
