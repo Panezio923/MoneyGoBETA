@@ -29,7 +29,7 @@
             var importo = $("#importoRic").val().replace(/\./g, '');
             importo = importo.replace(/,/g, '.');
             var metodo = $("#listaCarte option:selected").val()
-            console.log(metodo);
+            console.log(importo);
             $.ajax({
                 type: "POST",
                 url: "/home/inviaDenaro",
