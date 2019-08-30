@@ -29,7 +29,8 @@
     $("#form_richiediDenaro").on("submit", function (e) {maincontrol.richiediDenaro(e)});
     $("#byPassLimite").on("click", function(e){maincontrol.byPassLimite(e)});
     $(".aggiorna").on("click", function () {location.reload()});
-    $("#ricConto").on("click", function (){maincontrol.premutoRicaricaConto()});
+    $("#ricConto").on("click", function(){maincontrol.premutoRicaricaConto()});
+
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
         location.href = '/home/gestioneProfilo';
@@ -42,6 +43,13 @@
         location.href = '/home/adminCards';
         mainview.nascondiBarraLoading();
         return false;
+    };
+
+    maincontrol.premutoRicaricaConto = function(){
+      mainview.mostraBarraLoading();
+      location.href = '/home/ricaricaConto';
+      mainview.nascondiBarraLoading();
+      return false;
     };
 
     maincontrol.premutocreaLink = function(){
@@ -156,14 +164,6 @@
         maincontrol.inviaDenaro(e);
     };
 
-    maincontrol.premutoRicaricaConto = function(){
-        mainview.mostraBarraLoading();
-        location.href = '/home/ricaricaConto';
-        mainview.nascondiBarraLoading();
-        return false;
-    };
-
-
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
         if(destinatario_validato && cifra_validata) {
@@ -218,9 +218,11 @@
                     }
                     else if(msg === "TOO"){
                         $(".loading").hide();
+                        $(".alert").removeClass("alert-warning").addClass("alert-danger");
                         mainview.mostraAlert("L'importo selezionato non è coperto dal metodo scelto.");
-                        $(".aggiorna").show();
+                        $(".aggiorna").html("Chiudi").show();
                         $("#confermaInvioDenaro").hide();
+                        $("#byPassLimite").hide();
                     }
                     else if(msg === "OVERLIMIT"){
                         $(".loading").hide();

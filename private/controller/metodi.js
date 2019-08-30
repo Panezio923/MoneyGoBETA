@@ -246,7 +246,7 @@ Metodi.prototype = {
         let sql = "SELECT saldo_metodo FROM metodi_pagamento WHERE ref_nickname = ? AND (numero_carta = ? OR numero_iban = ?)";
         pool.query(sql, [mittente, metodo, metodo], function (err, result) {
             if(err) throw err;
-            if(result[0] - importo < 0) callback(false);
+            if(result[0].saldo_metodo - importo < 0) callback(false);
             else callback(true);
         });
     },

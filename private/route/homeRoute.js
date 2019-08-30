@@ -102,7 +102,6 @@ router.post('/inviaDenaro', (req,res,next)=>{
         if(!result) {
             res.send("TOO");
             res.end();
-            return;
         } else {
             if (res.locals.metodo === "MONEYGO") req.session.conto.saldo_conto = (req.session.conto.saldo_conto - res.locals.importo).toFixed(2);
             next('route');
@@ -187,6 +186,13 @@ router.post("/rifiutaTransazione", (req,res) =>{
         else res.send("DONE");
         res.end();
     })
+});
+
+router.get('/ricaricaConto',(req,res,next) => {
+    if(!req.session.user){
+        res.redirect('/');
+    }
+    else res.render('ricaricaConto',{title:"MoneyGo", metodi : req.session.metodi, saldo_metodo : req.session.saldo_metodo});
 });
 
 router.post('/creaToken', (req, res, next)=>{

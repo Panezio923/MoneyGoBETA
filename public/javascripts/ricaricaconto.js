@@ -61,21 +61,21 @@
     };
 
 
-$(document).ready(function () {
-    maincontrol.verificaNick();
+    $(document).ready(function () {
+        maincontrol.verificaNick();
 
 
-    $("#importoRic").change(function () {
-        var cifra = 0;
-        cifra = $("#importoRic").val();
-        if(cifra !== "" && !isNaN(cifra)) {
-            $("#importoRic").val(formatter.format(cifra));
-            cifra_validata = true;
-            return;
-        }else{
-            cifra_validata = false;
-        }
+        $("#importoRic").change(function () {
+            var cifra = 0;
+            cifra = $("#importoRic").val();
+            if(cifra !== "" && !isNaN(cifra)) {
+                $("#importoRic").val(formatter.format(cifra));
+                cifra_validata = true;
+                return;
+            }else{
+                cifra_validata = false;
+            }
+        });
     });
-});
 
 })();
