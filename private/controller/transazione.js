@@ -68,27 +68,42 @@ Transazione.prototype = {
     * @param {function} callback - La funzione da eseguire una volta terminate le operazioni.
     */
     creaToken : function (type, user, causale, importo, callback) {
+        //Carico in token tutti i dati per la transazione e quando l'utente l'accetta effettuo la query su transazione ed invio/ricevi denaro. //TODO
+        //Il destinatario della richiesta che è il mittente/destinatario del denaro è iniziato a null. Dopo che logga diventa il suo nick e richiama la richiesta. //TODO
         var token = crypto.createHmac('sha256', "random").update(user + Date.now()).digest('hex');
         console.log(token);
-        var data = new Date.now();
 
-        let sql_token = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione, token) VALUES(?,?,?,?,?,?,?)";
+        let sql_token = "INSERT INTO token(token, id_transazione, data) VALUES(?,?,?);" ;
 
-        if(type === "SEND") {
-            //Se è un token di invio allora chi lo crea è il mittente del denaro.
-            pool.query(sql_token, [data, causale, user, null, importo, "sospesa", token], function (esitoTransazione) {
-                if (!esitoTransazione) callback(false);
-                else callback(true);
-            })
-        }
-        else if(type === "RCV"){
-            //Se è un token di richiesta allora chi lo crea è il destinatario del denaro.
-            pool.query(sql_token, [data, causale, null, user, importo, "sospesa", token], function (esitoTransazione) {
-                if (!esitoTransazione) callback(false);
-                else callback(true);
-            })
-        }
-    },
+        pool.getConnection(function (err, connection) {
+            if(err){
+                console.log(err);
+                callback(undefined, "CONNERR");
+            }
+            else{
+                connection.beginTransaction(function (err) {
+                    if (err) {
+                        console.log(err);
+                        callback("CONNERR");
+                        connection.rollback();
+                        connection.release();
+                    } else {
+                        this.newTransazione(causale, user, null, importo, "sospesa", function (esitoTransazione) {
+                            if(!esitoTransazione){
+                                callback(undefined, esitoTransazione);
+                                connection.rollback();
+                                connection.release();
+                            }
+                            else{
+                               console.log(esitoTransazione.id);
+                               console.log(esitoTransazione);
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
 
 };
 
