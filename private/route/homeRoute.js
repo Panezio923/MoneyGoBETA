@@ -16,7 +16,7 @@ router.get('/aggiornaDati', (req, res)=>{
    }else{
        conto.calcolaSaldo(req.session.user.nickname, function (nuovoSaldo) {
           if(nuovoSaldo){
-              req.session.conto.saldo_conto = nuovoSaldo;
+              req.session.conto = nuovoSaldo;
               metodi.recuperaMetodi(req.session.user.nickname, function (nuoviMetodi) {
                 if(nuoviMetodi)
                     req.session.metodi = nuoviMetodi;
@@ -24,7 +24,6 @@ router.get('/aggiornaDati', (req, res)=>{
                     req.session.metodi = "err";
               })
           }
-             
           else
               req.session.conto.saldo_conto = "err";
        });
