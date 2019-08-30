@@ -10,15 +10,21 @@ const metodi = new Metodi();
 const conto = new Conto();
 const transazione = new Transazione();
 
-router.get('/', (req, res)=>{
-    console.log("ASD");
+router.get('/aggiornaDati', (req, res)=>{
    if(!req.session.user.nickname){
        res.redirect('/');
    }else{
        conto.calcolaSaldo(req.session.user.nickname, function (nuovoSaldo) {
-           console.log("ciaoxxxx");
-          if(nuovoSaldo)
+          if(nuovoSaldo){
               req.session.conto.saldo_conto = nuovoSaldo;
+              metodi.recuperaMetodi(req.session.user.nickname, function (nuoviMetodi) {
+                if(nuoviMetodi)
+                    req.session.metodi = nuoviMetodi;
+                else
+                    req.session.metodi = "err";
+              })
+          }
+             
           else
               req.session.conto.saldo_conto = "err";
        });
@@ -187,6 +193,7 @@ router.post("/rifiutaTransazione", (req,res) =>{
         res.end();
     })
 });
+
 //COMMENTO LASTMINUTE
 router.get('/ricaricaConto',(req,res,next) => {
     if(!req.session.user){
