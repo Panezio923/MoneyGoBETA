@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1aceef9d-89e5-4368-8eb1-7783bb6a90d9" name="Default Changelist" comment="17:11 05/08 &#10;Finito front-end invio denaro.">
-      <change afterPath="$PROJECT_DIR$/.idea/MoneyGO.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/634b52a2-4af4-4dc9-aab1-2f1f06e35b85.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/sergi.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57_[Default_Changelist]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57__Default_Changelist_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vagrant.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="1aceef9d-89e5-4368-8eb1-7783bb6a90d9" name="Default Changelist" comment="26/08 14:35&#10;&#10;Email completate, inizializzo LinkPagamento">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/access.log" beforeDir="false" afterPath="$PROJECT_DIR$/access.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private/controller/connessionedb.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/connessionedb.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private/controller/metodi.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/metodi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private/controller/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/private/route/homeRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/route/homeRoute.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/javascripts/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/inviadenaroModal.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/inviadenaroModal.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/javascripts/ricaricaconto.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/ricaricaconto.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,10 +54,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="1P07Aa1EgjQemC7wpwplwtqW9pp" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql&#10;mariadb" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
@@ -370,7 +353,28 @@
       <option name="project" value="LOCAL" />
       <updated>1565192605343</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="26/08 14:35&#10;&#10;Email completate, inizializzo LinkPagamento">
+      <created>1567158354425</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1567158354425</updated>
+    </task>
+    <task id="LOCAL-00017" summary="30/08 11:51">
+      <created>1567158702952</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1567158702952</updated>
+    </task>
+    <task id="LOCAL-00018" summary="aggiornaDati in homeRoute">
+      <created>1567159222166</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1567159222166</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TodoView">
@@ -438,7 +442,9 @@
     <MESSAGE value="14:01 - 05/04 &#10;InviaDenaro FrontEnd. &#10;Modificata grafica form-control di gestione dati." />
     <MESSAGE value="17:11 05/08 &#10;Finito front-end invio denaro." />
     <MESSAGE value="17:42 - 07/08 &#10;quasi terminato invia denaro. Manca il testing ed il debugging." />
-    <option name="LAST_COMMIT_MESSAGE" value="17:42 - 07/08 &#10;quasi terminato invia denaro. Manca il testing ed il debugging." />
-    <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
+    <MESSAGE value="26/08 14:35&#10;&#10;Email completate, inizializzo LinkPagamento" />
+    <MESSAGE value="30/08 11:51" />
+    <MESSAGE value="aggiornaDati in homeRoute" />
+    <option name="LAST_COMMIT_MESSAGE" value="aggiornaDati in homeRoute" />
   </component>
 </project>

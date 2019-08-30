@@ -38,7 +38,8 @@
                 success: function (msg) {
                     if(msg === "DONE"){
                         $("#successAlert").show();
-                        $("#alert_text_success").text("Ricarica eseguita con successo")
+                        $("#alert_text_success").text("Ricarica eseguita con successo");
+                        maincontrol.aggiornaDati();
                     }
                     else if(msg === "TRANERR"){
                         $("#alert").show();
@@ -60,10 +61,23 @@
         }
     };
 
+    maincontrol.aggiornaDati = function(){
+      $.ajax({
+          type: "GET",
+          url: "/home/aggiornaDati",
+
+
+          success: function () {
+              console.log("Fatto");
+          },
+          error: function () {
+              console.log("errore");
+          }
+      })
+    };
 
     $(document).ready(function () {
         maincontrol.verificaNick();
-
 
         $("#importoRic").change(function () {
             var cifra = 0;

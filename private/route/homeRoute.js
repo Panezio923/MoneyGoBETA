@@ -10,25 +10,30 @@ const metodi = new Metodi();
 const conto = new Conto();
 const transazione = new Transazione();
 
-router.get('/aggiornaDati', (req, res)=>{
+router.use('/aggiornaDati', (req, res, next)=>{
    if(!req.session.user.nickname){
        res.redirect('/');
    }else{
        conto.calcolaSaldo(req.session.user.nickname, function (nuovoSaldo) {
-          if(nuovoSaldo){
-              req.session.conto.saldo_conto = nuovoSaldo;
-              metodi.recuperaMetodi(req.session.user.nickname, function (nuoviMetodi) {
-                if(nuoviMetodi)
-                    req.session.metodi = nuoviMetodi;
-                else
-                    req.session.metodi = "err";
-              })
+          if(nuovoSaldo) {
+              req.session.conto = nuovoSaldo;
+              next('route');
           }
-             
           else
               req.session.conto.saldo_conto = "err";
        });
    }
+});
+
+router.get('/aggiornaDati', (req, res)=>{
+   metodi.recuperaMetodi(req.session.user.nickname, function (nuoviMetodi) {
+       if(nuoviMetodi){
+           req.session.metodi = nuoviMetodi;
+           res.send("DONE");
+       }
+       else
+           req.session.metodi = "err";
+   })
 });
 
 router.get('/adminCards', (req,res,next) =>{
