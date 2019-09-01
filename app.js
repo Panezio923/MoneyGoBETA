@@ -33,7 +33,7 @@ app.use(session({
   secret: 'secret',
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 900000}
+  cookie: { maxAge: 24 * 60 * 60 * 1000}
 }));
 
 //Helmet protegge l'app da vulnerabilità web

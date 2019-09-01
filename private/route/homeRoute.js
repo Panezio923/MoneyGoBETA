@@ -208,7 +208,18 @@ router.get('/ricaricaConto',(req,res,next) => {
 });
 
 router.post('/creaToken', (req, res, next)=>{
+    let user = req.session.user.nickname;
+    let type = req.body.type;
+    let causale = req.body.causale;
+    let importo = req.body.importo;
+    let metodo = req.body.metodo;
 
+    transazione.creaToken(type, user, causale, importo, metodo, function (esitoToken) {
+        if(!esitoToken) res.send("ERR");
+        else res.send(esitoToken);
+        res.end();
+
+    })
 
 });
 

@@ -67,26 +67,37 @@ Transazione.prototype = {
     * @param {float} importo - L'importo della transazione.
     * @param {function} callback - La funzione da eseguire una volta terminate le operazioni.
     */
-    creaToken : function (type, user, causale, importo, callback) {
+    creaToken : function (type, user, causale, importo, metodo, callback) {
         var token = crypto.createHmac('sha256', "random").update(user + Date.now()).digest('hex');
         console.log(token);
-        var data = new Date.now();
+        var data = new Date();
 
         let sql_token = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione, token) VALUES(?,?,?,?,?,?,?)";
+        let sql = "INSERT INTO link_pagamento(token, metodo, tipo) VALUES(?,?,?)";
 
         if(type === "SEND") {
             //Se è un token di invio allora chi lo crea è il mittente del denaro.
             pool.query(sql_token, [data, causale, user, null, importo, "sospesa", token], function (esitoTransazione) {
                 if (!esitoTransazione) callback(false);
-                else callback(true);
+                else {
+                    pool.query(sql, [token, metodo, "SEND"], function(esitoToken) {
+                        if(!esitoToken) callback(false);
+                        else callback(token);
+                    })
+                }
             })
         }
-        else if(type === "RCV"){
+        else if(type === "RCV") {
             //Se è un token di richiesta allora chi lo crea è il destinatario del denaro.
-            pool.query(sql_token, [data, causale, null, user, importo, "sospesa", token], function (esitoTransazione) {
-                if (!esitoTransazione) callback(false);
-                else callback(true);
-            })
+            pool.query( sql_token, [data, causale, null, user, importo, "sospesa", token], function (esitoTransazione) {
+                if (!esitoTransazione) callback( false );
+                else {
+                    pool.query( sql, [token, metodo, "RCV"], function (esitoToken) {
+                        if (!esitoToken) callback( false );
+                        else callback( token );
+                    } )
+                }
+            } )
         }
     },
 

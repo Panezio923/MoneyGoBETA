@@ -80,7 +80,7 @@
         maincontrol.verificaNick();
 
         $("#importoRic").change(function () {
-            var cifra = 0;
+            let cifra;
             cifra = $("#importoRic").val();
             if(cifra !== "" && !isNaN(cifra)) {
                 $("#importoRic").val(formatter.format(cifra));

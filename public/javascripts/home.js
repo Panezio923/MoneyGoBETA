@@ -16,6 +16,8 @@
     var reqmittente_validato = false; //Chi riceve la richiesta di denaro è il mittente della transazione
     let storeValue = null;
 
+    var clipboard = new ClipboardJS('.btn');
+
     const formatter = new Intl.NumberFormat('it-IT', {
         minimumFractionDigits: 2
     });
@@ -166,6 +168,7 @@
 
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
+        console.log(destinatario_validato)
         if(destinatario_validato && cifra_validata) {
             maincontrol.getFontePagamento();
 
@@ -311,6 +314,31 @@
       })
     };
 
+    maincontrol.creaLinkPagamento = function(){
+        $.ajax({
+            type: "POST",
+            url: "/home/creaToken",
+            data: {importo: maincontrol.importo, metodo: maincontrol.metodo, causale: $("#causaleInvia").val(), type: "SEND"},
+
+            beforeSend: function () {
+                //mainview.mostraBarraLoading();
+            },
+            success: function (msg) {
+                console.log(msg);
+                if(!msg){
+                    mainview.mostraAlert("Qualcosa è andato storto nella generazione del link");
+                }else{
+                    $('#linkInvio span').text("http://localhost:443/" + msg);
+                    $('#linkInvio').attr("value", ("http://localhost:443/" + msg));
+                }
+            }
+        })
+    };
+
+    mainview.mostraLinkPagamento = function(){
+        $(".linkpagamento").show();
+    };
+
     mainview.mostraBarraLoading = function(){
       $("#loading").show();
     };
@@ -328,8 +356,7 @@
         $(".alert").hide();
     };
 
-
-    $(document).ready(function () {
+    $( document ).ready(function () {
 
         //Quando carica la pagina recupero il nick dell'utente
         maincontrol.verificaNick();
@@ -359,9 +386,9 @@
         $("#destinatario").blur(function (e) {
             if ($("#destinatario").val() != "") {
                 if (/^[a-zA-Z0-9]+$/.test($("#destinatario").val())) {
-                    destinatario_validato = true;
                     $("#alert").hide();
                     maincontrol.controllaEsistenzaNick($("#destinatario").val(), "destinatario", destinatario_validato, e);
+                    console.log(destinatario_validato);
                     return;
                 } else {
                     destinatario_validato = false;
@@ -376,7 +403,7 @@
             destinatario_validato = false;
         });
 
-
+        $("#importoUNO, #importoDUE").val("");
         $("#importoUNO, #importoDUE").change(function () {
           var cifra = 0;
           if($("#importoUNO").val() === "" ) cifra = $("#importoDUE").val();
@@ -418,7 +445,25 @@
             cifra_validata = false;
             destinatario_validato = false;
             reqmittente_validato = false;
-        })
+        });
+
+        $("#checkCreaLink").prop("checked", false);
+        $("#checkCreaLink").on('click', function () {
+            if($("#checkCreaLink").is(":checked")){
+                if(cifra_validata) {
+                    maincontrol.getFontePagamento();
+                    console.log(maincontrol.metodo);
+                    if(maincontrol.metodo !== null) {
+                        maincontrol.creaLinkPagamento();
+                        mainview.mostraLinkPagamento();
+                    }else mainview.mostraAlert("Selezionare il metodo di pagamento");
+                }else mainview.mostraAlert("Importo inserito non valido");
+            }
+            else{
+                mainview.ripulisciCampiErrati();
+                $(".linkpagamento").hide();
+            }
+        });
 
 
     });
