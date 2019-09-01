@@ -323,7 +323,6 @@
         $('#listaMetodi a').on('click', function (e) {
             e.preventDefault();
             $(this).tab('show')
-
         });
 
         $("input[name='tipo']").on('click', function () {

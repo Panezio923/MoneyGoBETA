@@ -37,9 +37,13 @@
 
                 success: function (msg) {
                     if(msg === "DONE"){
-                        $("#successAlert").show();
-                        $("#alert_text_success").text("Ricarica eseguita con successo");
                         maincontrol.aggiornaDati();
+                        $("#alert_text_success").text("Ricarica eseguita con successo");
+                        $( "#successAlert" ).show();
+                        $("#successAlert").delay(3000).slideUp(200, function() {
+                            $(this).alert('close');
+                            location.reload();
+                        });
                     }
                     else if(msg === "TRANERR"){
                         $("#alert").show();
