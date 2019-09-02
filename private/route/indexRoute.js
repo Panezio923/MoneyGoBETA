@@ -73,7 +73,7 @@ router.post('/login', (req,res,next)=>{
 });
 
 //Logout richiesta
-router.get('/logout', (req,res, next)=>{
+router.get('/logout', (req,res)=>{
     if(req.session.user){
         req.session.destroy((function () {
             res.redirect('/');
@@ -82,12 +82,24 @@ router.get('/logout', (req,res, next)=>{
 });
 
 //Richiesta pagina registrazione
-router.get('/registrati', (req,res,next) =>{
+router.get('/registrati', (req,res) =>{
     res.render('registrati', {title:'Registrati su MoneyGO'});
 });
 
 router.get('/recuperoPassword', (req, res)=>{
     res.render('recuperoPassword', {title: 'Recupera la tua password'});
 });
+
+router.get('/token/:token', (req, res)=>{
+    var token = req.params.token;
+
+    transazione.verificaToken(token, function (esito) {
+        if(!esito) res.redirect('/');
+        else{
+            res.render() //TODO renderizza il login/ registrazione
+        }
+    })
+});
+
 
 module.exports = router;

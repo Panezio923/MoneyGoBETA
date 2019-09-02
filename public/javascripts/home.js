@@ -274,6 +274,8 @@
     };
 
     maincontrol.accettaTransazione = function(id){
+
+
         $.ajax({
             type: "POST",
             url: "/home/accettaTransazione",
@@ -315,10 +317,12 @@
     };
 
     maincontrol.creaLinkPagamento = function(){
+        var importo = $(".importo").val().replace(/\./g, '');
+        importo = importo.replace(/,/g, '.');
         $.ajax({
             type: "POST",
             url: "/home/creaToken",
-            data: {importo: maincontrol.importo, metodo: maincontrol.metodo, causale: $("#causaleInvia").val(), type: "SEND"},
+            data: {importo: importo, metodo: maincontrol.metodo, causale: $("#causaleInvia").val(), type: "SEND"},
 
             beforeSend: function () {
                 //mainview.mostraBarraLoading();
@@ -328,8 +332,8 @@
                 if(!msg){
                     mainview.mostraAlert("Qualcosa è andato storto nella generazione del link");
                 }else{
-                    $('#linkInvio span').text("http://localhost:443/" + msg);
-                    $('#linkInvio').attr("value", ("http://localhost:443/" + msg));
+                    $('#linkInvio span').text("http://localhost:443/token/" + msg);
+                    $('#linkInvio').attr("value", ("http://localhost:443/token/" + msg));
                 }
             }
         })

@@ -74,13 +74,14 @@ Transazione.prototype = {
 
         let sql_token = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione, token) VALUES(?,?,?,?,?,?,?)";
         let sql = "INSERT INTO link_pagamento(token, metodo, tipo) VALUES(?,?,?)";
-
         if(type === "SEND") {
             //Se è un token di invio allora chi lo crea è il mittente del denaro.
-            pool.query(sql_token, [data, causale, user, null, importo, "sospesa", token], function (esitoTransazione) {
+            pool.query(sql_token, [data, causale, user, "null", importo, "sospesa", token], function (err, esitoTransazione) {
+                if(err) throw err;
                 if (!esitoTransazione) callback(false);
                 else {
-                    pool.query(sql, [token, metodo, "SEND"], function(esitoToken) {
+                    pool.query(sql, [token, metodo, "SEND"], function(err, esitoToken) {
+                        if(err) throw err;
                         if(!esitoToken) callback(false);
                         else callback(token);
                     })
@@ -89,7 +90,7 @@ Transazione.prototype = {
         }
         else if(type === "RCV") {
             //Se è un token di richiesta allora chi lo crea è il destinatario del denaro.
-            pool.query( sql_token, [data, causale, null, user, importo, "sospesa", token], function (esitoTransazione) {
+            pool.query( sql_token, [data, causale, "null", user, importo, "sospesa", token], function (esitoTransazione) {
                 if (!esitoTransazione) callback( false );
                 else {
                     pool.query( sql, [token, metodo, "RCV"], function (esitoToken) {
@@ -101,6 +102,16 @@ Transazione.prototype = {
         }
     },
 
+    verificaToken: function (token, callback) {
+        let query = "SELECT * FROM transazione t, link_pagamento l WHERE t.token = l.token AND l.token = ?";
+
+        pool.query(query, token, function (err, esito) {
+            if(err) throw err;
+            if(!esito) callback(false);
+            else callback(true);
+        })
+
+    }
 };
 
 
