@@ -16,7 +16,6 @@ router.get('/aggiornaDati', (req, res, next)=>{
    }else{
        conto.calcolaSaldo(req.session.user.nickname, function (nuovoSaldo) {
           if(nuovoSaldo) {
-              console.log(nuovoSaldo);
               req.session.conto = nuovoSaldo;
               metodi.recuperaMetodi(req.session.user.nickname, function (nuoviMetodi) {
                   if(nuoviMetodi){
@@ -219,7 +218,15 @@ router.post('/creaToken', (req, res, next)=>{
         res.end();
 
     })
+});
 
+router.get('/pagamentoPeriodico', (req, res)=>{
+
+    if(!req.session.user){
+       res.redirect('/');
+       return;
+   }
+   else res.render('GestioneConto/pagamentoperiodico', {title: "Pagamento Periodico"});
 });
 
 

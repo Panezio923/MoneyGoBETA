@@ -16,8 +16,6 @@
     var reqmittente_validato = false; //Chi riceve la richiesta di denaro è il mittente della transazione
     let storeValue = null;
 
-    var clipboard = new ClipboardJS('.btn');
-
     const formatter = new Intl.NumberFormat('it-IT', {
         minimumFractionDigits: 2
     });
@@ -33,6 +31,7 @@
     $(".aggiorna").on("click", function () {location.reload()});
     $("#ricConto").on("click", function(){maincontrol.premutoRicaricaConto()});
     $("#aggiornaSaldo").on("click", function () {maincontrol.aggiornaDati()});
+    $("#pagPeriodico").on("click", function () {maincontrol.premutoPagamentoPeriodico()});
 
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
@@ -58,6 +57,13 @@
     maincontrol.premutocreaLink = function(){
         mainview.mostraBarraLoading();
         location.href = '/home/creaLink';
+        mainview.nascondiBarraLoading();
+        return false;
+    };
+
+    maincontrol.premutoPagamentoPeriodico = function(){
+        mainview.mostraBarraLoading();
+        location.href = '/home/pagamentoPeriodico';
         mainview.nascondiBarraLoading();
         return false;
     };

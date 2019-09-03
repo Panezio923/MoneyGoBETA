@@ -1,0 +1,122 @@
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyGo</title>
+    <link rel="stylesheet" href="/stylesheets/css/bootstrap.min.css">
+    <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/schermata.css">
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Didact Gothic' rel='stylesheet'>
+</head>
+<body class="d-flex flex-column">
+
+<% include ../partials/header_postlogin.ejs %>
+
+<div id="page-content">
+    <main class="container">
+
+        <div class="row justify-content-center">
+            <h2>Crea un nuovo pagamento periodico</h2>
+        </div>
+
+        <div class="row">
+            <div class="offset-6">
+                <div class="spinner-border text-primary mb-3" role="status" id="loading">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3"></div>
+        <form action="/nuovoPagamentoPeriodico" method="post" id="form_login">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <label for="dest">Destinatario Pagamento</label>
+                    <input class="form-control" type="text" name="importo" id="dest">
+                    <div class="mb-3"></div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="importo">Inserisci l'importo</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="euro">€</span>
+                        </div>
+                        <input type="text" min="1" max="50000" class="form-control text-right importo" placeholder="Importo"  aria-describedby="euro" id="importoUNO" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3"></div>
+
+            <div class="row">
+                <div class="col-12 col-md-6 ">
+                    <label for="start">Data inizio pagamento</label>
+                        <input type="date" class="form-control text-right" id="nascita"  placeholder="GG/MM/YYYY" required>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="periodicita">Periodicità</label>
+                    <select class="form-control" id="periodicita">
+                        <option value="unasettimana">Ogni Settimana</option>
+                        <option value="duesettimane">Ogni Due Settimane</option>
+                        <option value="unomese">Ogni Mese</option>
+                        <option value="seimsi">Ogni Sei Mesi</option>
+                        <option value="anno">Ogni Anno</option>
+                    </select>
+                    <div class="mb-3"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-primary btn-lg btn-block" id="reset" type="reset">Svuota Campi</button>
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-primary btn-lg btn-block" id="conferma" type="submit">Conferma</button>
+                </div>
+            </div>
+        </form>
+        <!--Alert-->
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="alert alert-danger text-center" id="alert" role="alert">
+                    <div class="testo_alert">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                <tr>
+                    <th scope="col">Destinatario</th>
+                    <th scope="col">Importo</th>
+                    <th scope="col">Periodicità</th>
+                    <th scope="col">Inizio Pagamento</th>
+                    <th scope="col">Opzioni</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!-- TODO un ciclo for sui pagamenti periodici -->
+                    <th scope="row">Kiurim</th>
+                    <td>125.00</td>
+                    <td>Un mese</td>
+                    <td>22/11/88</td>
+                    <td><button class="btn btn-sm btn-danger">Elimina</button> <button class="btn btn-sm btn-info">Interrompi</button> </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+<% include ../partials/footer.ejs %>
+
+<%include ../partials/script.ejs%>
+
+
+</body>
+</html>
