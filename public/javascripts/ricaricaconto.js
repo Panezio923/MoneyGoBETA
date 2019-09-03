@@ -8,6 +8,11 @@
     });
     $("#RicaricaConto").on("click", function (){maincontrol.premutoRicarica()});
 
+    mainview.mostraAlert = function(msg){
+        $("#alert_text").text(msg);
+        $("#alert").show("slow");
+    };
+
     maincontrol.verificaNick = function(){
         $.ajax({
             type: "GET",
@@ -24,11 +29,13 @@
     };
 
     maincontrol.premutoRicarica = function(){
-        if(cifra_validata) {
+        var metodo = $("#listaCarte option:selected").val();
+
+        if(cifra_validata && metodo !== undefined) {
             var destinatario = maincontrol.user_nickname;
             var importo = $("#importoRic").val().replace(/\./g, '');
             importo = importo.replace(/,/g, '.');
-            var metodo = $("#listaCarte option:selected").val()
+
             console.log(importo);
             $.ajax({
                 type: "POST",
@@ -46,22 +53,21 @@
                         });
                     }
                     else if(msg === "TRANERR"){
-                        $("#alert").show();
-                        $("#alert_text").text("Ricarica fallita, riprova")
+                       mainview.mostraAlert("Ricarica Fallita. Riprovare");
                     }
                     else if(msg === "FAULT"){
-                        $("#alert").show();
-                        $("#alert_text").text("Ricarica fallita, riprova")
+                        mainview.mostraAlert("Ricarica Fallita. Riprovare");
                     }
                     else if(msg === "TOO"){
-                        $("#alert").show();
-                        $("#alert_text").text("L'importo selezionato non è coperto dal metodo scelto")
+                        mainview.mostraAlert("L'importo selezionato non è coperto dal metodo scelto");
                     }
                 },
                 error: function () {
                     console.log("fallito");
                 }
             });
+        }else{
+            mainview.mostraAlert("Rincontrollare i dati inseriti");
         }
     };
 
@@ -70,9 +76,8 @@
           type: "GET",
           url: "/home/aggiornaDati",
 
-
-          success: function () {
-              console.log("Fatto");
+          success: function (saldo) {
+              $("#saldo").val(saldo.saldo_conto);
           },
           error: function () {
               console.log("errore");

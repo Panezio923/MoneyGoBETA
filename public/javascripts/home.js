@@ -32,6 +32,7 @@
     $("#byPassLimite").on("click", function(e){maincontrol.byPassLimite(e)});
     $(".aggiorna").on("click", function () {location.reload()});
     $("#ricConto").on("click", function(){maincontrol.premutoRicaricaConto()});
+    $("#aggiornaSaldo").on("click", function () {maincontrol.aggiornaDati()});
 
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
@@ -316,13 +317,14 @@
       })
     };
 
-    maincontrol.creaLinkPagamento = function(){
+    maincontrol.creaLinkPagamento = function(tipo){
         var importo = $(".importo").val().replace(/\./g, '');
         importo = importo.replace(/,/g, '.');
+        console.log(maincontrol.metodo);
         $.ajax({
             type: "POST",
             url: "/home/creaToken",
-            data: {importo: importo, metodo: maincontrol.metodo, causale: $("#causaleInvia").val(), type: "SEND"},
+            data: {importo: importo, metodo: maincontrol.metodo, causale: $(".causale").val(), type: tipo},
 
             beforeSend: function () {
                 //mainview.mostraBarraLoading();
@@ -332,9 +334,29 @@
                 if(!msg){
                     mainview.mostraAlert("Qualcosa è andato storto nella generazione del link");
                 }else{
-                    $('#linkInvio span').text("http://localhost:443/token/" + msg);
-                    $('#linkInvio').attr("value", ("http://localhost:443/token/" + msg));
+                    if(tipo === "SEND") {
+                        $( '#linkInvio span' ).text( "http://localhost:443/token/" + msg );
+                        $( '#linkInvio' ).attr( "value", ("http://localhost:443/token/" + msg) );
+                    }
+                    else if(tipo === "RCV"){
+                        $( '#linkRcv span' ).text( "http://localhost:443/token/" + msg );
+                        $( '#linkRcv' ).attr( "value", ("http://localhost:443/token/" + msg) );
+                    }
                 }
+            }
+        })
+    };
+
+    maincontrol.aggiornaDati = function(){
+        $.ajax({
+            type: "GET",
+            url: "/home/aggiornaDati",
+
+            success: function (saldo) {
+                $("#saldo").val(saldo.saldo_conto);
+            },
+            error: function () {
+                console.log("errore");
             }
         })
     };
@@ -458,7 +480,7 @@
                     maincontrol.getFontePagamento();
                     console.log(maincontrol.metodo);
                     if(maincontrol.metodo !== null) {
-                        maincontrol.creaLinkPagamento();
+                        maincontrol.creaLinkPagamento("SEND");
                         mainview.mostraLinkPagamento();
                     }else mainview.mostraAlert("Selezionare il metodo di pagamento");
                 }else mainview.mostraAlert("Importo inserito non valido");
@@ -469,6 +491,19 @@
             }
         });
 
+        $("#checkCreaLinkRcv").prop("checked", false);
+        $("#checkCreaLinkRcv").on('click', function () {
+            if($("#checkCreaLinkRcv").is(":checked")){
+                if(cifra_validata){
+                    maincontrol.metodo = "MONEYGO";
+                    maincontrol.creaLinkPagamento("RCV");
+                    mainview.mostraLinkPagamento();
+                }else mainview.mostraAlert("Importo inserito non valido");
+            }else{
+                mainview.ripulisciCampiErrati();
+                $(".linkpagamento").hide();
+            }
+        })
 
     });
 })();

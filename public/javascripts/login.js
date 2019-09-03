@@ -9,7 +9,7 @@
         if(e.keyCode === 13)
         maincontrol.premutoLogin(e)
     });
-    $("#registrati").click(function(){maincontrol.premutoRegistrati()});
+    $("#registrati").on("click", function(){maincontrol.premutoRegistrati()});
 
 
     maincontrol.premutoRegistrati = function () {

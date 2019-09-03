@@ -10,14 +10,23 @@ const metodi = new Metodi();
 const conto = new Conto();
 const transazione = new Transazione();
 
-router.use('/aggiornaDati', (req, res, next)=>{
+router.get('/aggiornaDati', (req, res, next)=>{
    if(!req.session.user.nickname){
        res.redirect('/');
    }else{
        conto.calcolaSaldo(req.session.user.nickname, function (nuovoSaldo) {
           if(nuovoSaldo) {
+              console.log(nuovoSaldo);
               req.session.conto = nuovoSaldo;
-              next('route');
+              metodi.recuperaMetodi(req.session.user.nickname, function (nuoviMetodi) {
+                  if(nuoviMetodi){
+                      req.session.metodi = nuoviMetodi;
+                      res.json({"saldo":req.session.conto.saldo_conto});
+                      res.end();
+                  }
+                  else
+                      req.session.metodi = "err";
+              })
           }
           else
               req.session.conto.saldo_conto = "err";
@@ -25,16 +34,6 @@ router.use('/aggiornaDati', (req, res, next)=>{
    }
 });
 
-router.get('/aggiornaDati', (req, res)=>{
-   metodi.recuperaMetodi(req.session.user.nickname, function (nuoviMetodi) {
-       if(nuoviMetodi){
-           req.session.metodi = nuoviMetodi;
-           res.send("DONE");
-       }
-       else
-           req.session.metodi = "err";
-   })
-});
 
 router.get('/adminCards', (req,res,next) =>{
     let user = req.session.user;
@@ -222,6 +221,8 @@ router.post('/creaToken', (req, res, next)=>{
     })
 
 });
+
+
 
 
 module.exports = router;

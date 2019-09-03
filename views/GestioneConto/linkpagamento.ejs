@@ -1,0 +1,88 @@
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyGo</title>
+    <link rel="stylesheet" href="/stylesheets/css/bootstrap.min.css">
+    <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/schermata.css">
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Didact Gothic' rel='stylesheet'>
+</head>
+<body class="d-flex flex-column">
+
+<% include ../partials/header_postlogin.ejs %>
+
+<div id="page-content">
+    <main class="container">
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2 class="text-center" style="background-color: #cfcfcf; border-radius: 5px">&nbsp; Effettua il Login per completare la transazione &nbsp; </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <p> Se non possiedi dei dati di accesso, ti invitiamo a <b>registrarti</b> e successivamente <b>riaprire il link.</b></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p>Importo della transazione: <span style="color: limegreen">€ <%=importo%></span> </p>
+            </div>
+            <div class="col-12 col-md-6">
+                <p class="text-right">Creatore della transazione: <span style="color: limegreen"><%=user%></span></p>
+            </div>
+        </div>
+        <hr class="style">
+
+        <div class="row">
+            <div class="offset-6">
+                <div class="spinner-border text-primary mb-3" role="status" id="loading">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <form action="/loginLink" method="post" id="form_login">
+            <label for="user">Username</label>
+            <input class="form-control form-control-lg" type="text" name="user" id="user">
+            <div class="mb-3"></div>
+            <label for="password">Password</label>
+            <input class="form-control form-control-lg" type="password" name="password" id="password">
+            <div class="mb-4"></div>
+        </form>
+        <!--Alert-->
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="alert alert-danger text-center" id="alert" role="alert">
+                    <div class="testo_alert">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button class="btn btn-primary btn-lg btn-block" id="registrati">Registrati</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-primary btn-lg btn-block"  id="loginLink">Login</button>
+            </div>
+        </div>
+        <div class="mb-2"></div>
+
+
+
+    </main>
+</div>
+<% include ../partials/footer.ejs %>
+
+<%include ../partials/script.ejs%>
+<script type="text/javascript" src="../javascripts/linkpagamento.js" ></script>
+
+
+</body>
+</html>

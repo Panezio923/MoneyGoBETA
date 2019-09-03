@@ -86,20 +86,69 @@ router.get('/registrati', (req,res) =>{
     res.render('registrati', {title:'Registrati su MoneyGO'});
 });
 
-router.get('/recuperoPassword', (req, res)=>{
+router.get('/recuperoPassword', (req, res, next)=>{
     res.render('recuperoPassword', {title: 'Recupera la tua password'});
 });
 
 router.get('/token/:token', (req, res)=>{
-    var token = req.params.token;
-
+    let token = req.params.token;
     transazione.verificaToken(token, function (esito) {
-        if(!esito) res.redirect('/');
+        if(!esito) res.render('index');
         else{
-            res.render() //TODO renderizza il login/ registrazione
+            let user;
+            if(esito[0].nick_mittente === "null") user = esito[0].destinatario;
+            else user = esito[0].nick_mittente;
+
+            res.render('GestioneConto/linkpagamento', {title: "MoneyGO", importo: esito[0].importo.toFixed(2), user: user});
+            res.end();
         }
     })
 });
+
+router.post('/token/:token/eseguiTransazione', (req, res)=>{
+   let token = req.params.token;
+    let mittente;
+    let destinatario;
+
+    transazione.verificaToken(token, function (dati) {
+        if(!dati) res.send("ERR");
+        else{
+           // inviaDenaro : function (mittente, importo, destinatario, metodo, callback)
+            if(dati[0].tipo === "SEND") {
+                mittente = dati[0].nick_mittente;
+                destinatario = req.session.user.nickname;
+            }
+            else if(dati[0].tipo === "RCV"){
+                destinatario = dati[0].destinatario;
+                mittente = req.session.user.nickname;
+            }
+            let importo = dati[0].importo;
+            let metodo = dati[0].metodo;
+
+            metodi.inviaDenaro(mittente, importo, destinatario, metodo, function (esitoInvio) {
+                if(!esitoInvio) res.send("ERR");
+                else{
+                    transazione.accettaToken(destinatario, token, function (esitoAccetta) {
+                        if(!esitoAccetta) res.send("ERR");
+                        else{
+                            transazione.eliminaToken(token, function (esitoElimina) {
+                                if(!esitoElimina) res.send("ERR");
+                                else res.send("DONE");
+                            })
+                        }
+                    })
+                }
+            })
+
+        }
+    })
+
+
+});
+
+
+
+
 
 
 module.exports = router;
