@@ -116,10 +116,14 @@ Transazione.prototype = {
 
     },
 
-    accettaToken: function (destinatario, token, callback) {
-        let query = "UPDATE transazione t SET t.destinatario = ?, t.stato_transazione = ? WHERE t.token = ?";
+    accettaToken: function (user, tipo, token, callback) {
+        let query;
 
-        pool.query(query, [destinatario, "eseguita", token], function (err, esito) {
+        if(tipo === "SEND")
+            query = "UPDATE transazione t SET t.destinatario = ?, t.stato_transazione = ? WHERE t.token = ?";
+        else if(tipo === "RCV") query = "UPDATE transazione t SET t.nick_mittente = ?, t.stato_transazione = ? WHERE t.token = ?";
+
+        pool.query(query, [user, "eseguita", token], function (err, esito) {
             if(err) throw err;
             if(!esito) callback(false);
             else callback(true);

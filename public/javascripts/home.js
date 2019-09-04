@@ -271,7 +271,6 @@
             storeValue = ($(this).attr("id"));
             let id_transazione = maincontrol.notifiche[storeValue[1]].id_transazione;
             if(storeValue[0] === "A"){
-                console.log("cliccato2");
                 maincontrol.accettaTransazione(id_transazione);
             }
             else if(storeValue[1] === "R"){
@@ -360,6 +359,7 @@
 
             success: function (saldo) {
                 $("#saldo").val(saldo.saldo_conto);
+                $("#saldo").load(location.href + ' #saldo');
             },
             error: function () {
                 console.log("errore");

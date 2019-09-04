@@ -126,9 +126,9 @@ router.post('/token/:token/eseguiTransazione', (req, res)=>{
             let metodo = dati[0].metodo;
 
             metodi.inviaDenaro(mittente, importo, destinatario, metodo, function (esitoInvio) {
-                if(!esitoInvio) res.send("ERR");
+                if(!esitoInvio) res.send("TOO");
                 else{
-                    transazione.accettaToken(destinatario, token, function (esitoAccetta) {
+                    transazione.accettaToken(req.session.user.nickname, dati[0].tipo, token, function (esitoAccetta) {
                         if(!esitoAccetta) res.send("ERR");
                         else{
                             transazione.eliminaToken(token, function (esitoElimina) {

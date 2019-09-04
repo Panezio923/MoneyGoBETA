@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1aceef9d-89e5-4368-8eb1-7783bb6a90d9" name="Default Changelist" comment="L'opera di cose. 01/09 19:45">
-      <change afterPath="$PROJECT_DIR$/views/GestioneConto/pagamentoperiodico.ejs" afterDir="false" />
+    <list default="true" id="1aceef9d-89e5-4368-8eb1-7783bb6a90d9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/private/controller/pagamentoperiodico.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/private/route/periodicoRoute.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/access.log" beforeDir="false" afterPath="$PROJECT_DIR$/access.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/controller/transazione.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/transazione.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/private/route/homeRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/route/homeRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/route/indexRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/route/indexRoute.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/javascripts/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/corpoprincipale.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/corpoprincipale.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/javascripts/linkpagamento.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/linkpagamento.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/GestioneConto/pagamentoperiodico.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/GestioneConto/pagamentoperiodico.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/ricaricaconto.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/ricaricaconto.ejs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,8 +44,8 @@
         <option value="CSS File" />
         <option value="CoffeeScript File" />
         <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="Template" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -256,7 +262,8 @@
       <workItem from="1567421460199" duration="18667000" />
       <workItem from="1567460787356" duration="7986000" />
       <workItem from="1567505760832" duration="3084000" />
-      <workItem from="1567516838940" duration="9914000" />
+      <workItem from="1567516838940" duration="9962000" />
+      <workItem from="1567590289892" duration="9937000" />
     </task>
     <task id="LOCAL-00001" summary="Instanziato il file connessione, creata connessione con utente phpmyadmin:&#10;User: vagrant&#10;Pass: password&#10;&#10;creata funzione login di prova.&#10;Funzione login riuscita.&#10;&#10;Si attendono notizie da Gnoffo per determinare l'impostazione MVC.">
       <created>1560499285017</created>
@@ -412,7 +419,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567519602516</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="18:08 03/09">
+      <created>1567526940618</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1567526940618</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TodoView">
@@ -487,6 +501,7 @@
     <MESSAGE value="12:44 30/08" />
     <MESSAGE value="10:11 02/08" />
     <MESSAGE value="L'opera di cose. 01/09 19:45" />
-    <option name="LAST_COMMIT_MESSAGE" value="L'opera di cose. 01/09 19:45" />
+    <MESSAGE value="18:08 03/09" />
+    <option name="LAST_COMMIT_MESSAGE" value="18:08 03/09" />
   </component>
 </project>

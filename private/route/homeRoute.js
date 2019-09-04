@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Metodi = require('../controller/metodi');
 const Conto = require('../controller/conto');
-const User = require('../controller/user');
+const Pagamento = require('../controller/pagamentoperiodico');
 const Transazione = require('../controller/transazione');
 
-const user = new User();
+const pagamento = new Pagamento();
 const metodi = new Metodi();
 const conto = new Conto();
 const transazione = new Transazione();
@@ -226,7 +226,16 @@ router.get('/pagamentoPeriodico', (req, res)=>{
        res.redirect('/');
        return;
    }
-   else res.render('GestioneConto/pagamentoperiodico', {title: "Pagamento Periodico"});
+   else {
+       pagamento.recuperaPagamentiPeriodici(req.session.user.nickname, function (pagamentiperiodici) {
+           if(!pagamentiperiodici){
+               console.log("Errore nel recupero pagamenti periodici");
+               res.redirect('/');
+           }else{
+               res.render('GestioneConto/pagamentoperiodico', {title:"MoneyGo", metodi : req.session.metodi, pagamentiPeriodici: pagamentiperiodici});
+           }
+       });
+    }
 });
 
 

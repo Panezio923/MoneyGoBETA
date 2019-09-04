@@ -18,8 +18,8 @@
 <div id="page-content">
     <main class="container">
 
-        <div class="row justify-content-center">
-            <h2>Crea un nuovo pagamento periodico</h2>
+        <div class="row">
+            <h2 class="col-12 text-center" style="background-color: #cfcfcf; border-radius: 5px">Crea un nuovo pagamento periodico</h2>
         </div>
 
         <div class="row">
@@ -67,8 +67,30 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-12 col-md-6">
+                    <label for="periodicita">Metodo Pagamento</label>
+                    <div class="form-group"  id="listaMetodi">
+                        <select class="form-control" title="Scegli un'opzione">
+                            <option value="MONEYGO">Saldo  MoneyGO</option>
+                            <%
+                            var numeroBanche = metodi.map(function(value) {return value.numero_iban;});
+                            var numeroCarte = metodi.map(function(value) {return value.numero_carta;});
+                            var saldo = metodi.map(function (value) {return value.saldo_metodo;});
+                            var numero = numeroCarte.concat(numeroBanche);
+                            //Filtro i numeri per rimuovere i valori null
+                            var filter = numero.filter(function (value) { return value; });
+                            for(let i = 0; i < metodi.length; i++){
+                            %>
+                            <option value="<%=filter[i]%>"> <%=filter[i]%> </option>
+                            <%}%>
+                        </select>
+                    </div>
+                    <div class="mb-3"></div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-6">
-                    <button class="btn btn-primary btn-lg btn-block" id="reset" type="reset">Svuota Campi</button>
+                    <button class="btn btn-primary btn-lg btn-block" id="reset" type="reset">Svuota</button>
                 </div>
                 <div class="col-6">
                     <button class="btn btn-primary btn-lg btn-block" id="conferma" type="submit">Conferma</button>
@@ -86,8 +108,13 @@
             </div>
         </div>
 
+        <div class="mb-5"></div>
+        <div class="row">
+            <h2 class="col-12 text-center" style="background-color: #cfcfcf; border-radius: 5px">I tuoi pagamenti periodici</h2>
+        </div>
+        <div class="mb-2"></div>
         <div class="table-responsive">
-            <table class="table table-primary">
+            <table class="table">
                 <thead>
                 <tr>
                     <th scope="col">Destinatario</th>
@@ -99,14 +126,25 @@
                 </tr>
                 </thead>
                 <tbody>
+
+                <%
+                    var destinatario = pagamentiPeriodici.map(function (value) { return value.destinatario });
+                    var importo = pagamentiPeriodici.map(function (value) { return value.importo });
+                    var periodicita = pagamentiPeriodici.map(function (value) { return value.periodicita });
+                    var datainizio = pagamentiPeriodici.map(function (value) { return value.data_inizio });
+                    var dateString = datainizio.format("%Y-%m-%d");
+
+                    for(let i = 0; i < pagamentiPeriodici.length; i++){
+                %>
                 <tr>
-                    <!-- TODO un ciclo for sui pagamenti periodici -->
-                    <th scope="row">Kiurim</th>
-                    <td>125.00</td>
-                    <td>Un mese</td>
-                    <td>22/11/88</td>
-                    <td><button class="btn btn-sm btn-danger">Elimina</button> <button class="btn btn-sm btn-info">Interrompi</button> </td>
+                    <th scope="row"><%=destinatario%></th>
+                    <td><%=importo%></td>
+                    <td><%=periodicita%></td>
+                    <td><%=datainizio%></td>
+                    <td><button class="btn btn-sm btn-danger" id="E<%=i%>">Elimina</button> <button class="btn btn-sm btn-info" id="I<%=i%>">Interrompi</button> </td>
                 </tr>
+
+                <%}%>
                 </tbody>
             </table>
         </div>

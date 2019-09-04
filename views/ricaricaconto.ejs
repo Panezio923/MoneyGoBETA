@@ -47,7 +47,7 @@
                                         var filter = numero.filter(function (value) { return value; });
                                         for(let i = 0; i < metodi.length; i++){
                                         %>
-                                        <option value="<%=filter[i]%>"><%=filter[i]%> - <div class="text-right">€ <%=saldo[i]%></div></option>
+                                        <option class="align-content-end" value="<%=filter[i]%>"><%=filter[i]%><p> - </p>€ <%=saldo[i]%></option>
                                         <%}%>
                                     </select>
                                 </div>

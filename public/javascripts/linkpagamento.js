@@ -76,6 +76,16 @@
             if(msg === "DONE"){
                location.href = '/home';
             }
+            else if(msg === "TOO"){
+               $("#form_login").show();
+               $("#loading").hide();
+               mainview.mostraAlert("Impossibile eseguire il pagamento con il saldo MoneyGO");
+            }
+            else if(msg === "ERR"){
+               $("#form_login").show();
+               $("#loading").hide();
+               mainview.mostraAlert("Qualcosa è andato storto, ti invitiamo a riprovare");
+            }
          }
       })
 
