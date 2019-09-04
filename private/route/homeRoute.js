@@ -232,13 +232,11 @@ router.get('/pagamentoPeriodico', (req, res)=>{
                console.log("Errore nel recupero pagamenti periodici");
                res.redirect('/');
            }else{
+               req.session.pagamentiperiodici = pagamentiperiodici;
                res.render('GestioneConto/pagamentoperiodico', {title:"MoneyGo", metodi : req.session.metodi, pagamentiPeriodici: pagamentiperiodici});
            }
        });
     }
 });
-
-
-
 
 module.exports = router;

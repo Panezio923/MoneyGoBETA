@@ -153,7 +153,7 @@
 
         $("#nick").blur(function(){
             if($("#nick").val() != ""){
-                if(/^[a-zA-Z0-9]+$/.test($("#nickname").val())){
+                if(/^[a-zA-Z0-9]+$/.test($("#nick").val())){
                     nickname_validato = true;
                     mainview.ripulisciCampiErrati();
                     maincontrol.controllaEsistenzaNick($("#nick").val());

@@ -14,6 +14,7 @@ const registerRoute = require('./private/route/registratiRoute');
 const homeRoute = require('./private/route/homeRoute');
 const gestioneMetodiRoute = require('./private/route/gestioneMetodiRoute');
 const gestioneDatiRoute = require('./private/route/gestioneDatiRoute');
+const periodicoRoute = require('./private/route/periodicoRoute');
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use('/registrati', registerRoute);
 app.use('/home', homeRoute);
 app.use('/home/adminCards', gestioneMetodiRoute);
 app.use('/home/gestioneDati', gestioneDatiRoute);
+app.use('/home/pagamentoPeriodico', periodicoRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

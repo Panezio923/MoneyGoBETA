@@ -22,19 +22,32 @@
             <h2 class="col-12 text-center" style="background-color: #cfcfcf; border-radius: 5px">Crea un nuovo pagamento periodico</h2>
         </div>
 
-        <div class="row">
-            <div class="offset-6">
-                <div class="spinner-border text-primary mb-3" role="status" id="loading">
-                    <span class="sr-only">Loading...</span>
-                </div>
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border loading m-5" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
             </div>
         </div>
+
         <div class="mb-3"></div>
-        <form action="/nuovoPagamentoPeriodico" method="post" id="form_login">
+        <div class="row justify-content-center" id="alertCheck">
+            <div class="success-checkmark">
+                <div class="check-icon">
+                    <span class="icon-line line-tip"></span>
+                    <span class="icon-line line-long"></span>
+                    <div class="icon-circle"></div>
+                    <div class="icon-fix"></div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <h5>Invio riuscito.</h5>
+            </div>
+        </div>
+
+        <form action="" method="post" id="form_pagamentoperiodico">
             <div class="row">
                 <div class="col-12 col-md-6">
                     <label for="dest">Destinatario Pagamento</label>
-                    <input class="form-control" type="text" name="importo" id="dest">
+                    <input class="form-control" type="text" name="destinatario" id="dest" placeholder="Nickname Destinatario">
                     <div class="mb-3"></div>
                 </div>
                 <div class="col-12 col-md-6">
@@ -43,7 +56,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="euro">€</span>
                         </div>
-                        <input type="text" min="1" max="50000" class="form-control text-right importo" placeholder="Importo"  aria-describedby="euro" id="importoUNO" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
+                        <input type="text" min="1" max="50000" class="form-control text-right importo" placeholder="Importo"  aria-describedby="euro" id="importoPeriodico" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
                     </div>
                 </div>
             </div>
@@ -52,15 +65,15 @@
             <div class="row">
                 <div class="col-12 col-md-6 ">
                     <label for="start">Data inizio pagamento</label>
-                        <input type="date" class="form-control text-right" id="nascita"  placeholder="GG/MM/YYYY" required>
+                        <input type="date" class="form-control text-right" id="startPagamento">
                 </div>
                 <div class="col-12 col-md-6">
                     <label for="periodicita">Periodicità</label>
                     <select class="form-control" id="periodicita">
                         <option value="unasettimana">Ogni Settimana</option>
                         <option value="duesettimane">Ogni Due Settimane</option>
-                        <option value="unomese">Ogni Mese</option>
-                        <option value="seimsi">Ogni Sei Mesi</option>
+                        <option value="unmese">Ogni Mese</option>
+                        <option value="seimesi">Ogni Sei Mesi</option>
                         <option value="anno">Ogni Anno</option>
                     </select>
                     <div class="mb-3"></div>
@@ -93,7 +106,7 @@
                     <button class="btn btn-primary btn-lg btn-block" id="reset" type="reset">Svuota</button>
                 </div>
                 <div class="col-6">
-                    <button class="btn btn-primary btn-lg btn-block" id="conferma" type="submit">Conferma</button>
+                    <button class="btn btn-primary btn-lg btn-block" id="conferma">Conferma</button>
                 </div>
             </div>
         </form>
@@ -114,7 +127,7 @@
         </div>
         <div class="mb-2"></div>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table" id="tablePagamentiPeriodici">
                 <thead>
                 <tr>
                     <th scope="col">Destinatario</th>
@@ -125,22 +138,24 @@
 
                 </tr>
                 </thead>
-                <tbody>
+                <tbody >
 
                 <%
+
                     var destinatario = pagamentiPeriodici.map(function (value) { return value.destinatario });
-                    var importo = pagamentiPeriodici.map(function (value) { return value.importo });
-                    var periodicita = pagamentiPeriodici.map(function (value) { return value.periodicita });
-                    var datainizio = pagamentiPeriodici.map(function (value) { return value.data_inizio });
-                    var dateString = datainizio.format("%Y-%m-%d");
+                    var importo = pagamentiPeriodici.map(function (value) { return value.importo.toFixed(2) });
+                    var periodicita = pagamentiPeriodici.map(function (value) { return value.periodicita});
+                    var datainizio = pagamentiPeriodici.map(function (value) { return value.data_inizio});
 
                     for(let i = 0; i < pagamentiPeriodici.length; i++){
+                        var data = new Date(datainizio[i]);
+                        var dataJS = data.getDate()+ "/" + (data.getMonth()+1) + "/" + data.getFullYear();
                 %>
                 <tr>
-                    <th scope="row"><%=destinatario%></th>
-                    <td><%=importo%></td>
-                    <td><%=periodicita%></td>
-                    <td><%=datainizio%></td>
+                    <th scope="row"><%=destinatario[i]%></th>
+                    <td>€ <%=importo[i]%></td>
+                    <td><%=periodicita[i]%></td>
+                    <td><%=dataJS%></td>
                     <td><button class="btn btn-sm btn-danger" id="E<%=i%>">Elimina</button> <button class="btn btn-sm btn-info" id="I<%=i%>">Interrompi</button> </td>
                 </tr>
 
@@ -154,6 +169,8 @@
 <% include ../partials/footer.ejs %>
 
 <%include ../partials/script.ejs%>
+
+<script type="text/javascript" src="../javascripts/pagamentoperiodico.js" ></script>
 
 
 </body>

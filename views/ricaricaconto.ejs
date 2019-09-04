@@ -28,56 +28,47 @@
             </div>
         </div>
 
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8 mb-2">
-                <div class="card">
-                    <h1 class="text-center card-header">Ricarica il tuo conto MoneyGO </h1>
-                    <div class="card-body">
-                        <div class = "row">
-                            <div class="col-md-8 offset-md-2 col-12">
-                                <label>Seleziona la fonte di ricarica</label>
-                                <div class="form-group"  id="listaCarte">
-                                    <select class="form-control" title="Scegli un'opzione">
-                                        <%
-                                        var numeroBanche = metodi.map(function(value) {return value.numero_iban;});
-                                        var numeroCarte = metodi.map(function(value) {return value.numero_carta;});
-                                        var saldo = metodi.map(function (value) {return value.saldo_metodo;});
-                                        var numero = numeroCarte.concat(numeroBanche);
-                                        //Filtro i numeri per rimuovere i valori null
-                                        var filter = numero.filter(function (value) { return value; });
-                                        for(let i = 0; i < metodi.length; i++){
-                                        %>
-                                        <option class="align-content-end" value="<%=filter[i]%>"><%=filter[i]%><p> - </p>€ <%=saldo[i]%></option>
-                                        <%}%>
-                                    </select>
-                                </div>
-                            </div>
+        <div class="row">
+            <h2 class="col-12 text-center mb-5" style="background-color: #cfcfcf; border-radius: 5px">Ricarica il tuo conto MoneyGO</h2>
+        </div>
+            <div class = "row">
+                <div class="col-12 col-md-6">
+                    <label>Seleziona la fonte di ricarica</label>
+                    <div class="form-group"  id="listaCarte">
+                        <select class="form-control" title="Scegli un'opzione">
+                            <%
+                            var numeroBanche = metodi.map(function(value) {return value.numero_iban;});
+                            var numeroCarte = metodi.map(function(value) {return value.numero_carta;});
+                            var saldo = metodi.map(function (value) {return value.saldo_metodo;});
+                            var numero = numeroCarte.concat(numeroBanche);
+                            //Filtro i numeri per rimuovere i valori null
+                            var filter = numero.filter(function (value) { return value; });
+                            for(let i = 0; i < metodi.length; i++){
+                            %>
+                            <option value="<%=filter[i]%>"><%=filter[i]%><p> - </p> € <%=saldo[i]%></option>
+                            <%}%>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="col-12 col-md-6">
+                    <label for="importo">Importo da ricaricare</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="euro">€</span>
                         </div>
-
-                        <div class="row">
-                            <div class="col-12 col-md-8 offset-md-2">
-                                <label for="importo">Inserisci l'importo che vuoi ricaricare</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="euro">€</span>
-                                    </div>
-                                    <input type="text" min="1" max="50000" class="form-control text-right importo" placeholder="Importo"  aria-describedby="euro" id="importoRic" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3"></div>
-
-                        <div class="row">
-                            <div class="col-12 col-md-12">
-                                <button type="button" class="btn btn-primary btn-block" id="RicaricaConto">Ricarica Conto</button>
-                            </div>
-                        </div>
+                        <input type="text" min="1" max="50000" class="form-control text-right importo" placeholder="Importo"  aria-describedby="euro" id="importoRic" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46">
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="mb-3"></div>
+
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <button type="button" class="btn btn-primary btn-block" id="RicaricaConto">Ricarica Conto</button>
+                </div>
+            </div>
     </main>
 </div>
 <%include partials/footer.ejs %>
