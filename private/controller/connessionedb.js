@@ -7,10 +7,10 @@ const mysql = require('mysql');
 
 const pool = mysql.createPool({
     connectionLimit: 100,
-    host: 'localhost',
-    user: 'vagrant',
-    password: 'password',
-    database: 'moneygo',
+    host: 'y5s2h87f6ur56vae.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'vkhlv6on8oei4rl0',
+    password: 'g6kvihnvb58vg2iw',
+    database: 'kvwwpun5efp6rxrw',
     multipleStatement: true,
 
 });
