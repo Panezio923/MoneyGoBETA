@@ -15,6 +15,17 @@ exports.inizializza = function(){
     });
 };
 
+
+exports.inviaMailNotifica = function (destinatario, msg) {
+    let info =  transporter.sendMail({
+        from: '"MoneyGO 💸" <moneygo@staff.com>',
+        to: destinatario,
+        subject: "Nuova transazione",
+        text: msg,
+    });
+    console.log(info);
+};
+
 exports.inviaMailRegistrazione = function(destinatario, utente, callback) {
     var html = "<head>\n" +
         "    <meta charset=\"utf-8\">\n" +

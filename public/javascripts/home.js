@@ -112,6 +112,7 @@
                     } else if (msg === "EXIST") {
                         $("#" + id).css("background-color", "#66ff99");
                         variabile_di_controllo = true;
+                        console.log(destinatario_validato);
                         mainview.ripulisciCampiErrati();
                     }
                 }
@@ -170,6 +171,7 @@
 
     maincontrol.byPassLimite = function(e){
         maincontrol.bypass = "on";
+        mainview.ripulisciCampiErrati();
         maincontrol.inviaDenaro(e);
     };
 
@@ -416,11 +418,12 @@
             }
         });
 
-        $("#destinatario").blur(function (e) {
+        $("#destinatario").blur(function () {
             if ($("#destinatario").val() != "") {
                 if (/^[a-zA-Z0-9]+$/.test($("#destinatario").val())) {
+                    destinatario_validato = true;
                     $("#alert").hide();
-                    maincontrol.controllaEsistenzaNick($("#destinatario").val(), "destinatario", destinatario_validato, e);
+                    maincontrol.controllaEsistenzaNick($("#destinatario").val(), "destinatario", destinatario_validato);
                     console.log(destinatario_validato);
                     return;
                 } else {
@@ -432,8 +435,7 @@
                         $("#destinatario").css("background-color", "");
                     });
                 }
-            }
-            destinatario_validato = false;
+            }else destinatario_validato = false;
         });
 
         $("#importoUNO, #importoDUE").val("");

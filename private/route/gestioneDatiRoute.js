@@ -95,4 +95,19 @@ router.post('/ModificaPassword', (req,res,next)=> {
     })
 });
 
+router.post('/getCodiceBot', (req, res)=>{
+   user.findBotTelegram(req.session.user.nickname, function (codice) {
+       if(!codice) res.send(null);
+       else res.send(codice[0]);
+   })
+});
+
+router.post('/caricaCodiceBot', (req, res)=>{
+    user.caricaCodiceTelegram(req.session.user.nickname, req.body.codice, function (esito) {
+        if(!esito) res.send("ERR");
+        else res.send("DONE");
+        res.end();
+    })
+});
+
 module.exports = router;

@@ -1,6 +1,8 @@
 (function () {
     var mainview = {};
-    var maincontrol = {};
+    var maincontrol = {
+        codiceBot: null
+    };
 
     var salvaemail = false;
     var salvatelefono = false;
@@ -18,6 +20,7 @@
     $("#ModificaComunicazione").on("click", function () {maincontrol.premutoModificaComunicazione()});
     $("#SalvaComunicazione").on("click", function () {maincontrol.premutoSalvaComunicazione()});
     $("#form_cambia_password").submit(function (e) {maincontrol.premutoConferma(e)});
+    $("#sendCodice").on("click", function (e) {maincontrol.caricaCodice( $("#codiceBot").val())});
 
 
     maincontrol.premutoModificaEmail = function () {
@@ -42,8 +45,7 @@
                         location.reload();
                     } else if (msg == "FAULT") {
                         salvaemail = false;
-                        $("#alert_text").text("Impossibile caricare l'email,si prega di riprovare");
-                        $("#alert").show();
+                        mainview.mostraAlert("Impossibile aggiornare l'email, si prega di riprovare");
                     }
                 }
             });
@@ -94,8 +96,7 @@
                                 location.reload();
                             } else if (msg == "FAULT") {
                                 salvatelefono = false;
-                                $("#alert_text").text("Impossibile caricare il numero di telefono,si prega di riprovare");
-                                $("#alert").show();
+                               mainview.mostraAlert("Impossibile caricare il numero di telefono, si prega di riprovare");
                             }
                         }
                     });
@@ -123,8 +124,7 @@
                         location.reload();
                     } else if (msg == "FAULT") {
                         salvalimite = false;
-                        $("#alert_text").text("Impossibile caricare il limite di spesa,si prega di riprovare");
-                        $("#alert").show();
+                       mainview.mostraAlert("Impossibile caricare il limite di spesa, si prega di riprovare");
                     }
                 }
             });
@@ -154,8 +154,7 @@
                     if (msg == "DONE") {
                         location.reload();
                     } else if (msg == "FAULT") {
-                        $("#alert_text").text("Impossibile cambiare il tipo di comunicazione,si prega di riprovare");
-                        $("#alert").show();
+                       mainview.mostraAlert("Impossibile cambiare il tipo di comunicazione, si prega di riprovare");
                     }
                 }
             });
@@ -176,8 +175,7 @@
                         vecchia_password = true;
                     } else if (msg === "WRONG") {
                         console.log(msg);
-                        $("#alert_text").text("Password non corretta");
-                        $("#alert").show();
+                        mainview.mostraAlert("Password non corretta");
                         mainview.campiErrati($("#passwordVecchia"));
                         vecchia_password = false;
                     }
@@ -207,18 +205,60 @@
                         $("#grado_password").text("");
 
                     } else if (msg == "FAULT") {
-                        $("#alert_text").text("Impossibile modificare la password, si prega di riprovare");
-                        $("#alert").show();
+                      mainview.mostraAlert("Qualcosa è andato storto, per favore riprovare")
                     }
                 }
             });
         }
-    }
+    };
+
+    maincontrol.getCodiceBot = function(){
+          $.ajax({
+              url: '/home/gestioneDati/getCodiceBot',
+              type: 'post',
+              //no data,
+
+              success: function (codice) {
+                  console.log(codice.telegram);
+                  if(codice.telegram !== null) {
+                      maincontrol.codiceBot = codice.telegram;
+                      $("#codiceBot").val(maincontrol.codiceBot).css("background-color", "#99ff99").prop("disabled", true);
+                      $("#sendCodice").prop("disabled", true);
+                  }
+                  else {
+                  }
+              }
+          })
+    };
+
+    maincontrol.caricaCodice = function(codice){
+        var pattern = /\d{9}/;
+        if(codice !== "" && codice.match(pattern)) {
+            $.ajax( {
+                url: '/home/gestioneDati/caricaCodiceBot',
+                type: 'post',
+                data: {codice: codice},
+
+                success: function (msg) {
+                    if (msg === "DONE") {
+                        $( "#codiceBot" ).val( codice );
+                        $( "#sendCodice" ).prop( "disabled", true );
+                    } else if (msg === "ERR") {
+                        mainview.campiErrati( $( "#codiceBot" ), "Qualcosa è andato storto, si prega di riprovare" );
+                    }
+                }
+            } )
+        }
+    };
 
 
+    mainview.mostraAlert = function(msg){
+        $("#alert_text").text(msg);
+        $("#alert").show("slow");
+    };
 
-    mainview.campiErrati = function (id) {
-        $("#alert_text").text("Per favore, ricontrollare i dati");
+    mainview.campiErrati = function (id, msg) {
+        $("#alert_text").text(msg);
         $("#alert").show("slow");
         id.addClass("is-invalid");
         id.removeClass("is-valid");
@@ -245,6 +285,8 @@
 
 
     $(document).ready(function () {
+
+        maincontrol.getCodiceBot();
 
         /*Controllo Email */
         $("#emailModifica").blur(function () {

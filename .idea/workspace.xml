@@ -2,27 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1aceef9d-89e5-4368-8eb1-7783bb6a90d9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_07_2019_23_57__Default_Changelist_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/private/bot.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/action_provision" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/action_set_name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/box_meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/creator_uid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/id" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/index_uuid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/synced_folders" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/machines/default/virtualbox/vagrant_cwd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vagrant/rgloader/loader.rb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/access.log" beforeDir="false" afterPath="$PROJECT_DIR$/access.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private/route/homeRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/route/homeRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/controller/transazione.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/transazione.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/controller/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/mailer.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/mailer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/route/gestioneDatiRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/route/gestioneDatiRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/javascripts/gestionedati.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/gestionedati.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/javascripts/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/schermata.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/schermata.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/corpoprincipale.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/corpoprincipale.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/inviadenaroModal.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/inviadenaroModal.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/javascripts/pagamentoperiodico.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/pagamentoperiodico.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/GestioneMoneyGO/gestione-profilo.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/GestioneMoneyGO/gestione-profilo.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/partials/notifiche.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/notifiche.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/richiedidenaroModal.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/richiedidenaroModal.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/ultime-transazioni.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/ultime-transazioni.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/ricaricaconto.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/ricaricaconto.ejs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -101,17 +96,17 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\mobileapp\www" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views\partials" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\HerokuMoneyGO\MoneyGoBETA\private" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\private" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\public\javascripts\js" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\public\javascripts" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views\pages" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\mobileapp\www" />
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views\partials" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -273,7 +268,8 @@
       <workItem from="1567505760832" duration="3084000" />
       <workItem from="1567516838940" duration="9962000" />
       <workItem from="1567590289892" duration="9937000" />
-      <workItem from="1567641897411" duration="3287000" />
+      <workItem from="1567641897411" duration="3888000" />
+      <workItem from="1567677764419" duration="14676000" />
     </task>
     <task id="LOCAL-00001" summary="Instanziato il file connessione, creata connessione con utente phpmyadmin:&#10;User: vagrant&#10;Pass: password&#10;&#10;creata funzione login di prova.&#10;Funzione login riuscita.&#10;&#10;Si attendono notizie da Gnoffo per determinare l'impostazione MVC.">
       <created>1560499285017</created>

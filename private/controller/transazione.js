@@ -1,7 +1,23 @@
 const pool = require('./connessionedb');
 const crypto = require('crypto');
+const User = require('./user');
+const mail = require('../mailer');
+const bot = require('../bot');
 
-function Transazione() {};
+function Transazione() {}
+const users = new User();
+
+function sendComunicazione(user, msg){
+    users.find(user, function(esito){
+        if(esito.comunicazione === 0){
+            mail.inizializza();
+            mail.inviaMailNotifica(esito.email, decodeURI(msg));
+        }
+        else if( esito.comunicazione === 2){
+            bot.sendTextTg("978219762:AAHaFe80I5p2Rlooe7dEN3KaGLJIxiyxReE", esito.telegram, msg);
+        }
+    });
+}
 
 Transazione.prototype = {
 
@@ -15,14 +31,31 @@ Transazione.prototype = {
         })
     },
 
+    recuperaInfoTransazione: function(idTransazione, token, callback){
+        let sql = "SELECT * FROM transazione WHERE id_transazione = ? OR token = ? ";
+
+        pool.query(sql, [idTransazione, token], function (err, transazione) {
+            if(err) throw err;
+            if(!transazione) callback(null);
+            else callback(transazione[0]);
+        })
+    },
+
     newTransazione : function (causale, mittente, destinatario, importo, stato, callback) {
         let sql = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione) VALUES(?,?,?,?,?,?)";
-
         var d = new Date();
-
         pool.query(sql, [d, causale, mittente, destinatario, importo, stato], function (err, result) {
             if(err) throw err;
-            if(result) callback(true);
+            if(result) {
+                if(stato === "eseguita") {
+                    var msgMitt = ("Una transazione è andata a buon fine con importo €" + importo.toFixed( 2 ) + " verso " + destinatario);
+                    sendComunicazione( mittente, encodeURI( msgMitt ) );
+                    var msgDest = "Hai ricevuto € " + importo.toFixed( 2 ) + " da parte di " + mittente;
+                    sendComunicazione( destinatario, encodeURI( msgDest ) );
+                    callback( true );
+                }
+                callback(true)
+            }
             else callback(false);
         })
     },
@@ -42,10 +75,19 @@ Transazione.prototype = {
     },
 
     accettaTransazione : function (user, id, callback) {
+        that = this;
         let sql = "UPDATE transazione SET stato_transazione = ? WHERE id_transazione = ? AND nick_mittente = ?";
         pool.query(sql, ["eseguita", id, user], function (err, result) {
             if(err) throw err;
-            if(result) callback(true);
+            if(result) {
+                that.recuperaInfoTransazione(id, null, function (transazione) {
+                    var msgMitt = ("Una transazione è stata accettata con importo €" + transazione.importo.toFixed(2) +  " verso " + transazione.destinatario);
+                    sendComunicazione(transazione.nick_mittente, encodeURI(msgMitt));
+                    var msgDest = "Hai ricevuto € " + transazione.importo.toFixed(2) + " da parte di " + transazione.nick_mittente;
+                    sendComunicazione(transazione.destinatario, encodeURI(msgDest));
+                    callback(true);
+                })
+            }
             else callback(false);
         })
     },
@@ -118,15 +160,22 @@ Transazione.prototype = {
 
     accettaToken: function (user, tipo, token, callback) {
         let query;
-
-        if(tipo === "SEND")
-            query = "UPDATE transazione t SET t.destinatario = ?, t.stato_transazione = ? WHERE t.token = ?";
+        that = this;
+        if(tipo === "SEND") query = "UPDATE transazione t SET t.destinatario = ?, t.stato_transazione = ? WHERE t.token = ?";
         else if(tipo === "RCV") query = "UPDATE transazione t SET t.nick_mittente = ?, t.stato_transazione = ? WHERE t.token = ?";
 
         pool.query(query, [user, "eseguita", token], function (err, esito) {
             if(err) throw err;
             if(!esito) callback(false);
-            else callback(true);
+            else {
+                that.recuperaInfoTransazione(null, token, function (transazione) {
+                    var msgMitt = ("Una transazione è stata accettata con importo €" + transazione.importo.toFixed(2) +  " verso " + transazione.destinatario);
+                    sendComunicazione(transazione.nick_mittente, encodeURI(msgMitt));
+                    var msgDest = "Hai ricevuto € " + transazione.importo.toFixed(2) + " da parte di " + transazione.nick_mittente;
+                    sendComunicazione(transazione.destinatario, encodeURI(msgDest));
+                    callback(true);
+                })
+            }
         })
     },
 
@@ -138,7 +187,8 @@ Transazione.prototype = {
             if(!esito) callback(false);
             else callback(true);
         })
-    }
+    },
+
 };
 
 

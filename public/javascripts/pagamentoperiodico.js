@@ -164,7 +164,7 @@
                 mainview.mostraAlert("Data inizio non valida");
             }
             /* Se viene è nel passato */
-            else if(start < d) {
+            else if(start <= d) {
                 mainview.mostraAlert("Data già passata");
             }
             else{

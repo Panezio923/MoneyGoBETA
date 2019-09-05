@@ -3,8 +3,8 @@
         <h1 class="text-center card-header">Notifiche <i class="fas fa-info-circle"></i></h1>
 
         <div class="card-body">
-            <div id="notifiche" class="scrollable">
-            <ul class="list-group list-group-flush ">
+            <div  class="scrollable">
+            <ul class="list-group list-group-flush " id="notifiche">
                 <%
                     let causale = notifiche.map(function (value){return value.causale});
                     let importo = notifiche.map(function (value) {return value.importo.toFixed(2)});

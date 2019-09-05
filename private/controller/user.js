@@ -127,6 +127,22 @@ User.prototype = {
         })
     },
 
+    findBotTelegram: function (user, callback) {
+        let sql = "SELECT telegram FROM utenti WHERE nickname = ?";
+        pool.query(sql, user, function (err, codice) {
+            if(err) throw err;
+            callback(codice);
+        })
+    },
+
+    caricaCodiceTelegram : function (user, codice, callback) {
+        let sql = "UPDATE utenti SET telegram = ? WHERE nickname = ?";
+        pool.query(sql, [codice, user], function (err, esito) {
+            if(err) throw err;
+            if(!esito) callback(false);
+            else callback(true);
+        })
+    }
 };
 
 

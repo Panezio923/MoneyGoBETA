@@ -6,7 +6,8 @@ var sendTextTg=function(tokentg, chatId, text) {
 
   xhttp.open("GET", url);
   xhttp.send();
-}
+
+};
 
 var sendFileTg=function(tokentg, chatId, pdfBinary) {
   const request = require('request');
@@ -16,20 +17,20 @@ var sendFileTg=function(tokentg, chatId, pdfBinary) {
   const url = 'https://api.telegram.org/bot'+tokentg+'/sendDocument';
 
   let r = request(url, (err, res, body) => {
-      if(err) console.log(err)
+      if(err) console.log(err);
 
       else {
         fs.unlink("./temp/tmp-"+cripted+".pdf", (err) => {
           if (err) {
-          console.error(err)
-          return
+          console.error(err);
+          return;
           }
       
           //file removed
         });
       }
       console.log(body);
-  })
+  });
 
   let f = r.form();
   f.append('chat_id', chatId);
@@ -44,7 +45,7 @@ var sendFileTg=function(tokentg, chatId, pdfBinary) {
   fs.writeFileSync(filename, (Buffer.from(pdfB64, 'base64').toString('binary')));
 
   f.append('document', fs.createReadStream(filename)); 
-}
+};
 
 
 module.exports={
