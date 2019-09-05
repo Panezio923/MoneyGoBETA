@@ -198,11 +198,11 @@ router.post("/rifiutaTransazione", (req,res) =>{
 });
 
 //COMMENTO LASTMINUTE
-router.get('/ricaricaConto',(req,res,next) => {
+router.get('/ricaricaConto',(req,res) => {
     if(!req.session.user){
         res.redirect('/');
     }
-    else res.render('ricaricaConto',{title:"MoneyGo", metodi : req.session.metodi, saldo_metodo : req.session.saldo_metodo});
+    else res.render('ricaricaconto',{title:"MoneyGo", metodi : req.session.metodi, saldo_metodo : req.session.saldo_metodo});
 });
 
 router.post('/creaToken', (req, res, next)=>{
