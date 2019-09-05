@@ -269,7 +269,7 @@
       <workItem from="1567516838940" duration="9962000" />
       <workItem from="1567590289892" duration="9937000" />
       <workItem from="1567641897411" duration="3888000" />
-      <workItem from="1567677764419" duration="14676000" />
+      <workItem from="1567677764419" duration="15087000" />
     </task>
     <task id="LOCAL-00001" summary="Instanziato il file connessione, creata connessione con utente phpmyadmin:&#10;User: vagrant&#10;Pass: password&#10;&#10;creata funzione login di prova.&#10;Funzione login riuscita.&#10;&#10;Si attendono notizie da Gnoffo per determinare l'impostazione MVC.">
       <created>1560499285017</created>
