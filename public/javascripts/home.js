@@ -176,6 +176,7 @@
 
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
+        console.log("tizio");
         if(destinatario_validato && cifra_validata) {
             maincontrol.getFontePagamento();
 
@@ -187,6 +188,7 @@
             var importo = $(".importo").val().replace(/\./g, '');
                 importo = importo.replace(/,/g, '.');
             var metodo = maincontrol.metodo;
+            console.log(metodo);
             var causale = $("#causaleInvia").val();
 
             //Salvo i valori all'interno della maincontrol
@@ -201,11 +203,15 @@
 
                 beforeSend: function(){
                     $("#formModal").hide();
-                    $("#loadingInvioDenaro").show();
+                    $(".alert").hide();
+                    $(".modal-footer").hide();
+                    $(".loading").show();
+
                 },
 
                 success: function (msg) {
                     console.log(msg);
+                    $(".modal-footer").show();
                     if(msg === "DONE"){
                         $(".alert").hide();
                         $(".loading").hide();

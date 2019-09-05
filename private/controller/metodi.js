@@ -261,13 +261,17 @@ Metodi.prototype = {
     },
 
     ricavaPredefinito: function(nickname, callback){
+        console.log("TIZIO");
+        var metodo;
         let sql = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
         pool.query(sql, nickname, function (err, result) {
           if(err) throw err;
-          if(result.length){
+          if(!result.length) callback(null);
+          else{
               if (result[0].numero_carta != null) metodo = result[0].numero_carta;
               else if (result[0].numero_iban != null) metodo = result[0].numero_iban;
-          }else callback(null);
+              callback(metodo);
+          }
 
         })
     },
@@ -277,12 +281,15 @@ Metodi.prototype = {
 
         if(metodo === "PREDEFINITO"){
          that.ricavaPredefinito(mittente, function (result) {
-              if(result !== null)
+             console.log("Caio");
+             if(result !== null)
               {
                   metodo = result;
                   that.verificaCopertura(mittente, importo, metodo, function (copertura) {
                       if(copertura) {
                           that.avviaInvio(mittente, importo, destinatario, metodo, function (confermaInvio) {
+                              console.log("sempronio");
+
                               if(confermaInvio) callback(confermaInvio);
                               else callback(null);
                           })

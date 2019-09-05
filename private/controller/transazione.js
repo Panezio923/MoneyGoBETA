@@ -55,7 +55,8 @@ Transazione.prototype = {
                     callback( true );
                     return;
                 }
-                callback(true)
+                callback(true);
+                return;
             }
             else callback(false);
         })
