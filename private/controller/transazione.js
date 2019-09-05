@@ -26,8 +26,8 @@ Transazione.prototype = {
 
         pool.query(sql, [user, user, "eseguita"], function (err, result) {
             if(err) throw err;
-            if(result) callback(result);
-            else callback(null);
+            if(!result) callback(null);
+            else callback(result);
         })
     },
 
@@ -47,7 +47,7 @@ Transazione.prototype = {
         pool.query(sql, [d, causale, mittente, destinatario, importo, stato], function (err, result) {
             if(err) throw err;
             if(result) {
-                if(stato === "eseguita") {
+                if(stato === "eseguita" && causale !== "ricarica conto") {
                     var msgMitt = ("Una transazione è andata a buon fine con importo €" + importo.toFixed( 2 ) + " verso " + destinatario);
                     sendComunicazione( mittente, encodeURI( msgMitt ) );
                     var msgDest = "Hai ricevuto € " + importo.toFixed( 2 ) + " da parte di " + mittente;
