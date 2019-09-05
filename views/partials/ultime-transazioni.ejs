@@ -1,23 +1,36 @@
-<div class="col-12 col-md-6 mb-3">
-    <div class="card">
+<div class="col-12 mb-3">
         <h2 class="text-center card-header">Ultime Transazioni <i class="fas fa-receipt"></i></h2>
-        <div class="card-body">
-            <ul class="list-group list-group-flush">
+    <div class="scrollable">
+        <table class="table table-striped table-responsive-sm ">
+            <thead>
+            <tr>
+                <th scope="col">Destinatario</th>
+                <th scope="col">Importo</th>
+                <th scope="col">Causale</th>
+                <th scope="col">Data</th>
+            </tr>
+            </thead>
+            <tbody>
                 <%
+                var importo = transazioni.map(function(value) {return value.importo.toFixed(2);});
+                var destinatario = transazioni.map(function (value) { return value.destinatario;});
+                var causale = transazioni.map(function (value) { return value.causale; });
+                var data = transazioni.map(function(value){return value.data});
 
-                    for(let i = 0; i < 5; i++){
-                        var importo = transazioni.map(function(value) {return value.importo;});
-                        var destinatario = transazioni.map(function (value) { return value.destinatario;});
-                        var causale = transazioni.map(function (value) { return value.causale; });
+                    for(let i = 0; i < transazioni.length; i++){
+                    var dataD = new Date(data[i]);
+                    var dataJS = dataD.getDate()+ "/" + (dataD.getMonth()+1) + "/" + dataD.getFullYear();
+
                 %>
-                <li class="list-group-item list-group-item-light"><b>Destinatario:</b> <%=destinatario[i]%> | <b>Importo:</b> <%= importo[i]%> | <b>Causale:</b> <%= causale[i]%></li>
-                <%
-                }
-                %>
+                <tr>
+                    <th scope="row"><%=destinatario[i]%></th>
+                    <td> € <%= importo[i]%></td>
+                    <td><%= causale[i]%></td>
+                    <td><%= dataJS%></td>
+                </tr>
 
-
-            </ul>
-        </div>
-
+                <%} %>
+            </tbody>
+        </table>
     </div>
-</div>
+    </div>

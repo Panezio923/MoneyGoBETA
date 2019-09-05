@@ -83,7 +83,10 @@ input{
 #SalvaComunicazione,#comunicazioneModifica,#byPassLimite, .loading, .alert-check, .aggiorna, .alert{
     display: none;
 }
-
+.scrollable {
+    height: 222px;
+    overflow-y: scroll;
+}
 
 .success-checkmark {
     width: 80px;

@@ -197,7 +197,6 @@ router.post("/rifiutaTransazione", (req,res) =>{
     })
 });
 
-//COMMENTO LASTMINUTE
 router.get('/ricaricaConto',(req,res) => {
     if(!req.session.user){
         res.redirect('/');

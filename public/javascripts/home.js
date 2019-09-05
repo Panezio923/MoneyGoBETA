@@ -340,12 +340,12 @@
                     mainview.mostraAlert("Qualcosa è andato storto nella generazione del link");
                 }else{
                     if(tipo === "SEND") {
-                        $( '#linkInvio span' ).text( "http://localhost:443/token/" + msg );
-                        $( '#linkInvio' ).attr( "value", ("http://localhost:443/token/" + msg) );
+                        $( '#linkInvio span' ).text( windows.location.hostname + ":" + windows.location.port + "/token/" + msg );
+                        $( '#linkInvio' ).attr( "value", (windows.location.hostname + ":" + windows.location.port + "/token/" + msg) );
                     }
                     else if(tipo === "RCV"){
-                        $( '#linkRcv span' ).text( "http://localhost:443/token/" + msg );
-                        $( '#linkRcv' ).attr( "value", ("http://localhost:443/token/" + msg) );
+                        $( '#linkRcv span' ).text( windows.location.hostname + ":" + windows.location.port + "/token/" + msg );
+                        $( '#linkRcv' ).attr( "value", (windows.location.hostname + ":" + windows.location.port + "/token/" + msg) );
                     }
                 }
             }
@@ -398,6 +398,7 @@
         maincontrol.getID();
 
         $('[data-toggle="tooltip"]').tooltip();
+        $(".causale").val("");
 
         var checkboxes = $("#checkPredefinito, #contoMG");
         checkboxes.prop("checked", false);

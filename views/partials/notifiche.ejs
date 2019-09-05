@@ -3,22 +3,19 @@
         <h1 class="text-center card-header">Notifiche <i class="fas fa-info-circle"></i></h1>
 
         <div class="card-body">
-            <div id="notifiche">
-            <ul class="list-group list-group-flush">
+            <div id="notifiche" class="scrollable">
+            <ul class="list-group list-group-flush ">
                 <%
                     let causale = notifiche.map(function (value){return value.causale});
-                    let importo = notifiche.map(function (value) {return value.importo});
+                    let importo = notifiche.map(function (value) {return value.importo.toFixed(2)});
                     let destinatario = notifiche.map(function (value) { return value.destinatario });
                     let i = 0;
-                    for(let i = 0; i < importo.length; ++i){
+                    for(let i = 0; i < notifiche.length; ++i){
 
                 %>
-                <div class="row mb-1">
-                    <div class="col-12">
                         <li class="list-group-item" id="L<%=i%>">Richiesta da <%=destinatario[i]%> di <b>€ <%=importo[i]%></b> con <causale class="text-tool" data-toggle="tooltip" data-placement="bottom" title="<%=causale[i]%>">causale</causale>.
-                            <div class="flex-sm-column"> <button type="button" class="btn btn-success btn-sm float-right ml-3" id="A<%=i%>">Accetta</button> <button type="button" class="btn btn-danger btn-sm float-right" id="R<%=i%>">Rifiuta</button></div> </li>
-                    </div>
-                </div>
+                            <div class="flex-sm-column"> <button type="button" class="btn btn-success btn-sm float-right ml-2" id="A<%=i%>">Accetta</button> <button type="button" class="btn btn-danger btn-sm float-right" id="R<%=i%>">Rifiuta</button></div> </li>
+
                <%}%>
             </ul>
             </div>

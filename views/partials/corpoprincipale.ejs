@@ -9,30 +9,29 @@
             <div class="card shadow">
                 <h1 class="text-center card-header">Saldo MoneyGO <i class="fas fa-coins"></i> </h1>
                 <div class="card-body">
-                    <div class="saldo text-center" ><button class="btn btn-primary float-right" id="aggiornaSaldo"><i class="fas fa-sync"></i></button><div id="saldo">€ <%= conto.saldo_conto%></div></div>
+                    <div class="saldo text-center" ><button class="btn btn-primary float-right" id="aggiornaSaldo" data-toggle="tooltip" title="Aggiorna stato saldo"><i class="fas fa-sync"></i></button><div id="saldo">€ <%= conto.saldo_conto%></div></div>
                 </div>
             <div class="mb-3"></div>
             </div>
         </div>
 
         <div class="col-12 col-md-6">
-             <div class="card shadow">
-                 <h1 class="text-center card-header">Operazioni utili <i class="fas fa-tools"></i></h1>
-                 <div class="row">
-                    <div class="col-6" align="center">
-                        <div class="mb-3"></div>
-                        <div class="button btn-lg btn-primary" aria-pressed="true" id="richiediDenaro"> <i class="fas fa-money-bill-wave button-img"></i></div>
-                        <b>Richiedi denaro</b>
-                    </div>
-                    <div class="col-6" align="center">
-                        <div class="mb-3"></div>
-                        <div class="button btn-lg btn-primary" id="inviaDenaro" aria-pressed="true"><i class="fas fa-hand-holding-usd button-img"></i></div>
-                        <b>Invia denaro</b>
-                    </div>
-                 </div>
-
-         <div class="mb-3"></div>
-     </div>
+            <div class="card shadow">
+                <h1 class="text-center card-header">Operazioni utili <i class="fas fa-tools"></i></h1>
+                    <div class="row">
+                        <div class="col-6" align="center">
+                            <div class="mb-3"></div>
+                            <div class="button btn-lg btn-primary" aria-pressed="true" id="richiediDenaro"> <i class="fas fa-money-bill-wave button-img"></i></div>
+                            <b>Richiedi denaro</b>
+                        </div>
+                        <div class="col-6" align="center">
+                            <div class="mb-3"></div>
+                            <div class="button btn-lg btn-primary" id="inviaDenaro" aria-pressed="true"><i class="fas fa-hand-holding-usd button-img"></i></div>
+                            <b>Invia denaro</b>
+                        </div>
+                     </div>
+                <div class="mb-3"></div>
+             </div>
         </div>
     </div>
 
@@ -42,40 +41,25 @@
         <!--Card Gestione profilo-->
         <div class="col-12 col-md-6">
         <div class="card shadow mb-3">
-            <h2 class="text-center">Gestici il tuo MoneyGO</h2>
+            <h2 class="text-center card-header">Menù  <i class="fas fa-bars ml-1"></i></h2>
             <div class="card-body">
                 <div class="row ">
                     <div class="col-12">
                         <button class="btn btn-primary btn-block" id="ricConto"><i class="fas fa-piggy-bank"></i>    Ricarica Conto      <i class="fas fa-piggy-bank"></i></button>
-                        <button class="btn btn-primary btn-block" id="gestProfilo"><i class="fas fa-user"></i> Gestione Profilo <i class="fas fa-user"></i></button>
                         <button class="btn btn-primary btn-block" id="estConto"><i class="fas fa-cash-register"></i> Estratto Conto <i class="fas fa-cash-register"></i></button>
+                        <button class="btn btn-primary btn-block" id="gestCarte"><i class="fas fa-credit-card"></i> Gestione Carte <i class="fas fa-credit-card"></i></button>
+                        <button class="btn btn-primary btn-block" id="pagPeriodico"><i class="fas fa-user-clock"></i> Pagamento Periodico <i class="fas fa-user-clock"></i></button>
+                        <button class="btn btn-primary btn-block" id="gestProfilo"><i class="fas fa-user"></i> Gestione Profilo <i class="fas fa-user"></i></button>
                     </div>
                 </div>
             </div>
         </div>
         </div>
         <!--Card Gestione Conto-->
-        <div class="col-12 col-md-6">
-            <div class="card shadow mb-3">
-                <h2 class="text-center">Gestici il tuo Conto</h2>
-                <div class="spinner-border text-primary mx-auto" id="loading" role="status"></div>
-                <span class="sr-only">Loading...</span>
-                <div class="card-body">
-                    <div class="row ">
-                        <div class="col-12">
-                            <button class="btn btn-primary btn-block" id="gestCarte"><i class="fas fa-credit-card"></i> Gestione Carte <i class="fas fa-credit-card"></i></button>
 
-                            <button class="btn btn-primary btn-block" id="pagPeriodico"><i class="fas fa-user-clock"></i> Pagamento Periodico <i class="fas fa-user-clock"></i></button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <%include notifiche.ejs%>
     </div>
-    <div class="row">
-       <%include notifiche.ejs%>
-
+    <div class="row mt-3">
         <%include ultime-transazioni.ejs%>
     </div>
 
