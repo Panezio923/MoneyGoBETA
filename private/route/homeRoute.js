@@ -132,7 +132,8 @@ router.post('/inviaDenaro', (req, res)=>{
        if(!result) return res.send("FAULT");
        else{
            req.session.transazioni = result;
-           return res.send("DONE");
+           res.send("DONE");
+           res.end();
        }
    })
 });

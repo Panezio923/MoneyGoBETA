@@ -53,6 +53,7 @@ Transazione.prototype = {
                     var msgDest = "Hai ricevuto € " + importo.toFixed( 2 ) + " da parte di " + mittente;
                     sendComunicazione( destinatario, encodeURI( msgDest ) );
                     callback( true );
+                    return;
                 }
                 callback(true)
             }
@@ -86,6 +87,7 @@ Transazione.prototype = {
                     var msgDest = "Hai ricevuto € " + transazione.importo.toFixed(2) + " da parte di " + transazione.nick_mittente;
                     sendComunicazione(transazione.destinatario, encodeURI(msgDest));
                     callback(true);
+                    return;
                 })
             }
             else callback(false);

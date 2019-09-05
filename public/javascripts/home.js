@@ -171,13 +171,11 @@
 
     maincontrol.byPassLimite = function(e){
         maincontrol.bypass = "on";
-        mainview.ripulisciCampiErrati();
         maincontrol.inviaDenaro(e);
     };
 
     maincontrol.inviaDenaro = function(e){
         e.preventDefault();
-        console.log(destinatario_validato)
         if(destinatario_validato && cifra_validata) {
             maincontrol.getFontePagamento();
 
