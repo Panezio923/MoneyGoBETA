@@ -119,12 +119,26 @@ router.post('/inviaDenaro', (req,res,next)=>{
 });
 
 router.post('/inviaDenaro', (req, res, next) =>{
-    transazione.newTransazione(res.locals.causale, res.locals.mittente, res.locals.destinatario, res.locals.importo, "eseguita", function (result) {
-        if(!result) return res.send("TRANERR");
-        else{
-            next('route');
-        }
-    })
+    if(res.locals.metodo === "PREDEFINITO"){
+        metodi.ricavaPredefinito(req.session.user.nickname, function (metodoPredefinito) {
+            if(!metodoPredefinito) res.send("ERRPRED");
+            else{
+                transazione.newTransazione(res.locals.causale, res.locals.mittente, res.locals.destinatario, res.locals.importo, "eseguita", metodoPredefinito,function (result) {
+                    if(!result) return res.send("TRANERR");
+                    else{
+                        next('route');
+                    }
+                })
+            }
+        })
+    }else {
+        transazione.newTransazione( res.locals.causale, res.locals.mittente, res.locals.destinatario, res.locals.importo, "eseguita", res.locals.metodo, function (result) {
+            if (!result) return res.send( "TRANERR" );
+            else {
+                next( 'route' );
+            }
+        } )
+    }
 });
 
 router.post('/inviaDenaro', (req, res)=>{
@@ -150,7 +164,7 @@ router.post("/richiediDenaro", (req, res, next)=>{
     * In questa chiamata alla funzione inverto il mittente ed il destinatario
     * in quanto il mittente è colui che invia denaro e non chi effettua la richiesta.
     */
-   transazione.newTransazione(causale, mittente, destinatario, importo, "in attesa", function (esito) {
+   transazione.newTransazione(causale, mittente, destinatario, importo, "in attesa", "MONEYGO", function (esito) {
        if(esito) res.send("DONE");
        else res.send("FAULT");
        res.end();

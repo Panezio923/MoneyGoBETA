@@ -8,15 +8,18 @@ function Transazione() {}
 const users = new User();
 
 function sendComunicazione(user, msg){
-    users.find(user, function(esito){
-        if(esito.comunicazione === 0){
-            mail.inizializza();
-            mail.inviaMailNotifica(esito.email, decodeURI(msg));
-        }
-        else if( esito.comunicazione === 2){
-            bot.sendTextTg("978219762:AAHaFe80I5p2Rlooe7dEN3KaGLJIxiyxReE", esito.telegram, msg);
-        }
-    });
+    try {
+        users.find( user, function (esito) {
+            if (esito.comunicazione === 0) {
+                mail.inizializza();
+                mail.inviaMailNotifica( esito.email, decodeURI( msg ) );
+            } else if (esito.comunicazione === 2) {
+                bot.sendTextTg( "978219762:AAHaFe80I5p2Rlooe7dEN3KaGLJIxiyxReE", esito.telegram, msg );
+            }
+        } );
+    }catch (e) {
+        console.log(e);
+    }
 }
 
 Transazione.prototype = {
@@ -41,10 +44,10 @@ Transazione.prototype = {
         })
     },
 
-    newTransazione : function (causale, mittente, destinatario, importo, stato, callback) {
-        let sql = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione) VALUES(?,?,?,?,?,?)";
+    newTransazione : function (causale, mittente, destinatario, importo, stato, metodo, callback) {
+        let sql = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione, metodo) VALUES(?,?,?,?,?,?,?)";
         var d = new Date();
-        pool.query(sql, [d, causale, mittente, destinatario, importo, stato], function (err, result) {
+        pool.query(sql, [d, causale, mittente, destinatario, importo, stato, metodo], function (err, result) {
             if(err) throw err;
             if(result) {
                 if(stato === "eseguita" && causale !== "ricarica conto") {
@@ -114,7 +117,6 @@ Transazione.prototype = {
     */
     creaToken : function (type, user, causale, importo, metodo, callback) {
         var token = crypto.createHmac('sha256', "random").update(user + Date.now()).digest('hex');
-        console.log(token);
         var data = new Date();
 
         let sql_token = "INSERT INTO transazione(data, causale, nick_mittente, destinatario, importo, stato_transazione, token) VALUES(?,?,?,?,?,?,?)";

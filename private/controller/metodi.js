@@ -261,7 +261,6 @@ Metodi.prototype = {
     },
 
     ricavaPredefinito: function(nickname, callback){
-        console.log("TIZIO");
         var metodo;
         let sql = "SELECT * FROM metodi_pagamento WHERE ref_nickname = ? AND predefinito = 1";
         pool.query(sql, nickname, function (err, result) {
@@ -281,15 +280,12 @@ Metodi.prototype = {
 
         if(metodo === "PREDEFINITO"){
          that.ricavaPredefinito(mittente, function (result) {
-             console.log("Caio");
              if(result !== null)
               {
                   metodo = result;
                   that.verificaCopertura(mittente, importo, metodo, function (copertura) {
                       if(copertura) {
                           that.avviaInvio(mittente, importo, destinatario, metodo, function (confermaInvio) {
-                              console.log("sempronio");
-
                               if(confermaInvio) callback(confermaInvio);
                               else callback(null);
                           })
