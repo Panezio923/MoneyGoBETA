@@ -22,7 +22,9 @@ Periodico.prototype = {
             if(!esito) callback(false);
             else callback(true);
         })
-    }
+    },
+
+
     
 };
 
