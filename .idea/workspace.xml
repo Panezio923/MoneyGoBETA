@@ -2,11 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1aceef9d-89e5-4368-8eb1-7783bb6a90d9" name="Default Changelist" comment="18:08 03/09">
+      <change afterPath="$PROJECT_DIR$/public/images/icona.ico" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/access.log" beforeDir="false" afterPath="$PROJECT_DIR$/access.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/controller/metodi.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/metodi.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/private/controller/pagamentoperiodico.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/pagamentoperiodico.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/controller/transazione.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/controller/transazione.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/route/homeRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/private/route/homeRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/GestioneConto/linkpagamento.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/GestioneConto/linkpagamento.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/GestioneConto/pagamentoperiodico.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/GestioneConto/pagamentoperiodico.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/gestione-carte.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/gestione-carte.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/gestioneprofilo.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/gestioneprofilo.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/home.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/home.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/recuperoPassword.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/recuperoPassword.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/registrati.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/registrati.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/ricaricaconto.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/ricaricaconto.ejs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,17 +96,17 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\HerokuMoneyGO\MoneyGoBETA\private" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\private" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\public\javascripts\js" />
-      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\public\javascripts" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\mobileapp\www" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
       <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views\partials" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\HerokuMoneyGO\MoneyGoBETA\public\images" />
+      <recent name="D:\HerokuMoneyGO\MoneyGoBETA\private" />
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\views" />
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\private" />
+      <recent name="D:\Programmi\XAMPP\htdocs\MoneyGo\public\javascripts\js" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -259,7 +270,8 @@
       <workItem from="1567590289892" duration="9937000" />
       <workItem from="1567641897411" duration="3888000" />
       <workItem from="1567677764419" duration="15854000" />
-      <workItem from="1567700820377" duration="9467000" />
+      <workItem from="1567700820377" duration="9604000" />
+      <workItem from="1567763852420" duration="8141000" />
     </task>
     <task id="LOCAL-00001" summary="Instanziato il file connessione, creata connessione con utente phpmyadmin:&#10;User: vagrant&#10;Pass: password&#10;&#10;creata funzione login di prova.&#10;Funzione login riuscita.&#10;&#10;Si attendono notizie da Gnoffo per determinare l'impostazione MVC.">
       <created>1560499285017</created>
