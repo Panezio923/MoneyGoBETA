@@ -1,26 +1,10 @@
 const pool = require('./connessionedb');
 const crypto = require('crypto');
 const User = require('./user');
-const mail = require('../mailer');
-const bot = require('../bot');
 
+const user = new User();
 function Transazione() {}
-const users = new User();
 
-sendComunicazione = function(user, msg){
-    try {
-        users.find( user, function (esito) {
-            if (esito.comunicazione === 0) {
-                mail.inizializza();
-                mail.inviaMailNotifica( esito.email, decodeURI( msg ) );
-            } else if (esito.comunicazione === 2) {
-                bot.sendTextTg( "978219762:AAHaFe80I5p2Rlooe7dEN3KaGLJIxiyxReE", esito.telegram, msg );
-            }
-        } );
-    }catch (e) {
-        console.log(e);
-    }
-};
 
 Transazione.prototype = {
 
@@ -52,9 +36,9 @@ Transazione.prototype = {
             if(result) {
                 if(stato === "eseguita" && causale !== "ricarica conto") {
                     var msgMitt = ("Una transazione è andata a buon fine con importo €" + importo.toFixed( 2 ) + " verso " + destinatario);
-                    sendComunicazione( mittente, encodeURI( msgMitt ) );
+                    user.sendComunicazione( mittente, encodeURI( msgMitt ) );
                     var msgDest = "Hai ricevuto € " + importo.toFixed( 2 ) + " da parte di " + mittente;
-                    sendComunicazione( destinatario, encodeURI( msgDest ) );
+                    user.sendComunicazione( destinatario, encodeURI( msgDest ) );
                     callback( true );
                     return;
                 }

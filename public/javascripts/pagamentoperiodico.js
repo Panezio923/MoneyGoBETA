@@ -79,8 +79,7 @@
                         $(".loading").hide();
                         $("#alertCheck").show().delay(2000).fadeOut();
                         $("#form_pagamentoperiodico").delay(2000).show(0);
-                        maincontrol.aggiornaPagamentiPeriodici();
-                        $("#tablePagamentiPeriodici").load(location.href + " #tablePagamentiPeriodici");
+                        $("#tablePagamentiPeriodici").load(location.href + ' #tablePagamentiPeriodici');
                     }
                     else if(msg === "ERR"){
                         mainview.mostraAlert("Qualcosa non va, riprovare");
@@ -244,6 +243,7 @@
 
         /* Controllo Data */
         $("#startPagamento").blur(function(){
+            $(".alert").hide();
             data_startvalidata = true;
             var start = $("#startPagamento").val();
             var d = new Date(); // Data corrente
@@ -260,6 +260,7 @@
             }
             else{
                 data_startvalidata = true;
+                $(".alert").hide();
                 return;
             }
             data_startvalidata = false;
