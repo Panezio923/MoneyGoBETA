@@ -154,6 +154,7 @@
 
         /* Controllo Data */
         $("#startPagamento").blur(function(){
+            data_startvalidata = true;
             var start = $("#startPagamento").val();
             var d = new Date(); // Data corrente
 

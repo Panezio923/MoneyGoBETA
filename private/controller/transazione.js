@@ -7,7 +7,7 @@ const bot = require('../bot');
 function Transazione() {}
 const users = new User();
 
-function sendComunicazione(user, msg){
+sendComunicazione = function(user, msg){
     try {
         users.find( user, function (esito) {
             if (esito.comunicazione === 0) {
@@ -20,7 +20,7 @@ function sendComunicazione(user, msg){
     }catch (e) {
         console.log(e);
     }
-}
+};
 
 Transazione.prototype = {
 
