@@ -381,7 +381,7 @@
 
         //Quando carica la pagina recupero il nick dell'utente
         maincontrol.verificaNick();
-        
+
         maincontrol.getID();
 
         $('[data-toggle="tooltip"]').tooltip();
