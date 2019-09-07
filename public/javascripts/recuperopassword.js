@@ -14,7 +14,9 @@
     };
 
     mainview.ripulisciCampiErrati = function(){
-        $("#alert").hide("fast");
+        $(".alert").hide("fast");
+        $("#mail").css("background-color", "");
+        $("#nick").css("background-color", "");
     };
 
     maincontrol.controllaEsistenzaMail = function(email){
@@ -27,11 +29,9 @@
                 if(msg === "NOTEXIST"){
                     email_validata=false;
                     mainview.mostraAlert("Email non presente nel sistema");
-                    $("#mail").css("borderColor", "red");
                     $("#mail").css("background-color", "#ff6962");
 
                     $("#mail").on("click", function () {
-                        $("#mail").css("borderColor", "");
                         $("#mail").css("background-color", "");
                     });
                 }else if (msg === "EXIST"){
@@ -55,11 +55,9 @@
                 if(msg === "NOTEXIST"){
                     nickname_validato=false;
                     mainview.mostraAlert("Nickname non presente nel sistema");
-                    $("#nick").css("borderColor", "red");
                     $("#nick").css("background-color", "#ff6962");
 
                     $("#nick").on("click", function () {
-                        $("#nick").css("borderColor", "");
                         $("#nick").css("background-color", "");
 
                     });

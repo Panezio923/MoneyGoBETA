@@ -65,7 +65,7 @@ router.post('/verificaCoincidenza', (req,res,next)=>{
    })
 });
 
-router.post('/inviaNuovaPassword', (req,res,next)=>{
+router.post('/inviaNuovaPassword', (req,res)=>{
     user.generaPassword(function (nuovaPassword) {
         user.caricaNuovaPassword(req.body.nickname, req.body.email, nuovaPassword, function (result) {
             if(result) {
