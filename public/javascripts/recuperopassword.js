@@ -106,6 +106,7 @@
         var nickname = $("#nick").val();
 
         if(email_validata && nickname_validato) {
+            console.log(email);
             $.ajax({
                 type: "POST",
                 data: {email: email, nickname: nickname},
@@ -138,10 +139,9 @@
                 else{
                     email_validata = false;
                     mainview.mostraAlert("Dati inseriti non validi");
-                    $("#mail").css("borderColor", "red");
+                    $("#mail").css("background-color", "#fff291");
 
                     $("#mail").on("click", function () {
-                        $("#mail").css("borderColor", "");
                         $("#nick").css("background-color", "");
                     });
                 }
@@ -161,11 +161,11 @@
                 else{
                     nickname_validato = false;
                     mainview.campiErrati();
-                    $("#nick").css("borderColor", "red");
+                    $("#nick").css("background-color", "#fff291");
 
                     $("#nick").on("click", function () {
-                        $("#nick").css("borderColor", "");
-                        $("#mail").css("background-color", "");
+                        $("#nick").css("background-color", "");
+
                     });
                 }
             }

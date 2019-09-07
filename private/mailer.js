@@ -4,23 +4,13 @@ let transporter;
 exports.inizializza = function(){
     transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 465,
-        secure: true, // true for 465, false for other ports
+        port: 587,
+        secure: false, // true for 465, false for other ports
         auth: {
             user: "infoprenotazionesop@gmail.com",
             pass: "teamsop123"
         }
     });
-};
-
-exports.inviaMailNotifica = function (destinatario, msg) {
-    let info =  transporter.sendMail({
-        from: '"MoneyGO 💸" <moneygo@staff.com>',
-        to: destinatario,
-        subject: "Nuova transazione",
-        text: msg,
-    });
-    console.log(info);
 };
 
 exports.inviaMailRecuperoPassword = function (destinatario, utente, password, callback) {
@@ -219,6 +209,16 @@ exports.inviaMailRecuperoPassword = function (destinatario, utente, password, ca
     });
     callback(esito);
 
+};
+
+exports.inviaMailNotifica = function (destinatario, msg) {
+    let info =  transporter.sendMail({
+        from: '"MoneyGO 💸" <moneygo@staff.com>',
+        to: destinatario,
+        subject: "Nuova transazione",
+        text: msg,
+    });
+    console.log(info);
 };
 
 exports.inviaMailRegistrazione = function(destinatario, utente, callback) {
