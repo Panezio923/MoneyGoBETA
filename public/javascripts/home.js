@@ -329,7 +329,7 @@
                     mainview.mostraAlert("Qualcosa è andato storto nella generazione del link");
                 }else{
                     if(tipo === "SEND") {
-                        $( '#linkInvio span' ).text( "https://intense-thicket-28731.herokuapp.com" "/token/" + msg );
+                        $( '#linkInvio span' ).text("https://intense-thicket-28731.herokuapp.com" + "/token/" + msg );
                         $( '#linkInvio' ).attr( "value", ("https://intense-thicket-28731.herokuapp.com" + "/token/" + msg) );
                     }
                     else if(tipo === "RCV"){
