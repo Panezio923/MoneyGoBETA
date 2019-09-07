@@ -28,8 +28,62 @@ router.post('/nuovoPagamentoPeriodico', (req, res, next)=>{
    });
 });
 
-router.post('/eliminaPagamentoPeriodico', (req, res)=>{
-
+router.use('/eliminaPagamentoPeriodico', (req, res, next)=>{
+    let id = req.body.id;
+    pagamento.eliminaPagamentoPeriodico(id, req.session.user.nickname, function (esito) {
+        if(!esito) res.send("ERR");
+        else next('route');
+    })
 });
+
+router.post('/eliminaPagamentoPeriodico', (req, res)=>{
+    pagamento.recuperaPagamentiPeriodici(req.session.user.nickname, function (periodiciAggiornati) {
+        if(!periodiciAggiornati) res.send("ERRPER");
+        else {
+            req.session.pagamentiperiodici = periodiciAggiornati;
+            res.send("DONE");
+            res.end();
+        }
+    })
+});
+
+router.use('/fermaPagamentoPeriodico', (req, res, next)=>{
+    let id = req.body.id;
+    pagamento.interrompiPagamentoPeriodico(id, req.session.user.nickname, function (esito) {
+        if(!esito) res.send("ERR");
+        else next('route');
+    })
+});
+
+router.post('/fermaPagamentoPeriodico', (req, res)=>{
+    pagamento.recuperaPagamentiPeriodici(req.session.user.nickname, function (periodiciAggiornati) {
+        if(!periodiciAggiornati) res.send("ERRPER");
+        else {
+            req.session.pagamentiperiodici = periodiciAggiornati;
+            res.send("DONE");
+            res.end();
+        }
+    })
+});
+
+router.use('/riprendiPagamentoPeriodico', (req, res, next)=>{
+    let id = req.body.id;
+    pagamento.riprendiPagamentoPeriodico(id, req.session.user.nickname, function (esito) {
+        if(!esito) res.send("ERR");
+        else next('route');
+    })
+});
+
+router.post('/riprendiPagamentoPeriodico', (req, res)=>{
+    pagamento.recuperaPagamentiPeriodici(req.session.user.nickname, function (periodiciAggiornati) {
+        if(!periodiciAggiornati) res.send("ERRPER");
+        else {
+            req.session.pagamentiperiodici = periodiciAggiornati;
+            res.send("DONE");
+            res.end();
+        }
+    })
+});
+
 
 module.exports = router;

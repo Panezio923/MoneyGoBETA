@@ -6,6 +6,7 @@
 
     var destinatario_validato;
     var data_startvalidata;
+    var storeValue;
 
     const formatter = new Intl.NumberFormat('it-IT', {
         minimumFractionDigits: 2
@@ -53,17 +54,9 @@
         }
     };
 
-    maincontrol.aggiornaPagamentiPeriodici = function(){
-        $.ajax({
-            url: '/home/pagamentoPeriodico/aggiornaPagamentiPeriodici',
-            type: 'POST',
-            //nodata
-            //nothingelse;
-        })
-    };
-    var metodo = $("#listaMetodi option:selected").val();
     maincontrol.caricaNuovoPagamento = function(e){
         e.preventDefault();
+        var metodo = $("#listaMetodi option:selected").val();
         if(cifra_validata && metodo !== undefined && destinatario_validato && data_startvalidata){
             var periodicita = $("#periodicita option:selected").val();
             var importo = $("#importoPeriodico").val().replace(/\./g, '');
@@ -113,7 +106,104 @@
         } );
     };
 
+    //Recupera l'id del bottone cliccato nella tabella e ne chiama la rispettiva funzione
+    maincontrol.getID = function(){
+        $(document).on('click', 'td button',function () {
+            storeValue = ($(this).attr("id"));
+
+            let id = storeValue.slice(1);
+
+            if(storeValue[0] === "E") maincontrol.eliminaPeriodico(id);
+            else if(storeValue[0] === "I") maincontrol.interrompiPeriodico(id);
+            else if(storeValue[0] === "R") maincontrol.riprendiPeriodico(id);
+        });
+    };
+
+    maincontrol.eliminaPeriodico = function(id){
+        $.ajax({
+            url: '/home/pagamentoPeriodico/eliminaPagamentoPeriodico',
+            type: 'post',
+            data: {id: id},
+
+            beforeSend: function () {
+                $("#E"+id).prop("disabled", true);
+                $("#loading"+id).show();
+            },
+            success: function (msg) {
+                if(msg === "DONE"){
+                    $("#loading"+id).hide();
+                    $("#tablePagamentiPeriodici").load(location.href + ' #tablePagamentiPeriodici');
+                }
+                else if(msg === "ERR"){
+                    $("#loading"+id).hide();
+                    mainview.mostraAlert("Impossibile eliminare il pagamento selezionato, riprovare");
+                }
+                else if(msg === "ERRPER"){
+                    $("#loading"+id).hide();
+                    mainview.mostraAlert("Impossibile aggiornare la lista dei pagamenti");
+                }
+            }
+        })
+    };
+
+    maincontrol.interrompiPeriodico = function(id){
+        $.ajax({
+            url: '/home/pagamentoPeriodico/fermaPagamentoPeriodico',
+            type: 'post',
+            data: {id: id},
+
+            beforeSend: function () {
+                $("#I"+id).prop("disabled", true);
+                $("#loading"+id).show();
+            },
+            success: function (msg) {
+                if(msg === "DONE"){
+                    $("#loading"+id).hide();
+                    $("#tablePagamentiPeriodici").load(location.href + ' #tablePagamentiPeriodici');
+                }
+                else if(msg === "ERR"){
+                    $("#loading"+id).hide();
+                    mainview.mostraAlert("Impossibile interrompere il pagamento selezionato, riprovare");
+                }
+                else if(msg === "ERRPER"){
+                    $("#loading"+id).hide();
+                    mainview.mostraAlert("Impossibile aggiornare la lista dei pagamenti");
+                }
+            }
+        })
+    };
+
+    maincontrol.riprendiPeriodico = function(id){
+        $.ajax({
+            url: '/home/pagamentoPeriodico/riprendiPagamentoPeriodico',
+            type: 'post',
+            data: {id: id},
+
+            beforeSend: function () {
+                $("#R"+id).prop("disabled", true);
+                $("#loading"+id).show();
+            },
+            success: function (msg) {
+                if(msg === "DONE"){
+                    $("#loading"+id).hide();
+                    $("#tablePagamentiPeriodici").load(location.href + ' #tablePagamentiPeriodici');
+                }
+                else if(msg === "ERR"){
+                    $("#loading"+id).hide();
+                    mainview.mostraAlert("Impossibile riprendere il pagamento selezionato, riprovare");
+                }
+                else if(msg === "ERRPER"){
+                    $("#loading"+id).hide();
+                    mainview.mostraAlert("Impossibile aggiornare la lista dei pagamenti");
+                }
+            }
+        })
+    };
+
+
     $(document).ready(function () {
+
+        maincontrol.getID();
 
         maincontrol.verificaNick();
         $("#form_pagamentoperiodico").find("input[type=text], input[type=date]").val("");

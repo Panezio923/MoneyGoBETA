@@ -74,8 +74,8 @@ Transazione.prototype = {
         let sql = "SELECT * FROM transazione t WHERE t.nick_mittente = ? AND stato_transazione = ?";
         pool.query(sql, [user, "in attesa"], function (err, result) {
             if(err) throw err;
-            if(result) callback(result);
-            else callback(null);
+            if(!result) callback(false);
+            else callback(result);
         })
     },
 

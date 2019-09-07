@@ -110,7 +110,7 @@ app.use('*.ejs', function (req, res, next) {
 });
 
 
-cron.schedule('00 22 * * * *', function () {
+cron.schedule('00 00 08 * * *', function () {
   periodico.periodiciDaEffettuare();
 });
 

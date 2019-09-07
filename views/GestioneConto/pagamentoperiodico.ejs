@@ -133,10 +133,12 @@
                     <th scope="col">Periodicità</th>
                     <th scope="col">Inizio Pagamento</th>
                     <th scope="col">Opzioni</th>
+                    <th scope="col"></th>
+
 
                 </tr>
                 </thead>
-                <tbody >
+                <tbody>
 
                 <%
 
@@ -144,6 +146,8 @@
                     var importo = pagamentiPeriodici.map(function (value) { return value.importo.toFixed(2) });
                     var periodicita = pagamentiPeriodici.map(function (value) { return value.periodicita});
                     var datainizio = pagamentiPeriodici.map(function (value) { return value.data_inizio});
+                    var stato = pagamentiPeriodici.map(function (value) { return value.stato});
+                    var id = pagamentiPeriodici.map(function (value) { return value.id_pag_per});
 
                     for(let i = 0; i < pagamentiPeriodici.length; i++){
                         var data = new Date(datainizio[i]);
@@ -154,7 +158,19 @@
                     <td>€ <%=importo[i]%></td>
                     <td><%=periodicita[i]%></td>
                     <td><%=dataJS%></td>
-                    <td><button class="btn btn-sm btn-danger" id="E<%=i%>">Elimina</button> <button class="btn btn-sm btn-info" id="I<%=i%>">Interrompi</button> </td>
+                    <td><button class="btn btn-sm btn-danger" id="E<%=id[i]%>">Elimina</button>
+                        <%if(stato[i] === "attivo"){%>
+                        <button class="btn btn-sm btn-warning" id="I<%=id[i]%>">Interrompi</button>
+                        <%}else if(stato[i] === "interrotto"){%>
+                        <button class="btn btn-sm btn-info" id="R<%=id[i]%>">Riprendi</button>
+                        <%}%>
+
+                    </td>
+                    <td>
+                        <div class="spinner-border spinner-border-sm text-dark mt-2 loading" role="status" id="loading<%=id[i]%>">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </td>
                 </tr>
 
                 <%}%>
