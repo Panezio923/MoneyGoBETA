@@ -142,7 +142,6 @@
     maincontrol.premutoSalvaComunicazione = function() {
         var comunicazione = $("#comunicazioneModifica option:selected").text();
         if(comunicazione === "Email")  comunicazione = 0;
-        else if(comunicazione === "SMS") comunicazione = 1;
         else if(comunicazione === "Telegram") comunicazione = 2;
 
             $.ajax({
