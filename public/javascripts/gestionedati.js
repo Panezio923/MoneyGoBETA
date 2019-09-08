@@ -222,9 +222,12 @@
                   if(codice.telegram !== null) {
                       maincontrol.codiceBot = codice.telegram;
                       $("#codiceBot").val(maincontrol.codiceBot).css("background-color", "#99ff99").prop("disabled", true);
-                      $("#sendCodice").prop("disabled", true);
+                      $("#sendCodice").html("Allineato").prop("disabled", true);
+
                   }
                   else {
+                      $("#codiceBot").css("background-color", "").prop("disabled", false);
+                      $("#sendCodice").html("Invia").prop("disabled", false);
                   }
               }
           })
