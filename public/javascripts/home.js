@@ -320,9 +320,6 @@
             url: "/home/creaToken",
             data: {importo: importo, metodo: maincontrol.metodo, causale: $(".causale").val(), type: tipo},
 
-            beforeSend: function () {
-                //mainview.mostraBarraLoading();
-            },
             success: function (msg) {
                 console.log(msg);
                 if(!msg){
