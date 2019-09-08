@@ -221,6 +221,18 @@ router.get('/ricaricaConto',(req,res) => {
     else res.render('ricaricaconto',{title:"MoneyGo", metodi : req.session.metodi, saldo_metodo : req.session.saldo_metodo});
 });
 
+router.get('/estrattoConto',(req,res) => {
+    if(!req.session.user) {
+        res.redirect('/');
+        return
+    }
+        transazione.recuperaTransazione(req.session.user.nickname,function(transazione){
+
+            if (!transazione) res.redirect('/');
+            else res.render('estratto-conto', {title: "MoneyGo", transazioni: transazione, utente: req.session.user.nickname});
+        });
+});
+
 router.post('/creaToken', (req, res, next)=>{
     let user = req.session.user.nickname;
     let type = req.body.type;
