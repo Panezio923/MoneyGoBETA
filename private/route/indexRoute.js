@@ -10,10 +10,12 @@ const conto = new Conto();
 const user = new User();
 const metodi = new Metodi();
 
+
 //Restituisce la pagina di index
 router.all('/', (req, res, next) =>{
     let user = req.session.user;
     if(!user) {
+        req.session.dataPeriodico = new Date();
         res.render('index', {title: 'MoneyGO'});
     }else{
         res.redirect('/home');
@@ -142,8 +144,6 @@ router.post('/token/:token/eseguiTransazione', (req, res)=>{
 
         }
     })
-
-
 });
 
 

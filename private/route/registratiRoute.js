@@ -65,18 +65,23 @@ router.post('/verificaCoincidenza', (req,res,next)=>{
    })
 });
 
-router.post('/inviaNuovaPassword', (req,res,next)=>{
+
+router.use('/inviaNuovaPassword', (req,res, next)=>{
     user.generaPassword(function (nuovaPassword) {
+        res.locals.nuovaPassword = nuovaPassword;
         user.caricaNuovaPassword(req.body.nickname, req.body.email, nuovaPassword, function (result) {
-            if(result) {
-                mailer.inviaMailRecuperoPassword(req.body.email, req.body.nickname, nuovaPassword, function (esito) {
-                    if (esito) res.send("DONE");
-                    else res.send("FAULT");
-                    res.end();
-                })
-            }else res.send("ERR");
+            if(!result) res.send("ERR");
+            else next('route');
         })
     })
+});
+
+router.post('/inviaNuovaPassword', (req, res)=>{
+    mailer.inviaMailRecuperoPassword(req.body.email, req.body.nickname, res.locals.nuovaPassword, function (esito) {
+        if (!esito) res.send( "FAULT" );
+        else res.send( "DONE" );
+        res.end();
+    });
 });
 
 module.exports = router;

@@ -14,7 +14,9 @@
     };
 
     mainview.ripulisciCampiErrati = function(){
-        $("#alert").hide("fast");
+        $(".alert").hide("fast");
+        $("#mail").css("background-color", "");
+        $("#nick").css("background-color", "");
     };
 
     maincontrol.controllaEsistenzaMail = function(email){
@@ -27,11 +29,9 @@
                 if(msg === "NOTEXIST"){
                     email_validata=false;
                     mainview.mostraAlert("Email non presente nel sistema");
-                    $("#mail").css("borderColor", "red");
                     $("#mail").css("background-color", "#ff6962");
 
                     $("#mail").on("click", function () {
-                        $("#mail").css("borderColor", "");
                         $("#mail").css("background-color", "");
                     });
                 }else if (msg === "EXIST"){
@@ -55,11 +55,9 @@
                 if(msg === "NOTEXIST"){
                     nickname_validato=false;
                     mainview.mostraAlert("Nickname non presente nel sistema");
-                    $("#nick").css("borderColor", "red");
                     $("#nick").css("background-color", "#ff6962");
 
                     $("#nick").on("click", function () {
-                        $("#nick").css("borderColor", "");
                         $("#nick").css("background-color", "");
 
                     });
@@ -108,6 +106,7 @@
         var nickname = $("#nick").val();
 
         if(email_validata && nickname_validato) {
+            console.log(email);
             $.ajax({
                 type: "POST",
                 data: {email: email, nickname: nickname},
@@ -140,10 +139,9 @@
                 else{
                     email_validata = false;
                     mainview.mostraAlert("Dati inseriti non validi");
-                    $("#mail").css("borderColor", "red");
+                    $("#mail").css("background-color", "#fff291");
 
                     $("#mail").on("click", function () {
-                        $("#mail").css("borderColor", "");
                         $("#nick").css("background-color", "");
                     });
                 }
@@ -163,11 +161,11 @@
                 else{
                     nickname_validato = false;
                     mainview.campiErrati();
-                    $("#nick").css("borderColor", "red");
+                    $("#nick").css("background-color", "#fff291");
 
                     $("#nick").on("click", function () {
-                        $("#nick").css("borderColor", "");
-                        $("#mail").css("background-color", "");
+                        $("#nick").css("background-color", "");
+
                     });
                 }
             }

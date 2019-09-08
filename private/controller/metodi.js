@@ -1,4 +1,7 @@
 const pool = require('./connessionedb');
+const User = require('./user');
+
+const user = new User();
 
 function Metodi() {}
 
@@ -246,7 +249,11 @@ Metodi.prototype = {
         let sql = "SELECT saldo_metodo FROM metodi_pagamento WHERE ref_nickname = ? AND (numero_carta = ? OR numero_iban = ?)";
         pool.query(sql, [mittente, metodo, metodo], function (err, result) {
             if(err) throw err;
-            if(result[0].saldo_metodo - importo < 0) callback(false);
+            if(result[0].saldo_metodo - importo < 0){
+                let msg = "Impossibile effettuare il pagamento con il metodo: " + metodo + " a causa di una MANCANZA FONDI";
+                user.sendComunicazione(mittente, encodeURI(msg));
+                callback(false);
+            }
             else callback(true);
         });
     },
@@ -255,7 +262,11 @@ Metodi.prototype = {
         let sql = "SELECT saldo_conto FROM conto_moneygo WHERE ref_nickname = ?";
         pool.query(sql, [mittente], function (err, result) {
             if(err) throw err;
-            if(result[0].saldo_conto - importo < 0) callback(false);
+            if(result[0].saldo_conto - importo < 0){
+                let msg = "Impossibile effettuare il pagamento con il Saldo MoneyGO a causa di una MANCANZA FONDI";
+                user.sendComunicazione(mittente, encodeURI(msg));
+                callback(false);
+            }
             else callback(true);
         });
     },

@@ -1,5 +1,7 @@
 const pool = require('./connessionedb');
 const bcrypt = require('bcrypt');
+const mail = require('../mailer');
+const bot = require('../bot');
 
 function User() {}
 
@@ -142,7 +144,23 @@ User.prototype = {
             if(!esito) callback(false);
             else callback(true);
         })
-    }
+    },
+
+
+    sendComunicazione: function(user, msg){
+        try {
+            this.find( user, function (esito) {
+                if (esito.comunicazione === 0) {
+                    mail.inizializza();
+                    mail.inviaMailNotifica( esito.email, decodeURI( msg ) );
+                } else if (esito.comunicazione === 2) {
+                    bot.sendTextTg( "978219762:AAHaFe80I5p2Rlooe7dEN3KaGLJIxiyxReE", esito.telegram, msg );
+                }
+            } );
+        }catch (e) {
+            console.log(e);
+        }
+    },
 };
 
 

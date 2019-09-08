@@ -7,6 +7,10 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const morgan = require('morgan');
 const helmet = require('helmet');
+var cron = require('node-cron');
+
+const Periodico = require('./private/controller/pagamentoperiodico');
+const periodico = new Periodico();
 
 //ROUTES
 const indexRoute = require('./private/route/indexRoute');
@@ -103,6 +107,11 @@ app.options("*", function (req, res) {
  */
 app.use('*.ejs', function (req, res, next) {
   res.status('403').end('403 Forbidden');
+});
+
+
+cron.schedule('00 00 08 * * *', function () {
+  periodico.periodiciDaEffettuare();
 });
 
 module.exports = app;
