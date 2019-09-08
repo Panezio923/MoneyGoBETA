@@ -83,6 +83,15 @@ User.prototype = {
         })
     },
 
+    findCodice: function(codice, callback){
+      let sql = "SELECT * FROM utenti WHERE p_iva = ? OR cf = ?";
+      pool.query(sql,[ codice, codice], function (err, result) {
+          if(err) throw err;
+          if(result.length) callback(false);
+          else callback(true);
+      })
+    },
+
     updateEmail: function (email, nickname, callback) {
         let sql = "UPDATE utenti SET email = ? WHERE nickname = ?";
         pool.query(sql, [email, nickname], function (err, result) {

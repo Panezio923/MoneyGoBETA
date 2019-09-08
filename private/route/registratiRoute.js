@@ -35,6 +35,15 @@ router.post('/verificaEmailUnica', (req,res,next)=>{
     })
 });
 
+router.post('/verificaCodice', (req, res)=>{
+    let codice = req.body.codice;
+    user.findCodice(codice, function (result) {
+        if(!result) res.send("EXIST");
+        else res.send("NOTEXIST");
+        res.end();
+    })
+});
+
 //RICHIESTA REGISTRAZIONE
 router.post('/inviaRegistrazione', (req, res, next) =>{
     user.createUser(req.body, function (result) {

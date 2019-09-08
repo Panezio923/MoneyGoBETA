@@ -79,7 +79,7 @@
             success: function (msg) {
                 if(msg === "EXIST"){
                     email_validata=false;
-                    mainview.emailDuplicata();
+                    mainview.campoEsistente("Email già presente nel sistema");
                     $("#email").addClass("is-invalid");
                 }else if (msg === "NOTEXIST"){
                     email_validata=true;
@@ -99,7 +99,7 @@
                 console.log(msg);
                 if(msg === "EXIST"){
                     nickname_validato=false;
-                    mainview.nicknameDuplicato();
+                    mainview.campoEsistente("Nickname già presente nel sistema");
                     $("#nickname").addClass("is-invalid");
                 }else if (msg === "NOTEXIST"){
                     nickname_validato=true;
@@ -109,18 +109,45 @@
         })
     };
 
+    maincontrol.codiceDuplicato = function(codice, tipo){
+        $.ajax({
+            type: "POST",
+            url: "/registrati/verificaCodice",
+            data: {codice: codice},
+
+            success: function (msg) {
+                console.log(msg);
+                if(msg === "EXIST"){
+                    if(tipo === "fiscale") {
+                        mainview.campoEsistente("Codice Fiscale già presente nel sistema");
+                        codicefiscale_validato = false;
+                        $("#codicefiscale").addClass("is-invalid");
+                    }else if(tipo === "iva"){
+                        mainview.campoEsistente("Partita Iva già presente nel sistema");
+                        iva_validata = false;
+                        $("#piva").addClass("is-invalid");
+                    }
+                }else if (msg === "NOTEXIST"){
+                    if(tipo === "fiscale") {
+                        codicefiscale_validato = true;
+                        mainview.ripulisciCampiErrati($("#codicefiscale"));
+                    }else if(tipo === "iva"){
+                        iva_validata = true;
+                        mainview.ripulisciCampiErrati($("#piva"));
+                    }
+                }
+            }
+        })
+
+    };
+
 
     mainview.showModal = function(){
         $("#modalSuccess").modal('show');
     };
 
-    mainview.emailDuplicata = function(){
-        $("#alert_text").text("Email giù utilizzata");
-        $("#alert").show("slow");
-    };
-
-    mainview.nicknameDuplicato = function(){
-        $("#alert_text").text("Nickname non disponibile");
+    mainview.campoEsistente = function(msg){
+        $("#alert_text").text(msg);
         $("#alert").show("slow");
     };
 
@@ -229,6 +256,7 @@
                 if (/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/i.test( $( "#codicefiscale" ).val() )) {
                     codicefiscale_validato = true;
                     mainview.ripulisciCampiErrati( $( "#codicefiscale" ) );
+                    maincontrol.codiceDuplicato( $( "#codicefiscale" ).val(), "fiscale" );
                     return;
                 } else {
                     codicefiscale_validato = false;
@@ -393,8 +421,8 @@
             if(ret !== ""){
                 mainview.campiErrati($("#piva"));
             }else {
+                maincontrol.codiceDuplicato( $( "#piva" ).val() , "iva" );
                 $( "#piva" ).removeClass( "is-invalid" );
-                iva_validata = true;
                 $( "#piva" ).addClass( "is-valid" );
             }
 

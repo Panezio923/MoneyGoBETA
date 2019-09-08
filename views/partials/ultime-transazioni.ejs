@@ -17,7 +17,7 @@
                 var causale = transazioni.map(function (value) { return value.causale; });
                 var data = transazioni.map(function(value){return value.data});
 
-                    for(let i = 0; i < 5; i++){
+                    for(let i = 0; i < transazioni.length; i++){
                     var dataD = new Date(data[i]);
                     var dataJS = dataD.getDate()+ "/" + (dataD.getMonth()+1) + "/" + dataD.getFullYear();
 
@@ -29,7 +29,7 @@
                     <td><%= dataJS%></td>
                 </tr>
 
-                <%} %>
+                <%}%>
             </tbody>
         </table>
     </div>
