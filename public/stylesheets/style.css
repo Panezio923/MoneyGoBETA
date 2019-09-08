@@ -62,9 +62,13 @@ u{
 
 li{margin-bottom: 8px;}
 
-a{color:white;}
+a{color: white;}
 
 a:hover{color: black;}
+
+.ddf{
+    color: blue;
+}
 
 input{
     border-width: 5px;

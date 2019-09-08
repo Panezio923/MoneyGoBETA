@@ -5,25 +5,24 @@
         </div>
     </div>
 </div>
-
-                    <div class="row">
-                        <div class="col-12 col-lg-6 mb-2">
-                            <div class="card shadow">
-                                <h1 class="text-center card-header">Modifica dati </h1>
-                                <div class="card-body">
-                                    <div class = "row">
-                                        <div class ="col-12 col-md-3 mb-2">
-                                            <div class="email" ><campi><b>Email</b></campi></div>
-                                        </div>
-                                        <div class ="col-12 col-md-6 mb-2">
-                                            <div class="email" id="email"><campi><%= user.email%></campi></div>
-                                            <input type="text" maxlength="100" class="form-control" id="emailModifica" placeholder="example@example.com">
-                                        </div>
-                                        <div class ="col-12 col-md-3 mb-2">
-                                            <button type="button" class="btn btn-primary btn-sm" id="ModificaEmail">Modifica</button>
-                                            <button type="button" class="btn btn-primary btn-sm" id="SalvaEmail">Salva</button>
-                                        </div>
-                                    </div>
+     <div class="row">
+        <div class="col-12 col-lg-6 mb-2">
+            <div class="card shadow">
+            <h1 class="text-center card-header">Modifica dati </h1>
+                <div class="card-body">
+                    <div class = "row">
+                        <div class ="col-12 col-md-3 mb-2">
+                            <div class="email" ><campi><b>Email</b></campi></div>
+                        </div>
+                        <div class ="col-12 col-md-6 mb-2">
+                            <div class="email" id="email"><campi><%= user.email%></campi></div>
+                            <input type="text" maxlength="100" class="form-control" id="emailModifica" placeholder="example@example.com">
+                        </div>
+                        <div class ="col-12 col-md-3 mb-2">
+                            <button type="button" class="btn btn-primary btn-sm" id="ModificaEmail">Modifica</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="SalvaEmail">Salva</button>
+                        </div>
+                    </div>
 
                     <div class = "row">
                         <div class ="col-12 col-md-3 mb-2">
@@ -86,18 +85,6 @@
                             <button type="button" class="btn btn-primary btn-sm" id="SalvaComunicazione">Salva</button>
                         </div>
                     </div>
-
-                    <div class = "row  mt-2">
-                        <div class ="col-12 col-md-4 mb-2">
-                            <div class="limite"><campi><b>Bot Telegram</b></campi></div>
-                        </div>
-                        <div class ="col-12 col-md-4 mb-2">
-                            <input type="text" class="form-control form-control-sm" id="codiceBot" placeholder="123456789" maxlength="10">
-                        </div>
-                        <div class ="col-12 col-md-3 offset-md-1 mb-2">
-                            <button type="button" class="btn btn-primary btn-sm" id="sendCodice">Invia</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -105,7 +92,7 @@
 </div>
 
 <div class="row">
-    <div class="col-12 col-lg-6 offset-lg-3">
+    <div class="col-12 col-lg-6 ">
         <div class="card shadow mb-2">
             <h1 class="text-center card-header">Modifica password</h1>
             <div class="card-body">
@@ -164,12 +151,35 @@
                             </div>
                                 <div class = "row">
                                     <div class="col-12">
-                                        <button id ="Conferma" class="btn btn-primary btn-lg btn-block mt-3">Conferma</button>
+                                        <button id ="Conferma" class="btn btn-primary   btn-block mt-3">Conferma</button>
                                     </div>
                                 </div>
                         </div>
                     </div>
                  </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6 ">
+        <div class="card shadow mb-2">
+            <h1 class="text-center card-header">Bot Telegram</h1>
+            <div class="card-body">
+                <campi>Se vuoi ricevere le notifiche su Telegram attiva il bot:</campi><br>
+                <campi>1    Per aggiungere il bot su Telegram clicca <a class="ddf" href="http://t.me/MoneyGo_info_bot" target="_blank">qui</a></campi><br>
+                <campi>2    Il bot ti invierà un codice, copialo nel form sottostante</campi><br>
+                <campi>3    Clicca su Sincronizza</campi>
+                <div class = "row  mt-2">
+                    <div class ="col-12 col-md-4 mb-2">
+                        <div class="limite"><campi><b>Bot Telegram</b></campi></div>
+                    </div>
+                    <div class ="col-12 col-md-4 mb-2">
+                        <input type="text" class="form-control form-control-sm" id="codiceBot" placeholder="123456789" maxlength="10">
+                    </div>
+                    <div class ="col-12 col-md-3 offset-md-1 mb-2">
+                        <button type="button" class="btn btn-primary btn-sm" id="sendCodice">Sincronizza</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
