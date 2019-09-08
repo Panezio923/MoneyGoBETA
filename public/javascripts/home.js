@@ -32,6 +32,7 @@
     $("#ricConto").on("click", function(){maincontrol.premutoRicaricaConto()});
     $("#aggiornaSaldo").on("click", function () {maincontrol.aggiornaDati()});
     $("#pagPeriodico").on("click", function () {maincontrol.premutoPagamentoPeriodico()});
+    $("#estConto").on("click", function () {maincontrol.premutoEstrattoConto()});
 
     maincontrol.premutogestisciProfilo = function(){
         mainview.mostraBarraLoading();
@@ -356,6 +357,13 @@
                 }
             }
         })
+    };
+
+    maincontrol.premutoEstrattoConto = function(){
+        mainview.mostraBarraLoading();
+        location.href = '/home/estrattoConto';
+        mainview.nascondiBarraLoading();
+        return false;
     };
 
     maincontrol.aggiornaDati = function(){

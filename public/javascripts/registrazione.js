@@ -80,11 +80,7 @@
                 if(msg === "EXIST"){
                     email_validata=false;
                     mainview.emailDuplicata();
-                    $("#email").css("borderColor", "red");
-
-                    $("#email").on("click", function () {
-                        $("#email").css("borderColor", "");
-                    });
+                    $("#email").addClass("is-invalid");
                 }else if (msg === "NOTEXIST"){
                     email_validata=true;
                     mainview.ripulisciCampiErrati();
@@ -106,7 +102,6 @@
                     mainview.nicknameDuplicato();
                     $("#nickname").addClass("is-invalid");
                 }else if (msg === "NOTEXIST"){
-                    mainview.emailDuplicata();
                     nickname_validato=true;
                     mainview.ripulisciCampiErrati();
                 }
