@@ -1,9 +1,7 @@
 
-    <div class="row justify-content-center">
-        <div class="col-12  col-md-6 offset-md-1">
-            <div class="text_registrati">Registrati a MoneyGo</div>
-        </div>
-    </div>
+<div class="row">
+    <h1 class="col-12 text-center mb-5" style="background-color: #cfcfcf; border-radius: 5px">Registrati a MoneyGO</h1>
+</div>
 
     <div class="col-12  col-md-6 offset-md-3">
         <div class="alert alert-danger text-center" id="alert" role="alert">
@@ -13,8 +11,24 @@
 
     <!--Form registrazione-->
     <form action="/inviaRegistrazione" method="post" id="form_registrati">
-        <div class="form-row">
-            <div class="form-group col-12 col-md-12">
+            <div class="form-group">
+                <div class="row justify-content-center mb-3">
+                    <div class="col-12 col-md-2">
+                        <p>Sei un ?</p>
+                    </div>
+                        <div class="checkbox-group" required>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="utente">
+                                <label class="custom-control-label" for="utente">Utente</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="attcomm">
+                                <label class="custom-control-label" for="attcomm">Attività Commerciale</label>
+                            </div>
+
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <label for="validationServer01">Nome</label>
@@ -43,8 +57,8 @@
 
                 <div class="row">
                     <div class="col-12 col-md-6">
-                        <label for="Email">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="example@example.com" required>
+                        <label for="Email">Partita Iva</label>
+                        <input type="text" class="form-control" id="piva" placeholder="00000000000" required>
                     </div>
                     <div class="col-12 col-md-6">
                         <label for="Tel">Numero di Telefono</label>
@@ -59,7 +73,10 @@
                         <label for="Nick">Nickname</label>
                         <input type="text" class="form-control" id="nickname" placeholder="Nickname" required>
                     </div>
-
+                    <div class="col-12 col-md-6">
+                        <label for="Email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="example@example.com" required>
+                    </div>
                     <div class="mb-1"></div>
 
                 </div>
@@ -103,5 +120,4 @@
                     </div>
                 </div>
             </div>
-        </div>
     </form>

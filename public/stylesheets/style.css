@@ -75,11 +75,11 @@ input{
     border-color: red;
 }
 
-div.show{
+div.showcausale{
     white-space: nowrap;
     width: 100px;
     overflow: hidden;
-    text-overflow:"---";
+    text-overflow:" . . .";
 }
 
 .card-header{ font-size: 2.5em;}

@@ -2,14 +2,14 @@ const pool = require('./connessionedb');
 const crypto = require('crypto');
 const User = require('./user');
 
-const user = new User();
+const utente = new User();
 function Transazione() {}
 
 
 Transazione.prototype = {
 
     recuperaTransazione : function (user, callback) {
-        let sql = "SELECT * FROM transazione t WHERE (t.nick_mittente = ? OR t.destinatario = ?) AND t.stato_transazione = ? ORDER BY id_transazione DESC";
+        let sql = "SELECT * FROM transazione t WHERE (t.nick_mittente = ? OR t.destinatario = ?) AND t.stato_transazione = ? ORDER BY data DESC";
 
         pool.query(sql, [user, user, "eseguita"], function (err, result) {
             if(err) throw err;
@@ -36,9 +36,9 @@ Transazione.prototype = {
             if(result) {
                 if(stato === "eseguita" && causale !== "ricarica conto") {
                     var msgMitt = ("Una transazione è andata a buon fine con importo €" + importo.toFixed( 2 ) + " verso " + destinatario);
-                    user.sendComunicazione( mittente, encodeURI( msgMitt ) );
+                    utente.sendComunicazione( mittente, encodeURI( msgMitt ) );
                     var msgDest = "Hai ricevuto € " + importo.toFixed( 2 ) + " da parte di " + mittente;
-                    user.sendComunicazione( destinatario, encodeURI( msgDest ) );
+                    utente.sendComunicazione( destinatario, encodeURI( msgDest ) );
                     callback( true );
                     return;
                 }
@@ -115,7 +115,12 @@ Transazione.prototype = {
                     pool.query(sql, [token, metodo, "SEND"], function(err, esitoToken) {
                         if(err) throw err;
                         if(!esitoToken) callback(false);
-                        else callback(token);
+                        else{
+                            let msg = "Hai creato un nuovo link pagamento nel quale invi € " + parseFloat(importo).toFixed(2) + " il link annesso è: "
+                                        + " https://money-go.herokuapp.com/token/" + token;
+                            utente.sendComunicazione(user, encodeURI(msg));
+                            callback(token);
+                        }
                     })
                 }
             })
@@ -129,7 +134,12 @@ Transazione.prototype = {
                     pool.query( sql, [token, metodo, "RCV"], function (err, esitoToken) {
                         if(err) throw err;
                         if (!esitoToken) callback( false );
-                        else callback( token );
+                        else {
+                            let msg = "Hai creato un nuovo link pagamento nel quale ricevi € " + parseFloat(importo).toFixed(2) + " il link annesso è: "
+                                + " https://money-go.herokuapp.com/token/" + token;
+                            utente.sendComunicazione(user, encodeURI(msg));
+                            callback( token );
+                        }
                     } )
                 }
             } )
@@ -159,9 +169,9 @@ Transazione.prototype = {
             else {
                 that.recuperaInfoTransazione(null, token, function (transazione) {
                     var msgMitt = ("Una transazione è stata accettata con importo €" + transazione.importo.toFixed(2) +  " verso " + transazione.destinatario);
-                    sendComunicazione(transazione.nick_mittente, encodeURI(msgMitt));
+                    utente.sendComunicazione(transazione.nick_mittente, encodeURI(msgMitt));
                     var msgDest = "Hai ricevuto € " + transazione.importo.toFixed(2) + " da parte di " + transazione.nick_mittente;
-                    sendComunicazione(transazione.destinatario, encodeURI(msgDest));
+                    utente.sendComunicazione(transazione.destinatario, encodeURI(msgDest));
                     callback(true);
                 })
             }

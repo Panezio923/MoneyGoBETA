@@ -17,7 +17,7 @@
                 var causale = transazioni.map(function (value) { return value.causale; });
                 var data = transazioni.map(function(value){return value.data});
 
-                    for(let i = 0; i < 5; i++){
+                    for(let i = 0; i < transazioni.length; i++){
                     var dataD = new Date(data[i]);
                     var dataJS = dataD.getDate()+ "/" + (dataD.getMonth()+1) + "/" + dataD.getFullYear();
 
@@ -25,11 +25,11 @@
                 <tr>
                     <th scope="row"><%=destinatario[i]%></th>
                     <td> € <%= importo[i]%></td>
-                    <td><div class="show" data-toggle="tooltip" data-placement="bottom" title="<%=causale[i]%>" ><%= causale[i]%></div></td>
+                    <td><div class="showcausale" data-toggle="tooltip" data-placement="bottom" title="<%=causale[i]%>" ><%= causale[i]%></div></td>
                     <td><%= dataJS%></td>
                 </tr>
 
-                <%} %>
+                <%}%>
             </tbody>
         </table>
     </div>

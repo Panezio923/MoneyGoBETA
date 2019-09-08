@@ -35,19 +35,35 @@ User.prototype = {
     createUser: function (body, callback) {
         let pwd = body.password;
         body.password = bcrypt.hashSync(pwd, 10);
+        let codice;
 
         var bind = [];
         for (var i in body) {
             bind.push(i);
         }
-        let sql = "INSERT INTO utenti (nome, cognome, cf, data_di_nascita, email, telefono, nickname, password) VALUES (?,?,?,?,?,?,?,?);";
+        if(body.codicefiscale === '') {
+            codice = body.piva;
+            console.log(codice);
+            let sql = "INSERT INTO utenti (nome, cognome, p_iva, data_di_nascita, email, telefono, nickname, password) VALUES (?,?,?,?,?,?,?,?);";
 
-        pool.query(sql, [body.nome, body.cognome, body.codicefiscale, body.nascita, body.email, body.telefono, body.nickname, body.password], function (err, result) {
-            if (err) throw err;
-            callback(result);
-            //console.log(result);
-        })
+            pool.query(sql, [body.nome, body.cognome, codice, body.nascita, body.email, body.telefono, body.nickname, body.password], function (err, result) {
+                if (err) throw err;
+                callback(result);
+                //console.log(result);
+            })
+        }
+        else {
+            codice = body.codicefiscale;
+            let sql = "INSERT INTO utenti (nome, cognome, cf, data_di_nascita, email, telefono, nickname, password) VALUES (?,?,?,?,?,?,?,?);";
+
+            pool.query(sql, [body.nome, body.cognome, codice, body.nascita, body.email, body.telefono, body.nickname, body.password], function (err, result) {
+                if (err) throw err;
+                callback(result);
+                //console.log(result);
+            })
+        }
     },
+
 
     findEmail: function (email, callback) {
         let sql = "SELECT * FROM utenti u WHERE u.email = ?";
@@ -65,6 +81,15 @@ User.prototype = {
             if (result) callback(result);
             else callback(null);
         })
+    },
+
+    findCodice: function(codice, callback){
+      let sql = "SELECT * FROM utenti WHERE p_iva = ? OR cf = ?";
+      pool.query(sql,[ codice, codice], function (err, result) {
+          if(err) throw err;
+          if(result.length) callback(false);
+          else callback(true);
+      })
     },
 
     updateEmail: function (email, nickname, callback) {
