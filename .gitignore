@@ -60,5 +60,10 @@ typings/
 # next.js build output
 .next
 
+<<<<<<< HEAD
 .idea
 access.log
+=======
+access.log
+.idea
+>>>>>>> fcae6404ec5ed2993aa72e7b7a4203f21699e526

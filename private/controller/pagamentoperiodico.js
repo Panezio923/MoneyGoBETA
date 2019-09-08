@@ -1,17 +1,20 @@
 const pool = require('./connessionedb');
+const Metodi = require('./metodi');
+const Transazione = require('./transazione');
+
+const transazione = new Transazione();
+const metodi = new Metodi();
 
 function Periodico() {}
 
 Periodico.prototype = {
   
     recuperaPagamentiPeriodici: function (user, callback) {
-        var that = this;
         let sql = "SELECT * FROM pagamento_periodico WHERE user = ?";
         pool.query(sql, user, function (err, pagamentiPeriodici) {
             if(err) throw err;
             if(!pagamentiPeriodici) callback(false);
             else {
-                that.periodiciDaEffettuare(pagamentiPeriodici);
                 callback( pagamentiPeriodici );
             }
         })
@@ -27,38 +30,127 @@ Periodico.prototype = {
         })
     },
 
-    periodiciDaEffettuare: function (callback) {
-        let periodici;
-        let sql = "SELECT * FROM pagamento_periodico";
-        pool.query(sql, function (err, pagamentiPeriodici) {
+    eliminaPagamentoPeriodico: function(id, user, callback){
+      let sql = "DELETE FROM pagamento_periodico WHERE id_pag_per = ? AND user = ?";
+
+      pool.query(sql, [id, user], function (err, result) {
+          if(err) throw err;
+          if(!result) callback(false);
+          else callback(true);
+      })
+    },
+
+    interrompiPagamentoPeriodico: function(id, user, callback){
+      let sql = "UPDATE pagamento_periodico SET stato = ? WHERE id_pag_per = ? AND user = ?";
+
+      pool.query(sql, ["interrotto", id, user], function (err, result) {
+          if(err) throw err;
+          if(!result) callback(false);
+          else callback(true);
+      })
+    },
+
+    riprendiPagamentoPeriodico: function(id, user, callback){
+      let sql = "UPDATE pagamento_periodico SET stato = ? WHERE id_pag_per = ? AND user = ?";
+
+      pool.query(sql, ["attivo", id, user], function (err, result) {
+          if(err) throw err;
+          if(!result) callback(false);
+          else callback(true);
+      })
+    },
+
+    periodiciDaEffettuare: function () {
+        var that = this;
+        var pagamentiPeriodici;
+        let sql = "SELECT * FROM pagamento_periodico WHERE stato = 'attivo'";
+        pool.query(sql, function (err, Periodici) {
             if(err) throw err;
-            if(!pagamentiPeriodici) callback(false);
-            else{
-                for(let i = 0; i < pagamentiPeriodici.length; i++){
-                    let periodico = pagamentiPeriodici[i];
-                    let perdiodicita = periodico.periodicita;
-                    switch (perdiodicita) {
-                        case "settimana":
-                            perdiodicita = 7;
-                            break;
-                        case "mese":
-                            periodicita = 30;
-                            break;
-                        case "anno":
-                            periodicita = 365;
-                            break;
-                        default:
-                            periodicita = 0;
+            if(!Periodici) console.log("Errore nel recupero dei pagamenti periodici");
+            else pagamentiPeriodici = Periodici;
+
+            for(let i = 0; i < pagamentiPeriodici.length; i++){
+                let periodico = pagamentiPeriodici[i];
+                let periodicita = periodico.periodicita;
+                var dataOdierna = new Date();
+
+                if (periodico.data_ultimo_pagamento === null) {
+                    if (periodico.data_inizio.toLocaleDateString() === dataOdierna.toLocaleDateString()) {
+                        that.effettuaPeriodico(periodico, function (esito) {
+                            if(!esito) console.log("1 Errore pagamento Periodico");
+                            else console.log("Pagamento periodico ID:" + periodico.id_pag_per + " riuscito");
+                        });
+                        continue;
                     }
-                    console.log(periodico.data_inizio.toLocaleDateString());
-                    var d = new Date();
-                    console.log(d.toLocaleDateString());
+                    continue;
+                }
+
+                var ultimoPagamento =  periodico.data_ultimo_pagamento;
+
+                switch (periodicita) {
+                    case "settimana":
+                        periodicita = 7;
+
+                        if(Math.abs(dataOdierna.getDate() - ultimoPagamento.getDate())%periodicita === 0){
+                            that.effettuaPeriodico(periodico, function (esito) {
+                               if(!esito) console.log("2 Errore pagamento Periodico");
+                               else console.log("Pagamento periodico ID:" + periodico.id_pag_per + " riuscito");
+                            });
+                        }
+
+                        break;
+                    case "mese":
+                        periodicita = 30;
+                        var diffTime = Math.abs(dataOdierna.getTime() - ultimoPagamento.getTime());
+                        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        if((diffDays%periodicita) >= 1 && dataOdierna.getDate() === ultimoPagamento.getDate()){
+                            that.effettuaPeriodico(periodico, function (esito) {
+                                if(!esito) console.log("3 Errore pagamento Periodico");
+                                else console.log("Pagamento periodico ID:" + periodico.id_pag_per + " riuscito");
+                            });
+                       }
+
+                        break;
+                    case "anno":
+                        periodicita = 365;
+                        var diffTime = Math.abs(dataOdierna.getTime() - ultimoPagamento.getTime());
+                        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                       if((diffDays%periodicita) === 0 || (diffDays%periodicita) === 1){
+                           that.effettuaPeriodico(periodico, function (esito) {
+                               if(!esito) console.log("4 Errore pagamento Periodico");
+                               else console.log("Pagamento periodico ID:" + periodico.id_pag_per + " riuscito");
+                           });
+                       }
+
+                        break;
+                    default:
+                        periodicita = 0;
                 }
             }
         })
+    },
 
-    }
-    
+    effettuaPeriodico : function (pagamentoPeriodico, callback) {
+        metodi.inviaDenaro(pagamentoPeriodico.user, pagamentoPeriodico.importo, pagamentoPeriodico.destinatario, pagamentoPeriodico.metodo, function (esito) {
+            if(!esito) callback(false);
+            else{
+                transazione.newTransazione("Pagamento Periodico", pagamentoPeriodico.user, pagamentoPeriodico.destinatario, pagamentoPeriodico.importo, "eseguita", pagamentoPeriodico.metodo, function (esitoTransazione) {
+                    if(!esitoTransazione) callback(false);
+                    else {
+                        let sql = "UPDATE pagamento_periodico SET data_ultimo_pagamento = ? WHERE id_pag_per = ?";
+                        pool.query(sql, [new Date(), pagamentoPeriodico.id_pag_per], function (err, updateData) {
+                            if(err) throw err;
+                            if(!updateData) callback(false);
+                            else callback(true);
+                        })
+                    }
+                })
+            }
+        })
+    },
+
 };
 
 module.exports = Periodico;

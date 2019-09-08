@@ -257,31 +257,14 @@
         }
     };
 
-    maincontrol.ricavaNotifiche = function(){
-        $.ajax({
-            type: "get",
-            url: "/home/ricavaNotifiche",
-
-            success: function (data) {
-                maincontrol.notifiche = data;
-            },
-            error: function () {
-                console.log("errore recupero notifiche");
-            }
-        })
-    };
-
     //Recupera l'id dell'elemento selezionato dalla listgroup
     maincontrol.getID = function(){
-        $(".list-group-item button").on('click',function () {
+        $(document).on('click', ".list-group-item button" ,function () {
             storeValue = ($(this).attr("id"));
-            let id_transazione = maincontrol.notifiche[storeValue[1]].id_transazione;
-            if(storeValue[0] === "A"){
-                maincontrol.accettaTransazione(id_transazione);
-            }
-            else if(storeValue[1] === "R"){
-                maincontrol.rifiutaTransazione(id_transazione);
-            }
+            let id_transazione = storeValue.slice(1);
+
+            if(storeValue[0] === "A") maincontrol.accettaTransazione(id_transazione);
+            else if(storeValue[0] === "R") maincontrol.rifiutaTransazione(id_transazione);
         });
     };
 
@@ -337,21 +320,18 @@
             url: "/home/creaToken",
             data: {importo: importo, metodo: maincontrol.metodo, causale: $(".causale").val(), type: tipo},
 
-            beforeSend: function () {
-                //mainview.mostraBarraLoading();
-            },
             success: function (msg) {
                 console.log(msg);
                 if(!msg){
                     mainview.mostraAlert("Qualcosa è andato storto nella generazione del link");
                 }else{
                     if(tipo === "SEND") {
-                        $( '#linkInvio span' ).text( windows.location.hostname + ":" + windows.location.port + "/token/" + msg );
-                        $( '#linkInvio' ).attr( "value", (windows.location.hostname + ":" + windows.location.port + "/token/" + msg) );
+                        $( '#linkInvio span' ).text("https://intense-thicket-28731.herokuapp.com" + "/token/" + msg );
+                        $( '#linkInvio' ).attr( "value", ("https://intense-thicket-28731.herokuapp.com" + "/token/" + msg) );
                     }
                     else if(tipo === "RCV"){
-                        $( '#linkRcv span' ).text( windows.location.hostname + ":" + windows.location.port + "/token/" + msg );
-                        $( '#linkRcv' ).attr( "value", (windows.location.hostname + ":" + windows.location.port + "/token/" + msg) );
+                        $( '#linkRcv span' ).text("https://intense-thicket-28731.herokuapp.com" + "/token/" + msg );
+                        $( '#linkRcv' ).attr( "value", ("https://intense-thicket-28731.herokuapp.com" + "/token/" + msg) );
                     }
                 }
             }
@@ -398,8 +378,6 @@
 
         //Quando carica la pagina recupero il nick dell'utente
         maincontrol.verificaNick();
-
-        maincontrol.ricavaNotifiche();
 
         maincontrol.getID();
 

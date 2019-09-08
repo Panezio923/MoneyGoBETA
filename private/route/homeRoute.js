@@ -171,44 +171,46 @@ router.post("/richiediDenaro", (req, res, next)=>{
    })
 });
 
-/*
- * Questa route restituisce le transazioni in attesa per crearne una copia
- * sul front-end
- */
-router.get("/ricavaNotifiche", (req, res)=>{
-    //console.log(req.session.notifiche);
-   transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (esito) {
-       if(esito !== 0) {
-           req.session.notifiche = esito;
-           res.send(esito);
-       }
-       else res.send("NONE");
-
-   })
-});
-
-router.post("/accettaTransazione", (req, res)=>{
+router.use("/accettaTransazione", (req, res, next)=>{
     metodi.inviaDenaro(req.session.user.nickname, req.body.importo, req.body.destinatario, "MONEYGO", function (esito) {
-        if(!esito) res.send("ERROR");
-        else{
-            //console.log(req.body.id);
-            req.session.conto.saldo_conto = (req.session.conto.saldo_conto - req.body.importo).toFixed(2);
-            transazione.accettaTransazione(req.session.user.nickname, req.body.id, function (esitoDUE) {
-                if(!esitoDUE) res.send("ERROR");
-                else{
-                    res.send("DONE");
-                }
-                res.end();
-            })
-        }
+        if (!esito) res.send( "ERROR" );
+        else next( 'route' );
     })
 });
 
-router.post("/rifiutaTransazione", (req,res) =>{
+router.post('/accettaTransazione', (req, res, next)=>{
+    req.session.conto.saldo_conto = (req.session.conto.saldo_conto - req.body.importo).toFixed(2);
+    transazione.accettaTransazione(req.session.user.nickname, req.body.id, function (esito) {
+        if (!esito) res.send( "ERROR" );
+        else next( 'route' );
+    })
+});
+
+router.post('/accettaTransazione', (req, res)=>{
+   transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (esito) {
+       if(!esito) res.send("ERROR");
+       else{
+           req.session.notifiche = esito;
+           res.send("DONE");
+       }
+   })
+});
+
+router.use("/rifiutaTransazione", (req,res, next) =>{
     transazione.rifiutaTransazione(req.session.user.nickname, req.body.id, function (esito) {
         if(!esito) res.send("ERROR");
-        else res.send("DONE");
-        res.end();
+        else next('route')
+    })
+});
+
+router.post('/rifiutaTransazione', (req, res, next)=>{
+    transazione.recuperaTransazioniInAttesa(req.session.user.nickname, function (esito) {
+        if(!esito) res.send("NONE");
+        else{
+            req.session.notifiche = esito;
+            res.send("DONE");
+        }
+
     })
 });
 

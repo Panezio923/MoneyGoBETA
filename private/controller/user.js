@@ -1,5 +1,7 @@
 const pool = require('./connessionedb');
 const bcrypt = require('bcrypt');
+const mail = require('../mailer');
+const bot = require('../bot');
 
 function User() {}
 
@@ -33,19 +35,35 @@ User.prototype = {
     createUser: function (body, callback) {
         let pwd = body.password;
         body.password = bcrypt.hashSync(pwd, 10);
+        let codice;
 
         var bind = [];
         for (var i in body) {
             bind.push(i);
         }
-        let sql = "INSERT INTO utenti (nome, cognome, cf, data_di_nascita, email, telefono, nickname, password) VALUES (?,?,?,?,?,?,?,?);";
+        if(body.codicefiscale === '') {
+            codice = body.piva;
+            console.log(codice);
+            let sql = "INSERT INTO utenti (nome, cognome, p_iva, data_di_nascita, email, telefono, nickname, password) VALUES (?,?,?,?,?,?,?,?);";
 
-        pool.query(sql, [body.nome, body.cognome, body.codicefiscale, body.nascita, body.email, body.telefono, body.nickname, body.password], function (err, result) {
-            if (err) throw err;
-            callback(result);
-            //console.log(result);
-        })
+            pool.query(sql, [body.nome, body.cognome, codice, body.nascita, body.email, body.telefono, body.nickname, body.password], function (err, result) {
+                if (err) throw err;
+                callback(result);
+                //console.log(result);
+            })
+        }
+        else {
+            codice = body.codicefiscale;
+            let sql = "INSERT INTO utenti (nome, cognome, cf, data_di_nascita, email, telefono, nickname, password) VALUES (?,?,?,?,?,?,?,?);";
+
+            pool.query(sql, [body.nome, body.cognome, codice, body.nascita, body.email, body.telefono, body.nickname, body.password], function (err, result) {
+                if (err) throw err;
+                callback(result);
+                //console.log(result);
+            })
+        }
     },
+
 
     findEmail: function (email, callback) {
         let sql = "SELECT * FROM utenti u WHERE u.email = ?";
@@ -142,7 +160,23 @@ User.prototype = {
             if(!esito) callback(false);
             else callback(true);
         })
-    }
+    },
+
+
+    sendComunicazione: function(user, msg){
+        try {
+            this.find( user, function (esito) {
+                if (esito.comunicazione === 0) {
+                    mail.inizializza();
+                    mail.inviaMailNotifica( esito.email, decodeURI( msg ) );
+                } else if (esito.comunicazione === 2) {
+                    bot.sendTextTg( "978219762:AAHaFe80I5p2Rlooe7dEN3KaGLJIxiyxReE", esito.telegram, msg );
+                }
+            } );
+        }catch (e) {
+            console.log(e);
+        }
+    },
 };
 
 
