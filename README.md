@@ -3,3 +3,10 @@ I dati di accesso di un generico utente sono riportati di seguito è comunque po
 
 Username: ValerioGambino
 Password: Unipa1234
+
+Le carte da inserire per l'utente "ValerioGambino" sono:
+
+
+MasterCard: 5555 5555 5555 5555 (sedici volte 5)
+Visa: 4444 4444 4444 4444 (sedici volte 4)
+
