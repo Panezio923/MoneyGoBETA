@@ -10,6 +10,6 @@ Password: Unipa1234
 Le carte da inserire per l'utente "ValerioGambino" sono:
 
 
-MasterCard: 5555 5555 5555 5555 (sedici volte 5)
-Visa: 4444 4444 4444 4444 (sedici volte 4)
+MasterCard: 5555 5555 5555 5555 (sedici volte 5), CVV: 001
+Visa: 4444 4444 4444 4444 (sedici volte 4), CVV: 123
 
