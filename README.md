@@ -12,4 +12,6 @@ Le carte da inserire per l'utente "ValerioGambino" sono:
 
 MasterCard: 5555 5555 5555 5555 (sedici volte 5), CVV: 001
 Visa: 4444 4444 4444 4444 (sedici volte 4), CVV: 123
+IBAN: IT100000000000000000000000
+IBAN: IT110000000000000000000000
 
