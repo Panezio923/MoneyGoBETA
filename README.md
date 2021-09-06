@@ -1,17 +1,4 @@
-MoneyGo è hostato su Heroku ed è raggiungibile a questo indirizzo: https://moneygoweb.herokuapp.com
+# MoneyGO
 
-
-Al fine della simulazione le carte ed i conti bancari inseriti all’interno di MoneyGo sono puramente fittizie.
-I dati di accesso di un generico utente sono riportati di seguito è comunque possibile registrare dei nuovi account.
-
-Username: ValerioGambino
-Password: Unipa1234
-
-Le carte da inserire per l'utente "ValerioGambino" sono:
-
-
-MasterCard: 5555 5555 5555 5555 (sedici volte 5), CVV: 001
-Visa: 4444 4444 4444 4444 (sedici volte 4), CVV: 123
-IBAN: IT100000000000000000000000
-IBAN: IT110000000000000000000000
-
+Progetto sviluppato in NodeJS ed Express per la creazione di una piattaforma in stile PayPal.
+Client-side Ejs, Bootstrap e Javascript. 
